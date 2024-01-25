@@ -4,6 +4,7 @@ import 'package:foodapplication/view/auth/verifiy_otp_screen.dart';
 import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
+import '../view/account/widgets/contact_us_screen.dart';
 import '../view/account/widgets/terms_conditions_screen.dart';
 import '../view/splash/splash_screen.dart';
 import 'app_routes.dart';
@@ -33,6 +34,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.termsConditionsScreen,
       page: () => TermsConditionsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.contactUsScreen,
+      page: () => ContactUsScreen(),
     ),
   ];
 }

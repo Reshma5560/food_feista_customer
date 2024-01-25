@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_style.dart';
@@ -6,7 +7,7 @@ import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
 
 import '../../controller/auth/login_controller.dart';
-import '../../res/app_colors.dart';
+import '../../repositories/auth_repositories.dart';
 import '../../res/ui_utils.dart';
 import '../../utils/helper.dart';
 import '../gradient_container/gradient_container.dart';
@@ -74,10 +75,20 @@ class LoginScreen extends StatelessWidget {
                                   showError: con.passwordValidation.value,
                                   keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
-                                    con.passwordValidation.value = false;
+                                    if (con.passwordCon.value.text.length == 8) {
+                                      con.passwordError.value = "";
+                                      FocusScope.of(context).unfocus();
+                                    } else if (con.passwordCon.value.text.length < 8) {
+                                      con.passwordValidation.value = true;
+                                      con.passwordError.value = "Please Enter your password at least 8 digits.";
+                                    } else {
+                                      con.passwordValidation.value = false;
+                                      con.passwordError.value = "";
+                                    }
                                   },
                                   inputFormatters: [
-
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(8),
                                   ],
                                 ),
                                 SizedBox(height: MediaQuery.of(context).viewInsets.bottom + defaultPadding.w * 3),
@@ -101,32 +112,36 @@ class LoginScreen extends StatelessWidget {
                                                 /// Email validation
                                                 if (con.emailCon.value.text.trim().isEmpty) {
                                                   con.emailValidation.value = true;
-                                                  con.emailError.value = "Please enter your email address";
+                                                  con.emailError.value = "Please enter your email address.";
                                                 } else if (Helper.isEmail(con.emailCon.value.text.trim()) != true) {
                                                   con.emailValidation.value = true;
-                                                  con.emailError.value = "Please enter valid email address";
+                                                  con.emailError.value = "Please enter valid email address.";
                                                 } else {
                                                   con.emailValidation.value = false;
                                                 }
 
+                                                ///password validation
 
-
-
+                                                if (con.passwordCon.value.text.isEmpty) {
+                                                  con.passwordValidation.value = true;
+                                                  con.passwordError.value = "Please Enter your password.";
+                                                } else if (con.passwordCon.value.text.length < 8) {
+                                                  con.passwordValidation.value = true;
+                                                  con.passwordError.value = "Please Enter your password at least 8 digits.";
+                                                } else {
+                                                  con.passwordValidation.value = false;
+                                                  con.passwordError.value = "";
+                                                }
 
                                                 if (con.emailValidation.isFalse) {
                                                   FocusScope.of(context).unfocus();
-                                                  // AuthRepository().signUpApi(
-                                                  //   mobileNumber: int.parse(loginCon.mobileNumberCon.value.text.trim()),
-                                                  //   isLoader: con.isLoading,
-                                                  //   params: {
-                                                  //     "mobile_no": loginCon.mobileNumberCon.value.text.trim(),
-                                                  //     "first_name": con.firstNameCon.value.text.trim(),
-                                                  //     "last_name": con.lastNameCon.value.text.trim(),
-                                                  //     "device_token": Get.find<FirebaseController>().deviceToken.value,
-                                                  //     "device_type": loginCon.deviceType.value,
-                                                  //     "device_id": "${loginCon.deviceId.value}_${loginCon.mobileNumberCon.value.text.trim()}",
-                                                  //   },
-                                                  // );
+                                                  AuthRepository().loginApi(
+                                                    isLoader: con.isLoading,
+                                                    params: {
+                                                      "email": con.emailCon.value.text.trim(),
+                                                      "password": con.passwordCon.value.text.trim(),
+                                                    },
+                                                  );
                                                 }
                                               }
                                             },

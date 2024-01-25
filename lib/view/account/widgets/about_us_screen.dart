@@ -4,6 +4,7 @@ import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:get/get.dart';
 
+import '../../../res/app_appbar.dart';
 import '../../../res/app_colors.dart';
 import '../../../res/widgets/app_bar.dart';
 
@@ -26,24 +27,9 @@ class AboutUsScreen extends StatelessWidget {
             duration: const Duration(milliseconds: 700),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(defaultRadius * 3),
-                    bottomRight: Radius.circular(defaultRadius * 3),
-                  ),
-                  child: MyAppBar(
-                    bgColor: Theme.of(context).colorScheme.background,
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_outlined,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: () {},
-                    ),
-                    title: "About Us",
-                    centerTitle: true,
-                    titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
-                  ),
+                CommonAppBar(
+                  title: "About Us",
+                  onPressed: () {},
                 ),
                 Expanded(
                   child: ListView(

@@ -1,13 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
-import '../../../res/app_colors.dart';
 import '../../../res/app_style.dart';
-import '../../../res/widgets/webview.dart';
-import '../../../utils/local_storage.dart';
-import '../../../utils/utils.dart';
 
 class AuthFooter extends StatelessWidget {
   const AuthFooter({super.key});
@@ -30,34 +24,34 @@ class AuthFooter extends StatelessWidget {
                     text: 'By continuing, you are indicating that you agree to the ',
                     style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, letterSpacing: .4, height: 1.7),
                   ),
-                  TextSpan(
-                    text: 'Privacy Policy',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.blue, height: 1.7),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        if (!isValEmpty(LocalStorage.privacyPolicyLink)) {
-                          Get.to(
-                            () => MyWebView(webURL: LocalStorage.privacyPolicyLink.value, title: "Privacy Policy"),
-                          );
-                        }
-                      },
-                  ),
+                  // TextSpan(
+                  //   text: 'Privacy Policy',
+                  //   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.blue, height: 1.7),
+                  //   recognizer: TapGestureRecognizer()
+                  //     ..onTap = () {
+                  //       if (!isValEmpty(LocalStorage.privacyPolicyLink)) {
+                  //         Get.to(
+                  //           () => MyWebView(webURL: LocalStorage.privacyPolicyLink.value, title: "Privacy Policy"),
+                  //         );
+                  //       }
+                  //     },
+                  // ),
                   TextSpan(
                     text: ' and ',
                     style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, letterSpacing: .4, height: 1.7),
                   ),
-                  TextSpan(
-                    text: 'Terms',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.blue, height: 1.7),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        if (!isValEmpty(LocalStorage.termsAndConditionsLink)) {
-                          Get.to(
-                            () => MyWebView(webURL: LocalStorage.termsAndConditionsLink.value, title: "Term and conditions"),
-                          );
-                        }
-                      },
-                  ),
+                  // TextSpan(
+                  //   text: 'Terms',
+                  //   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp, color: AppColors.blue, height: 1.7),
+                  //   recognizer: TapGestureRecognizer()
+                  //     ..onTap = () {
+                  //       if (!isValEmpty(LocalStorage.termsAndConditionsLink)) {
+                  //         Get.to(
+                  //           () => MyWebView(webURL: LocalStorage.termsAndConditionsLink.value, title: "Term and conditions"),
+                  //         );
+                  //       }
+                  //     },
+                  // ),
                   TextSpan(
                     text: '.',
                     style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, letterSpacing: .4, height: 1.7),

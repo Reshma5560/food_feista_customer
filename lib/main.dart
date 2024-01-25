@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // LocalStorage.clearLocalStorage();
     // LocalStorage.printLocalStorageData();
     return ScreenUtilInit(
       designSize: const Size(360, 690),

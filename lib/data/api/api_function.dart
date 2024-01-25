@@ -121,7 +121,6 @@ class APIFunction {
         options: Options(
           headers: {
             "Content-Type": "application/json",
-            if (LocalStorage.isGuestUser.isFalse)
               "Authorization": "Bearer ${LocalStorage.token.value}",
           },
         ),

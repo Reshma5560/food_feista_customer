@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../res/color_print.dart';
-
 
 class Prefs {
   static const String token = "TOKEN";
@@ -21,16 +22,16 @@ class Prefs {
   static const String deviceType = "DEVICE_TYPE";
   static const String deviceFCMToken = "DEVICE_FCM_TOKEN";
 
-  static const String isGuestUser = "GUEST_USER";
-  static const String showPreview = "SHOW_PREVIEW";
-  static const String likeConcept = "LIKE_CONCEPT";
-
-  static const String privacyPolicyLink = "PRIVACY_POLICY_LINK";
-  static const String termsAndConditionsLink = "TERMS_AND_CONDITIONS_LINK";
-  static const String faqLink = "FAQ_LINK";
-  static const String aboutUsLink = "ABOUT_US_LINK";
-  static const String playStoreLink = "PLAY_STORE_LINK";
-  static const String appStoreLink = "APP_STORE_LINK";
+  // static const String isGuestUser = "GUEST_USER";
+  // static const String showPreview = "SHOW_PREVIEW";
+  // static const String likeConcept = "LIKE_CONCEPT";
+  //
+  // static const String privacyPolicyLink = "PRIVACY_POLICY_LINK";
+  // static const String termsAndConditionsLink = "TERMS_AND_CONDITIONS_LINK";
+  // static const String faqLink = "FAQ_LINK";
+  // static const String aboutUsLink = "ABOUT_US_LINK";
+  // static const String playStoreLink = "PLAY_STORE_LINK";
+  // static const String appStoreLink = "APP_STORE_LINK";
 }
 
 class LocalStorage {
@@ -50,27 +51,27 @@ class LocalStorage {
   static RxString deviceToken = "".obs;
   static RxString deviceType = "".obs;
 
-  static RxBool isGuestUser = true.obs;
-  static RxBool showPreview = true.obs;
-  static RxBool likeConcept = true.obs;
-
-  //! Don't clear any links in local storage
-  static RxString privacyPolicyLink = "".obs;
-  static RxString termsAndConditionsLink = "".obs;
-  static RxString faqLink = "".obs;
-  static RxString aboutUsLink = "".obs;
-  static RxString playStoreLink = "".obs;
-  static RxString appStoreLink = "".obs;
+  // static RxBool isGuestUser = true.obs;
+  // static RxBool showPreview = true.obs;
+  // static RxBool likeConcept = true.obs;
+  //
+  // //! Don't clear any links in local storage
+  // static RxString privacyPolicyLink = "".obs;
+  // static RxString termsAndConditionsLink = "".obs;
+  // static RxString faqLink = "".obs;
+  // static RxString aboutUsLink = "".obs;
+  // static RxString playStoreLink = "".obs;
+  // static RxString appStoreLink = "".obs;
 
   static Future storeDataInfo({required Map<String, dynamic> data}) async {
-    prefs.write(Prefs.userId, data['_id'] ?? "");
-    prefs.write(Prefs.roleSlags, data['role']["role_slug"] ?? "");
+    prefs.write(Prefs.userId, data['id'] ?? "");
+    // prefs.write(Prefs.roleSlags, data['role']["role_slug"] ?? "");
     prefs.write(Prefs.firstName, data['first_name'] ?? "");
     prefs.write(Prefs.lastName, data['last_name'] ?? "");
-    prefs.write(Prefs.userImage, data['user_image'] ?? "");
-    prefs.write(Prefs.mobileNumber, data['mobile_no'] ?? "");
-    prefs.write(Prefs.isUserActive, data['isActive'] ?? false);
-    prefs.write(Prefs.isUserVerify, data['isVerify'] ?? false);
+    prefs.write(Prefs.userImage, data['image'] ?? "");
+    prefs.write(Prefs.mobileNumber, data['phone'] ?? "");
+    prefs.write(Prefs.isUserActive, data['is_active'] == 0 ? false : true);
+    prefs.write(Prefs.isUserVerify, data['is_verified'] == 0 ? false : true);
 
     userId.value = prefs.read(Prefs.userId) ?? "";
     roleSlags.value = prefs.read(Prefs.roleSlags) ?? "";
@@ -82,22 +83,22 @@ class LocalStorage {
     isUserVerify.value = prefs.read(Prefs.isUserVerify) ?? false;
   }
 
-  static Future updateOrStoreLikes({required Map<String, dynamic> linkObject}) async {
-    //! Don't clear any links in local storage
-    await prefs.write(Prefs.privacyPolicyLink, linkObject["privacy_policy"] ?? "");
-    await prefs.write(Prefs.termsAndConditionsLink, linkObject["terms_and_conditions"] ?? "");
-    await prefs.write(Prefs.faqLink, linkObject["faq"] ?? "");
-    await prefs.write(Prefs.aboutUsLink, linkObject["about_us"] ?? "");
-    await prefs.write(Prefs.playStoreLink, linkObject["play_store"] ?? "");
-    await prefs.write(Prefs.appStoreLink, linkObject["app_store"] ?? "");
-
-    privacyPolicyLink.value = prefs.read(Prefs.privacyPolicyLink) ?? "";
-    termsAndConditionsLink.value = prefs.read(Prefs.termsAndConditionsLink) ?? "";
-    faqLink.value = prefs.read(Prefs.faqLink) ?? "";
-    aboutUsLink.value = prefs.read(Prefs.aboutUsLink) ?? "";
-    playStoreLink.value = prefs.read(Prefs.playStoreLink) ?? "";
-    appStoreLink.value = prefs.read(Prefs.appStoreLink) ?? "";
-  }
+  // static Future updateOrStoreLikes({required Map<String, dynamic> linkObject}) async {
+  //   //! Don't clear any links in local storage
+  //   await prefs.write(Prefs.privacyPolicyLink, linkObject["privacy_policy"] ?? "");
+  //   await prefs.write(Prefs.termsAndConditionsLink, linkObject["terms_and_conditions"] ?? "");
+  //   await prefs.write(Prefs.faqLink, linkObject["faq"] ?? "");
+  //   await prefs.write(Prefs.aboutUsLink, linkObject["about_us"] ?? "");
+  //   await prefs.write(Prefs.playStoreLink, linkObject["play_store"] ?? "");
+  //   await prefs.write(Prefs.appStoreLink, linkObject["app_store"] ?? "");
+  //
+  //   privacyPolicyLink.value = prefs.read(Prefs.privacyPolicyLink) ?? "";
+  //   termsAndConditionsLink.value = prefs.read(Prefs.termsAndConditionsLink) ?? "";
+  //   faqLink.value = prefs.read(Prefs.faqLink) ?? "";
+  //   aboutUsLink.value = prefs.read(Prefs.aboutUsLink) ?? "";
+  //   playStoreLink.value = prefs.read(Prefs.playStoreLink) ?? "";
+  //   appStoreLink.value = prefs.read(Prefs.appStoreLink) ?? "";
+  // }
 
   Future updateUserInfo({String? fistNaMEe, String? lastNaME, String? userImaGE}) async {
     if (!isValEmpty(fistNaMEe)) {
@@ -114,22 +115,15 @@ class LocalStorage {
     }
   }
 
-  static Future<void> updateTipLikeStatus({required bool? likeConcePT}) async {
-    await prefs.write(Prefs.likeConcept, likeConcePT ?? true);
-    likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
-  }
-
-  static Future<void> updatePreviewStatus({required bool? showPreviEW}) async {
-    await prefs.write(Prefs.showPreview, showPreviEW ?? true);
-    showPreview.value = prefs.read(Prefs.showPreview) ?? true;
-  }
-
-  static Future<void> updateGuestUserStatus({required bool? isGuestUsER, String? guestUserID}) async {
-    await prefs.write(Prefs.isGuestUser, isGuestUsER ?? true);
-    await prefs.write(Prefs.userId, guestUserID ?? "");
-    isGuestUser.value = prefs.read(Prefs.isGuestUser) ?? true;
-    userId.value = prefs.read(Prefs.userId) ?? "";
-  }
+  // static Future<void> updateTipLikeStatus({required bool? likeConcePT}) async {
+  //   await prefs.write(Prefs.likeConcept, likeConcePT ?? true);
+  //   likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
+  // }
+  //
+  // static Future<void> updatePreviewStatus({required bool? showPreviEW}) async {
+  //   await prefs.write(Prefs.showPreview, showPreviEW ?? true);
+  //   showPreview.value = prefs.read(Prefs.showPreview) ?? true;
+  // }
 
   static Future<void> setLoginToken({required String userToken}) async {
     await prefs.write(Prefs.token, userToken.isNotEmpty ? userToken : token);
@@ -170,15 +164,15 @@ class LocalStorage {
     isUserActive = false.obs;
     isUserVerify = false.obs;
 
-    isGuestUser = true.obs;
-    showPreview = true.obs;
-    likeConcept = true.obs;
-
-    if (clearDeviceData == true) {
-      deviceId = "".obs;
-      deviceToken = "".obs;
-      deviceType = "".obs;
-    }
+    // isGuestUser = true.obs;
+    // showPreview = true.obs;
+    // likeConcept = true.obs;
+    //
+    // if (clearDeviceData == true) {
+    //   deviceId = "".obs;
+    //   deviceToken = "".obs;
+    //   deviceType = "".obs;
+    // }
   }
 
   static Future<void> readDataInfo() async {
@@ -192,26 +186,27 @@ class LocalStorage {
     isUserActive.value = prefs.read(Prefs.isUserActive) ?? false;
     isUserVerify.value = prefs.read(Prefs.isUserVerify) ?? false;
 
-    isGuestUser.value = prefs.read(Prefs.isGuestUser) ?? true;
-    showPreview.value = prefs.read(Prefs.showPreview) ?? true;
-    likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
+    // isGuestUser.value = prefs.read(Prefs.isGuestUser) ?? true;
+    // showPreview.value = prefs.read(Prefs.showPreview) ?? true;
+    // likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
 
     deviceId.value = prefs.read(Prefs.deviceId) ?? "";
     deviceToken.value = prefs.read(Prefs.deviceFCMToken) ?? "";
     deviceType.value = prefs.read(Prefs.deviceType) ?? "";
 
-    privacyPolicyLink.value = prefs.read(Prefs.privacyPolicyLink) ?? "";
-    termsAndConditionsLink.value = prefs.read(Prefs.termsAndConditionsLink) ?? "";
-    faqLink.value = prefs.read(Prefs.faqLink) ?? "";
-    aboutUsLink.value = prefs.read(Prefs.aboutUsLink) ?? "";
-    playStoreLink.value = prefs.read(Prefs.playStoreLink) ?? "";
-    appStoreLink.value = prefs.read(Prefs.appStoreLink) ?? "";
+    // privacyPolicyLink.value = prefs.read(Prefs.privacyPolicyLink) ?? "";
+    // termsAndConditionsLink.value = prefs.read(Prefs.termsAndConditionsLink) ?? "";
+    // faqLink.value = prefs.read(Prefs.faqLink) ?? "";
+    // aboutUsLink.value = prefs.read(Prefs.aboutUsLink) ?? "";
+    // playStoreLink.value = prefs.read(Prefs.playStoreLink) ?? "";
+    // appStoreLink.value = prefs.read(Prefs.appStoreLink) ?? "";
+    printLocalStorageData();
   }
 
   static Future<void> printLocalStorageData() async {
     printData(key: "Device Id", value: LocalStorage.deviceId.value);
     printData(key: "Device Token", value: LocalStorage.deviceToken.value);
-    printData(key: "Guest User", value: LocalStorage.isGuestUser.value);
+    // printData(key: "Guest User", value: LocalStorage.isGuestUser.value);
     printData(key: "User access token", value: LocalStorage.token.value);
     printData(key: "User userId", value: LocalStorage.userId.value);
     printData(key: "User roleSlags", value: LocalStorage.roleSlags);
@@ -221,7 +216,7 @@ class LocalStorage {
     printData(key: "User mobileNumber", value: LocalStorage.mobileNumber.value);
     printData(key: "User isUserActive", value: LocalStorage.isUserActive.value);
     printData(key: "User isUserVerify", value: LocalStorage.isUserVerify.value);
-    printData(key: "Show Preview", value: LocalStorage.showPreview.value);
-    printData(key: "Like Concept", value: LocalStorage.likeConcept.value);
+    // printData(key: "Show Preview", value: LocalStorage.showPreview.value);
+    // printData(key: "Like Concept", value: LocalStorage.likeConcept.value);
   }
 }
