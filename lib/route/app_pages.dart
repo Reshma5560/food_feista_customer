@@ -18,10 +18,10 @@ class AppPages {
       name: AppRoutes.loginScreen,
       page: () => LoginScreen(),
     ),
-    GetPage(
-      name: AppRoutes.otpVerificationScreen,
-      page: () => VerifyOtpScreen(),
-    ),
+    // GetPage(
+    //   name: AppRoutes.otpVerificationScreen,
+    //   page: () => VerifyOtpScreen(),
+    // ),
     GetPage(
       name: AppRoutes.registerScreen,
       page: () => SignUpScreen(),
