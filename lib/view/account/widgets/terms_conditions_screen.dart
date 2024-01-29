@@ -46,7 +46,8 @@ class TermsConditionsScreen extends StatelessWidget {
                         height: defaultPadding,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: defaultPadding),
                         child: Text(
                           '''1. Acceptance of Terms
 

@@ -6,6 +6,15 @@ class AppAssets {
 
   /// ICONS ///
   static String infoProfileIcon = '${iconPath}info_profile_icon.png';
+  static String homeIcon = '${iconPath}ic_home.png';
+  static String categoryIcon = '${iconPath}ic_category.png';
+  static String menuIcon = '${iconPath}ic_menu.png';
+  static String profileIcon = '${iconPath}ic_profile.png';
+  static String scanningIcon = '${iconPath}ic_scanning.png';
+  static String searchIcon = '${iconPath}ic_search.png';
+  static String shoppingBasketIcon = '${iconPath}ic_shopping_basket.png';
+  static String piggyBank="${iconPath}ic_piggy_bank.png";
+  
 
   /// IMAGES ///
   static String appLogo = '${imagesPath}app_logo.png';

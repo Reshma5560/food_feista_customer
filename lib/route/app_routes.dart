@@ -7,6 +7,7 @@ class AppRoutes {
   static String aboutUsScreen = '/ABOUT_US_SCREEN';
   static String termsConditionsScreen = '/TERMS_CONDITIONS_SCREEN';
   static String contactUsScreen = '/CONTACT_US_SCREEN';
+  static String indexScreen="/INDEX_SCREEN";
 /*  static String bottomBarScreen = '/BOTTOMBAR_SCREEN';
   static String createOrUpdateGroupScreen = '/CREATE_NEW_GROUP_SCREEN';
   static String notificationScreen = '/NOTIFICATION_SCREEN';

@@ -1,6 +1,7 @@
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
 import 'package:foodapplication/view/auth/verifiy_otp_screen.dart';
+import 'package:foodapplication/view/index/index_screen.dart';
 import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
@@ -39,5 +40,9 @@ class AppPages {
       name: AppRoutes.contactUsScreen,
       page: () => ContactUsScreen(),
     ),
+     GetPage(
+      name: AppRoutes.indexScreen,
+      page: () => IndexScreen(),
+    )
   ];
 }
