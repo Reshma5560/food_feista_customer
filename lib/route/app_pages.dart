@@ -1,5 +1,8 @@
 import 'package:foodapplication/view/account/account_screen.dart';
+import 'package:foodapplication/view/account/widgets/add_address_screen.dart';
 import 'package:foodapplication/view/account/widgets/edit_account_screen.dart';
+import 'package:foodapplication/view/account/widgets/location_screen.dart';
+import 'package:foodapplication/view/account/widgets/manage_address_screen.dart';
 import 'package:foodapplication/view/account/widgets/update_password.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
@@ -43,23 +46,34 @@ class AppPages {
       name: AppRoutes.contactUsScreen,
       page: () => ContactUsScreen(),
     ),
-     GetPage(
+    GetPage(
       name: AppRoutes.indexScreen,
       page: () => IndexScreen(),
     ),
-    
-     GetPage(
+
+    GetPage(
       name: AppRoutes.updatePasswordScreen,
       page: () => UpdatePasswordScreen(),
     ),
-     GetPage(
+    GetPage(
       name: AppRoutes.editAccountScreen,
       page: () => EditAccountScreen(),
     ),
-     GetPage(
+    GetPage(
       name: AppRoutes.accountScreen,
       page: () => AccountScreen(),
     ),
-
+    GetPage(
+      name: AppRoutes.manageAddressScreen,
+      page: () => ManageAddressScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.addAddressScreen,
+      page: () => AddAddressScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.locationScreen,
+      page: () => LocationScreen(),
+    )
   ];
 }

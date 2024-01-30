@@ -12,7 +12,15 @@ class ApiUrls {
   static String logoutUrl = "logout";
   static String getProfileUrl = "get-profile";
   static String updateUserProfileUrl = "update-profile";
-  static String updatePasswordUrl="update-password";
+  static String updatePasswordUrl = "update-password";
+  static String addAddressUrl = "add-address";
+  static String getAddressUrl = "get-address";
+  static String getCountryUrl = "get-country";
+  static String getStateUrl = "get-state/";
+  static String getCityUrl = "get-city/";
+  static String removeAddressUrl="remove-address/";
+  static String updateAddressUrl="update-address/";
+  static String getAddressByIdUrl="address-detail/"; 
 
 //account api
   static String contactUsUrl = "contact-us";
