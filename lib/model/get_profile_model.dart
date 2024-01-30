@@ -44,8 +44,8 @@ class Data {
     int isVerified;
     String verifyCode;
     dynamic deletedAt;
-    DateTime createdAt;
-    DateTime updatedAt;
+    // DateTime createdAt;
+    // DateTime updatedAt;
     int status;
     int orderCount;
     dynamic loginMedium;
@@ -75,8 +75,8 @@ class Data {
         required this.isVerified,
         required this.verifyCode,
         required this.deletedAt,
-        required this.createdAt,
-        required this.updatedAt,
+        // required this.createdAt,
+        // required this.updatedAt,
         required this.status,
         required this.orderCount,
         required this.loginMedium,
@@ -107,8 +107,8 @@ class Data {
         isVerified: json["is_verified"],
         verifyCode: json["verify_code"],
         deletedAt: json["deleted_at"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        // createdAt: DateTime.parse(json["created_at"]),
+        // updatedAt: DateTime.parse(json["updated_at"]),
         status: json["status"],
         orderCount: json["order_count"],
         loginMedium: json["login_medium"],
@@ -139,8 +139,8 @@ class Data {
         "is_verified": isVerified,
         "verify_code": verifyCode,
         "deleted_at": deletedAt,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        // "created_at": createdAt.toIso8601String(),
+        // "updated_at": updatedAt.toIso8601String(),
         "status": status,
         "order_count": orderCount,
         "login_medium": loginMedium,

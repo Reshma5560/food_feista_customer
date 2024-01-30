@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodapplication/controller/edit_account_controller.dart';
+import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_button.dart';

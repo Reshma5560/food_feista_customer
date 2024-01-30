@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodapplication/common_widgets/custom_alert_dislog.dart';
-import 'package:foodapplication/controller/account_controller.dart';
-import 'package:foodapplication/repositories/desktop_repositories.dart';
+import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -187,6 +186,16 @@ class AccountScreen extends StatelessWidget {
             title: 'Edit Account',
             onPressed: () {
               Get.toNamed(AppRoutes.editAccountScreen);
+            },
+          ),
+          Divider(
+            color: AppColors.grey,
+          ),
+          CustomListTile(
+            icon: Icons.location_on,
+            title: 'Manage Address',
+            onPressed: () {
+              Get.toNamed(AppRoutes.manageAddressScreen);
             },
           ),
           Divider(

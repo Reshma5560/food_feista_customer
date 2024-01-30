@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart' as dio;
-import 'package:foodapplication/controller/account_controller.dart';
-import 'package:foodapplication/controller/edit_account_controller.dart';
+import 'package:foodapplication/controller/account/account_controller.dart';
+import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/model/get_profile_model.dart';
