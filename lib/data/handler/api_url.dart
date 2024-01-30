@@ -3,15 +3,19 @@ import '../../app_environment.dart';
 class ApiUrls {
   static String baseUrl = AppEnvironment().getApiURL();
 
-
   //? Auth Api's
   static String loginUrl = "customer-login";
   static String registerUrl = "auth/sign-up";
   static String verifyToken = "auth/verify-token";
   static String changePassword = "users/change-password";
   static String deleteAccount = "users/delete-account";
-  static String logoutUrl = "auth/logout";
-  static String updateUserProfileUrl = "users/";
+  static String logoutUrl = "logout";
+  static String getProfileUrl = "get-profile";
+  static String updateUserProfileUrl = "update-profile";
+  static String updatePasswordUrl="update-password";
+
+//account api
+  static String contactUsUrl = "contact-us";
 
 // //? Bottombar Api's
 // static String groups = "group/group-list";

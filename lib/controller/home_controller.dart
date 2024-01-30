@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:foodapplication/model/food_list_model.dart';
 import 'package:foodapplication/model/image_title_model.dart';
@@ -58,4 +59,6 @@ OFF'''),
     "Whats New",
     "Deal Products"
   ];
+
+ 
 }

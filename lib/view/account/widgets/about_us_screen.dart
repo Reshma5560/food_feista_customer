@@ -29,7 +29,7 @@ class AboutUsScreen extends StatelessWidget {
               children: [
                 CommonAppBar(
                   title: "About Us",
-                  onPressed: () {},
+                  onPressed: () {Get.back();},
                 ),
                 Expanded(
                   child: ListView(

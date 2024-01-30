@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodapplication/common_widgets/custom_alert_dislog.dart';
 import 'package:foodapplication/common_widgets/title_button_row_widget.dart';
 import 'package:foodapplication/controller/home_controller.dart';
 import 'package:foodapplication/res/app_assets.dart';
@@ -8,6 +9,7 @@ import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:foodapplication/res/app_theme.dart';
+import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
@@ -50,11 +52,14 @@ class HomeScreen extends StatelessWidget {
         child: AppBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           centerTitle: true,
-          leading: Image.asset(
-            AppAssets.menuIcon,
-            height: 10.h,
-            width: 10.w,
-          ).paddingOnly(left: 15),
+          leading: InkWell(
+            onTap: () {},
+            child: Image.asset(
+              AppAssets.menuIcon,
+              height: 10.h,
+              width: 10.w,
+            ).paddingOnly(left: 15),
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -30,7 +30,7 @@ class TermsConditionsScreen extends StatelessWidget {
               children: [
                 CommonAppBar(
                   title: "Terms & Conditions",
-                  onPressed: () {},
+                  onPressed: () {Get.back();},
                 ),
                 Expanded(
                   child: ListView(
