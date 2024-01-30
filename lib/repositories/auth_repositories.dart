@@ -4,15 +4,15 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:foodapplication/controller/account/components/add_address_controller.dart';
 import 'package:foodapplication/controller/account/components/manage_Address_controller.dart';
-import 'package:foodapplication/model/get_address_model.dart';
-import 'package:foodapplication/model/get_city_model.dart';
-import 'package:foodapplication/model/get_country_model.dart';
-import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../data/api/api_function.dart';
 import '../data/handler/api_url.dart';
+import '../data/model/get_address_model.dart';
+import '../data/model/get_city_model.dart';
+import '../data/model/get_country_model.dart';
+import '../data/model/get_state_model.dart';
 import '../res/color_print.dart';
 import '../res/ui_utils.dart';
 import '../utils/local_storage.dart';
@@ -140,7 +140,7 @@ class AuthRepository {
             isSuccessStatus.value = getCountryModel.status!;
             if (isSuccessStatus.value) {
               con.countryList.add(Country(countryName: 'Select country'));
-              con.countryList.value.addAll(getCountryModel.data!);
+              con.countryList.addAll(getCountryModel.data!);
               con.countryDropDownValue = con.countryList[0];
               con.countryList.refresh();
             } else {
@@ -219,7 +219,7 @@ class AuthRepository {
             isSuccessStatus.value = getCityModel.status!;
             if (isSuccessStatus.value) {
               con.cityList.add(City(cityName: 'Select city'));
-              con.cityList.value.addAll(getCityModel.data!);
+              con.cityList.addAll(getCityModel.data!);
               con.cityDropDownValue = con.cityList[0];
               con.cityList.refresh();
             } else {

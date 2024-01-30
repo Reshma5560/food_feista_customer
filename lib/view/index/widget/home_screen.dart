@@ -10,14 +10,14 @@ import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
-import '../../model/home_data_model.dart';
-import '../../res/app_loader.dart';
-import '../../res/box_shadow.dart';
+import '../../../data/model/home_data_model.dart';
+import '../../../res/app_loader.dart';
+import '../../../res/box_shadow.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final homeController = Get.put(HomeController());
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -326,7 +326,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _sellingTypeListModule() {
+  Widget sellingTypeListModule() {
     return SizedBox(
       height: 33,
       child: ListView.builder(
@@ -368,7 +368,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _foodListByCategoryModule() {
+  Widget foodListByCategoryModule() {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,

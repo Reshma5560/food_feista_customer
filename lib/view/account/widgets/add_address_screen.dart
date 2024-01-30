@@ -4,10 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/add_address_controller.dart';
-import 'package:foodapplication/model/get_city_model.dart';
-import 'package:foodapplication/model/get_country_model.dart';
-// import 'package:foodapplication/model/get_address_model.dart';
-import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_button.dart';
@@ -15,6 +11,10 @@ import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
+
+import '../../../data/model/get_city_model.dart';
+import '../../../data/model/get_country_model.dart';
+import '../../../data/model/get_state_model.dart';
 
 class AddAddressScreen extends StatelessWidget {
   AddAddressScreen({super.key});
@@ -351,7 +351,7 @@ class AddAddressScreen extends StatelessWidget {
           decoration: InputDecoration(
             fillColor: AppColors.white,
             filled: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 18.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
             enabledBorder: OutlineInputBorder(
               // borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: AppColors.grey),
@@ -409,7 +409,7 @@ class AddAddressScreen extends StatelessWidget {
           decoration: InputDecoration(
             fillColor: AppColors.white,
             filled: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 18.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
             enabledBorder: OutlineInputBorder(
               // borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: AppColors.grey),
@@ -425,7 +425,7 @@ class AddAddressScreen extends StatelessWidget {
             Icons.keyboard_arrow_down_rounded,
             color: AppColors.grey,
           ),
-          items: con.cityList.value.map<DropdownMenuItem<City>>((City value) {
+          items: con.cityList.map<DropdownMenuItem<City>>((City value) {
             log("value.name ${value.cityName}");
             return DropdownMenuItem<City>(
               value: value,
@@ -481,7 +481,7 @@ class AddAddressScreen extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: AppTextField(
             controller: con.logTextEditingController,

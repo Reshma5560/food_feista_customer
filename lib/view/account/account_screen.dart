@@ -11,6 +11,7 @@ class AccountScreen extends StatelessWidget {
   AccountScreen({super.key});
 
   final profileController = Get.put(ProfileController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +30,7 @@ class AccountScreen extends StatelessWidget {
           const SizedBox(
             height: defaultPadding,
           ),
-          Text("My Account",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Theme.of(context).primaryColor))
+          Text("My Account", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor))
               .paddingSymmetric(horizontal: defaultPadding),
           const SizedBox(
             height: defaultPadding,
@@ -109,8 +106,7 @@ class AccountScreen extends StatelessWidget {
                             ),
                             onError: (exception, stackTrace) =>
                                 // Image.asset(AppImages.appLogoImage),
-                                Image.network(
-                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                Image.network("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -127,8 +123,7 @@ class AccountScreen extends StatelessWidget {
                               fit: BoxFit.cover,
                               onError: (exception, stackTrace) =>
                                   // Image.asset(AppImages.appLogoImage),
-                                  Image.network(
-                                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
+                                  Image.network("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
                         ),
                       ),
               ),
@@ -165,14 +160,10 @@ class AccountScreen extends StatelessWidget {
       const SizedBox(
         height: 10,
       ),
-      Text(
-          "${profileController.getDataMap?.data.firstName} ${profileController.getDataMap?.data.lastName}",
+      Text("${profileController.getDataMap?.data.firstName} ${profileController.getDataMap?.data.lastName}",
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
       Text("+91 ${profileController.getDataMap?.data.phone}",
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: AppColors.greyFontColor))
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.greyFontColor))
     ]);
   }
 
@@ -201,9 +192,12 @@ class AccountScreen extends StatelessWidget {
           Divider(
             color: AppColors.grey,
           ),
-          const CustomListTile(
+          CustomListTile(
             icon: Icons.favorite,
             title: 'Favorite',
+            onPressed: () {
+              Get.toNamed(AppRoutes.wishListScreen);
+            },
           ),
           Divider(
             color: AppColors.grey,
@@ -269,8 +263,8 @@ class CustomListTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final void Function()? onPressed;
-  const CustomListTile(
-      {super.key, required this.icon, required this.title, this.onPressed});
+
+  const CustomListTile({super.key, required this.icon, required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -284,10 +278,7 @@ class CustomListTile extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        Expanded(
-            child: Text(title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 14))),
+        Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
         Icon(
           Icons.arrow_forward_ios,
           size: defaultPadding,

@@ -18,15 +18,18 @@ class ApiUrls {
   static String getCountryUrl = "get-country";
   static String getStateUrl = "get-state/";
   static String getCityUrl = "get-city/";
-  static String removeAddressUrl="remove-address/";
-  static String updateAddressUrl="update-address/";
-  static String getAddressByIdUrl="address-detail/"; 
+  static String removeAddressUrl = "remove-address/";
+  static String updateAddressUrl = "update-address/";
+  static String getAddressByIdUrl = "address-detail/";
 
 //account api
   static String contactUsUrl = "contact-us";
+
   //home data
   static String homeDataUrl = "home/city/1";
 
+  ///wish list
+  static String getWishListUrl = "home/city/1";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";

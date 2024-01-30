@@ -6,13 +6,14 @@ import 'package:foodapplication/view/account/widgets/manage_address_screen.dart'
 import 'package:foodapplication/view/account/widgets/update_password.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
-import 'package:foodapplication/view/home/home_screen.dart';
-import 'package:foodapplication/view/index/index_screen.dart';
+import 'package:foodapplication/view/index/widget/home_screen.dart';
 import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
 import '../view/account/widgets/contact_us_screen.dart';
 import '../view/account/widgets/terms_conditions_screen.dart';
+import '../view/account/widgets/wish_list_screen.dart';
+import '../view/index/bottom_screen.dart';
 import '../view/splash/splash_screen.dart';
 import 'app_routes.dart';
 
@@ -79,6 +80,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.locationScreen,
       page: () => LocationScreen(),
-    )
+    ),
+    GetPage(
+      name: AppRoutes.wishListScreen,
+      page: () => WishListScreen(),
+    ),
   ];
 }

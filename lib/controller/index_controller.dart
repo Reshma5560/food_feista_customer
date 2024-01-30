@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodapplication/view/account/account_screen.dart';
-import 'package:foodapplication/view/cart/cart_screen.dart';
-import 'package:foodapplication/view/home/home_screen.dart';
-import 'package:foodapplication/view/my%20order/my_order_screen.dart';
-import 'package:foodapplication/view/search/search_screen.dart';
+import 'package:foodapplication/view/index/widget/cart_screen.dart';
+import 'package:foodapplication/view/index/widget/home_screen.dart';
+import 'package:foodapplication/view/index/widget/my_order_screen.dart';
+import 'package:foodapplication/view/index/widget/search_screen.dart';
 import 'package:get/get.dart';
 
 class IndexController extends GetxController {

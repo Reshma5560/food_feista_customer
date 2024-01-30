@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodapplication/model/food_list_model.dart';
-import 'package:foodapplication/model/image_title_model.dart';
 import 'package:get/get.dart';
 
-import '../model/home_data_model.dart';
+import '../data/model/food_list_model.dart';
+import '../data/model/home_data_model.dart';
 import '../repositories/desktop_repositories.dart';
 
 class HomeController extends GetxController {

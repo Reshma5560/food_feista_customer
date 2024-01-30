@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-import 'package:foodapplication/model/get_country_model.dart';
+import 'get_country_model.dart';
+
 
 GetStateModel getStateModelFromJson(String str) =>
     GetStateModel.fromJson(json.decode(str));

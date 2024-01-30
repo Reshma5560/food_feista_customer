@@ -23,7 +23,7 @@ class CartScreen extends StatelessWidget {
           child: Row(
             children: [
               Obx(() => Expanded(
-                  child: Text("\$${cartController.TotalAmount.value}"))),
+                  child: Text("\$${cartController.totalAmount.value}"))),
               AppButton(
                 width: 100,
                 height: 30,
@@ -193,8 +193,8 @@ class CartScreen extends StatelessWidget {
                           total.value = (total.value!.toDouble() -
                               item.price!.toDouble())!;
 
-                          cartController.TotalAmount.value =
-                              cartController.TotalAmount.value -
+                          cartController.totalAmount.value =
+                              cartController.totalAmount.value -
                                   item.price!.toDouble();
                         }
                       },
@@ -229,8 +229,8 @@ class CartScreen extends StatelessWidget {
                         total.value =
                             (total.value!.toDouble() + item.price!.toDouble());
 
-                        cartController.TotalAmount.value =
-                            cartController.TotalAmount.value +
+                        cartController.totalAmount.value =
+                            cartController.totalAmount.value +
                                 item.price!.toDouble();
                       },
                       child: Container(

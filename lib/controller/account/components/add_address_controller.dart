@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:foodapplication/model/get_city_model.dart';
-import 'package:foodapplication/model/get_country_model.dart';
-import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+
+import '../../../data/model/get_city_model.dart';
+import '../../../data/model/get_country_model.dart';
+import '../../../data/model/get_state_model.dart';
 
 class AddAddressController extends GetxController {
   TextEditingController addressCon = TextEditingController();
@@ -70,10 +71,6 @@ class AddAddressController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   @override
   void onReady() {

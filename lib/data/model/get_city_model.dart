@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-import 'package:foodapplication/model/get_address_model.dart';
-import 'package:foodapplication/model/get_state_model.dart';
+import 'get_state_model.dart';
+
 
 GetCityModel getCityModelFromJson(String str) =>
     GetCityModel.fromJson(json.decode(str));

@@ -1,8 +1,9 @@
-import 'package:foodapplication/model/food_list_model.dart';
 import 'package:get/get.dart';
 
+import '../data/model/food_list_model.dart';
+
 class CartController extends GetxController {
-  Rx<double> TotalAmount = 0.00.obs;
+  Rx<double> totalAmount = 0.00.obs;
 
   List<FoodListModel> cartList = [
     FoodListModel(
@@ -91,7 +92,7 @@ class CartController extends GetxController {
   @override
   void onInit() {
     for (var i = 0; i < cartList.length; i++) {
-      TotalAmount.value = TotalAmount.value + cartList[i].price!.toDouble();
+      totalAmount.value = totalAmount.value + cartList[i].price!.toDouble();
     }
     // TODO: implement onInit
     super.onInit();
