@@ -8,9 +8,10 @@ class AppRoutes {
   static String termsConditionsScreen = '/TERMS_CONDITIONS_SCREEN';
   static String contactUsScreen = '/CONTACT_US_SCREEN';
   static String indexScreen="/INDEX_SCREEN";
-  static String editAccountScreen="/EDITACCOUNTSCREEN";
-  static String accountScreen="/ACCOUNTSCREEN";
-  static String updatePasswordScreen="/UPDATEPASSWORDSCREEN";
+  static String editAccountScreen="/EDIT_ACCOUNT_SCREEN";
+  static String accountScreen="/ACCOUNT_SCREEN";
+  static String updatePasswordScreen="/UPDATE_PASSWORD_SCREEN";
+  static String homeScreen="/HOME_SCREEN";
 /*  static String bottomBarScreen = '/BOTTOMBAR_SCREEN';
   static String createOrUpdateGroupScreen = '/CREATE_NEW_GROUP_SCREEN';
   static String notificationScreen = '/NOTIFICATION_SCREEN';

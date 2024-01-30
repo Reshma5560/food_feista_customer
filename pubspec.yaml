@@ -44,6 +44,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   get_storage: ^2.1.1
   flutter_local_notifications: ^16.3.2
+  flutter_rating_bar: ^4.0.1
   flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.9
   webview_flutter: ^4.4.4

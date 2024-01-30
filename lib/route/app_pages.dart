@@ -3,7 +3,7 @@ import 'package:foodapplication/view/account/widgets/edit_account_screen.dart';
 import 'package:foodapplication/view/account/widgets/update_password.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
-import 'package:foodapplication/view/auth/verifiy_otp_screen.dart';
+import 'package:foodapplication/view/home/home_screen.dart';
 import 'package:foodapplication/view/index/index_screen.dart';
 import 'package:get/get.dart';
 
@@ -52,14 +52,17 @@ class AppPages {
       name: AppRoutes.updatePasswordScreen,
       page: () => UpdatePasswordScreen(),
     ),
-     GetPage(
+    GetPage(
       name: AppRoutes.editAccountScreen,
       page: () => EditAccountScreen(),
     ),
-     GetPage(
+    GetPage(
       name: AppRoutes.accountScreen,
       page: () => AccountScreen(),
     ),
-
+    GetPage(
+      name: AppRoutes.homeScreen,
+      page: () => HomeScreen(),
+    ),
   ];
 }

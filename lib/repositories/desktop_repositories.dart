@@ -12,6 +12,9 @@ import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
+import '../controller/home_controller.dart';
+import '../model/home_data_model.dart';
+
 class DesktopRepository {
   // Future<dynamic> logOutApiCall({RxBool? isLoader}) async {
   //   try {
@@ -57,7 +60,6 @@ class DesktopRepository {
         },
       );
     } on dio.DioException catch (e) {
-    
       if (e.response?.statusCode == 404) {
         printWarning(e.response?.statusCode);
         printError(type: this, errText: "$e");
@@ -103,6 +105,42 @@ class DesktopRepository {
       }
     } finally {
       isLoader?.value = false;
+    }
+  }
+
+  Future<dynamic> getHomeData() async {
+    final HomeController con = Get.find<HomeController>();
+
+    try {
+      await APIFunction().getApiCall(apiName: ApiUrls.homeDataUrl).then(
+        (response) async {
+          HomeDataModel homeDataModel = HomeDataModel.fromJson(response);
+
+          ///banner list
+          con.bannerList.clear();
+          con.bannerList.value = homeDataModel.banner ?? [];
+
+          ///category List
+          con.categoryList.clear();
+          con.categoryList.value = homeDataModel.categories ?? [];
+
+          ///Restaurant List
+          con.restaurantList.clear();
+          con.restaurantList.value = homeDataModel.restaurant ?? [];
+
+          ///Blog List
+          con.blogList.clear();
+          con.blogList.value = homeDataModel.blogs ?? [];
+
+          ///trendingFood List
+          con.trendingFoodList.clear();
+          con.trendingFoodList.value = homeDataModel.trendingFoods ?? [];
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      con.isLoading.value = false;
     }
   }
 }

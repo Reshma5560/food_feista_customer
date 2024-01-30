@@ -97,7 +97,7 @@ class Data {
         lastName: json["last_name"],
         phone: json["phone"],
         email: json["email"],
-        image: json["image"],
+        image: json["image"]??"",
         isPhoneVerified: json["is_phone_verified"],
         emailVerifiedAt: json["email_verified_at"],
         emailVerificationToken: json["email_verification_token"],

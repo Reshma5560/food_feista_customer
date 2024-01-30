@@ -16,6 +16,8 @@ class ApiUrls {
 
 //account api
   static String contactUsUrl = "contact-us";
+  //home data
+  static String homeDataUrl = "home/city/1";
 
 // //? Bottombar Api's
 // static String groups = "group/group-list";
