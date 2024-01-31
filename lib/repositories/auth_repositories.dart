@@ -2,17 +2,19 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:foodapplication/controller/account/components/add_address_controller.dart';
 import 'package:foodapplication/controller/account/components/manage_Address_controller.dart';
+import 'package:foodapplication/model/get_add_by_id_model.dart';
+import 'package:foodapplication/model/get_address_model.dart';
+import 'package:foodapplication/model/get_city_model.dart';
+import 'package:foodapplication/model/get_country_model.dart';
+import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../data/api/api_function.dart';
 import '../data/handler/api_url.dart';
-import '../data/model/get_address_model.dart';
-import '../data/model/get_city_model.dart';
-import '../data/model/get_country_model.dart';
-import '../data/model/get_state_model.dart';
 import '../res/color_print.dart';
 import '../res/ui_utils.dart';
 import '../utils/local_storage.dart';
@@ -105,7 +107,7 @@ class AuthRepository {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
               // Get.back();
-              // Get.offAllNamed(AppRoutes.indexScreen);
+              Get.offAllNamed(AppRoutes.manageAddressScreen);
             }
           }
           return response;
@@ -140,7 +142,7 @@ class AuthRepository {
             isSuccessStatus.value = getCountryModel.status!;
             if (isSuccessStatus.value) {
               con.countryList.add(Country(countryName: 'Select country'));
-              con.countryList.addAll(getCountryModel.data!);
+              con.countryList.value.addAll(getCountryModel.data!);
               con.countryDropDownValue = con.countryList[0];
               con.countryList.refresh();
             } else {
@@ -219,7 +221,7 @@ class AuthRepository {
             isSuccessStatus.value = getCityModel.status!;
             if (isSuccessStatus.value) {
               con.cityList.add(City(cityName: 'Select city'));
-              con.cityList.addAll(getCityModel.data!);
+              con.cityList.value.addAll(getCityModel.data!);
               con.cityDropDownValue = con.cityList[0];
               con.cityList.refresh();
             } else {
@@ -239,6 +241,7 @@ class AuthRepository {
     }
   }
 
+//get all address api
   Future<dynamic> getAddressApiCall({RxBool? isLoader}) async {
     final con = Get.find<ManageAddressController>();
 
@@ -299,8 +302,7 @@ class AuthRepository {
   // get address by id api
   Future<void> getAddressByIdApiCall(
       {RxBool? isLoader, String? addressId}) async {
-    // final AddAddressController con = Get.find<AddAddressController>();
-    RxBool isSuccessStatus = false.obs;
+    final AddAddressController con = Get.find<AddAddressController>();
     try {
       isLoader?.value = true;
       await APIFunction()
@@ -309,22 +311,22 @@ class AuthRepository {
       )
           .then(
         (response) async {
+          printData(key: "get address  response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
-            // GetStateModel getStateModel = GetStateModel.fromJson(response);
-            // isSuccessStatus.value = getStateModel.status!;
-            if (isSuccessStatus.value) {
-              // con.stateList.add(StateList(stateName: 'Select state'));
-              // con.stateList.value = getStateModel.data ?? [];
-              // if (con.stateList.isNotEmpty) {
-              //   con.stateDropDownValue = con.stateList[0];
-              // }
-              // printData(key: "get state response", value: con.stateList.length);
-              // // con.stateList.refresh();
-              // await getAddressApiCall();
-            } else {
-              log("getAddressByIdApiCall else");
-            }
+            GetAddressByIdModel data = GetAddressByIdModel.fromJson(response);
+
+            con.getAddressData = data;
+            con.receiverNameCon.text =
+                con.getAddressData!.data.contactPersonName;
+            con.mobilenoCon.text = con.getAddressData!.data.contactPersonNumber;
+            con.zipcodeCon.text = con.getAddressData!.data.zipCode;
+            con.countryDropDownValue = con.getAddressData!.data.country;
+            con.stateDropDownValue = con.getAddressData!.data.state;
+            con.cityDropDownValue = con.getAddressData!.data.city;
+
+            log("${con.getAddressData}");
           }
+
           return response;
         },
       );

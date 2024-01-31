@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/manage_Address_controller.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_colors.dart';
+import 'package:foodapplication/res/app_enum.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -18,7 +21,15 @@ class ManageAddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.toNamed(AppRoutes.locationScreen),
+          onPressed: () {
+            Get.toNamed(
+              AppRoutes.locationScreen,
+              arguments: {
+                "enumType": AddressEnum.add,
+              },
+            );
+            log("==========${AddressEnum.add}");
+          },
           backgroundColor: Theme.of(context).primaryColor,
           child: const Icon(Icons.add),
         ),
@@ -40,73 +51,123 @@ class ManageAddressScreen extends StatelessWidget {
                     ),
                     Obx(
                       () => con.isLoader.value
-                          ? const AppLoader()
-                          : con.getAddressData!.data!.isEmpty
-                              ? const Align(alignment: Alignment.center, child: Text("No Address Found"))
+                          ? AppLoader()
+                          : con.getAddressData!.data.isEmpty
+                              ? Align(
+                                  alignment: Alignment.center,
+                                  child: Text("No Address Found"))
                               : Expanded(
                                   child: ListView(
                                     children: [
                                       Text(
                                         "SAVED ADDRESS",
-                                        style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(
                                         height: 10.w,
                                       ),
                                       ListView.builder(
-                                        itemCount: con.getAddressData?.data?.length,
+                                        itemCount:
+                                            con.getAddressData?.data.length,
                                         shrinkWrap: true,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          var item = con.getAddressData!.data?[index];
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          var item =
+                                              con.getAddressData?.data[index];
                                           return Container(
-                                            margin: const EdgeInsets.symmetric(vertical: 5),
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                            decoration:
-                                                BoxDecoration(border: Border.all(color: AppColors.grey), borderRadius: BorderRadius.circular(15)),
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 12),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: AppColors.grey),
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
                                                     Icon(
-                                                      item?.addressType == "home"
+                                                      item?.addressType ==
+                                                              "home"
                                                           ? Icons.home
-                                                          : item?.addressType == "office"
+                                                          : item?.addressType ==
+                                                                  "office"
                                                               ? Icons.work
-                                                              : Icons.other_houses,
-                                                      color: Theme.of(context).primaryColor,
+                                                              : Icons
+                                                                  .other_houses,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
                                                     ),
                                                     SizedBox(width: 5.w),
                                                     Expanded(
                                                       child: Text(
-                                                        item?.addressType == "home"
+                                                        item?.addressType ==
+                                                                "home"
                                                             ? "Home Address"
-                                                            : item?.addressType == "office"
+                                                            : item?.addressType ==
+                                                                    "office"
                                                                 ? "Work Address"
                                                                 : "Other Address",
                                                         style: const TextStyle(
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight:
+                                                              FontWeight.w700,
                                                         ),
                                                       ),
                                                     ),
                                                     InkWell(
                                                       onTap: () {
-                                                        AuthRepository().removeAddressByIdApiCall(addressId: item?.id);
+                                                        AuthRepository()
+                                                            .removeAddressByIdApiCall(
+                                                                addressId:
+                                                                    item?.id);
                                                       },
-                                                      child: Icon(Icons.delete, color: Theme.of(context).primaryColor),
+                                                      child: Icon(Icons.delete,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
                                                     ),
                                                     SizedBox(
                                                       width: 10.w,
                                                     ),
-                                                    Icon(Icons.edit, color: Theme.of(context).primaryColor)
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                          AppRoutes
+                                                              .locationScreen,
+                                                          arguments: {
+                                                            "enumType":
+                                                                AddressEnum
+                                                                    .edit,
+                                                            "AddressId":
+                                                                item?.id
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Icon(Icons.edit,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                    )
                                                   ],
                                                 ),
                                                 SizedBox(height: 10.w),
                                                 Text(
                                                   "${item?.floor} ${item?.address} ${item?.road} ${item?.house} ${item?.city.cityName} ${item?.state.stateName} ${item?.country.countryName}",
                                                   maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: AppColors
+                                                          .greyFontColor),
                                                 )
                                               ],
                                             ),
@@ -114,7 +175,8 @@ class ManageAddressScreen extends StatelessWidget {
                                         },
                                       ),
                                     ],
-                                  ).paddingSymmetric(horizontal: defaultPadding.w),
+                                  ).paddingSymmetric(
+                                      horizontal: defaultPadding.w),
                                 ),
                     ),
                   ]));

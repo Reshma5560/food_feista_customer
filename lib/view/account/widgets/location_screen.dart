@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodapplication/controller/account/components/add_address_controller.dart';
+import 'package:foodapplication/controller/account/components/location_controller.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,8 @@ import 'package:latlong2/latlong.dart';
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
 
-  final con = Get.put(AddAddressController());
+  final con = Get.put(LocationController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +24,10 @@ class LocationScreen extends StatelessWidget {
           children: [
             FlutterMap(
               options: MapOptions(
-                  center: con.latTextEditingController.text.isNotEmpty &&
-                          con.logTextEditingController.text.isNotEmpty
-                      ? LatLng(double.parse(con.logTextEditingController.text),
-                          double.parse(con.latTextEditingController.text))
+                  center: con.latValue.value.isNotEmpty &&
+                          con.longValue.value.isNotEmpty
+                      ? LatLng(double.parse(con.longValue.value),
+                          double.parse(con.latValue.value))
                       : const LatLng(40.7128, -74.0060
                           // double.parse("screenController.productDetails!.branch.longitude"),
                           // doubleouble.parse("screenController.productDetails!.branch.latitude"),
@@ -43,11 +46,10 @@ class LocationScreen extends StatelessWidget {
                 MarkerLayer(
                   markers: [
                     Marker(
-                      point: con.latTextEditingController.text.isNotEmpty &&
-                              con.logTextEditingController.text.isNotEmpty
-                          ? LatLng(
-                              double.parse(con.logTextEditingController.text),
-                              double.parse(con.latTextEditingController.text))
+                      point: con.latValue.value.isNotEmpty &&
+                              con.longValue.value.isNotEmpty
+                          ? LatLng(double.parse(con.longValue.value),
+                              double.parse(con.latValue.value))
                           : const LatLng(40.7128, -74.0060),
                       child: const Icon(
                         Icons.location_on,
@@ -66,8 +68,9 @@ class LocationScreen extends StatelessWidget {
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(
-                      color: AppColors.copyBackground,
-                      borderRadius: BorderRadius.circular(20),),
+                    color: AppColors.copyBackground,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   width: Get.width / 1.4,
                   child: Column(
                     children: [
@@ -80,22 +83,24 @@ class LocationScreen extends StatelessWidget {
                             width: 5.sp,
                           ),
                           Expanded(
-                            child: Obx(() => con.isLoader.value
-                                ? const Center(
-                                    child: const CircularProgressIndicator(),
-                                  )
-                                : con.place != null
-                                    ? Text(
-                                        "${con.place?.name} ${con.place?.subThoroughfare}, ${con.place?.thoroughfare}, ${con.place?.subLocality}, ${con.place?.locality}, ${con.place?.administrativeArea}, ${con.place?.postalCode}, ${con.place?.country}",
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColors.black),
-                                      )
-                                    : const Text("Loading..."),),
+                            child: Obx(
+                              () => con.isLoader.value
+                                  ? const Center(
+                                      child: const CircularProgressIndicator(),
+                                    )
+                                  : con.place != null
+                                      ? Text(
+                                          "${con.place?.name} ${con.place?.subThoroughfare}, ${con.place?.thoroughfare}, ${con.place?.subLocality}, ${con.place?.locality}, ${con.place?.administrativeArea}, ${con.place?.postalCode}, ${con.place?.country}",
+                                          textAlign: TextAlign.left,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColors.black),
+                                        )
+                                      : const Text("Loading..."),
+                            ),
                           ),
                         ],
                       ),
@@ -105,7 +110,31 @@ class LocationScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.toNamed(AppRoutes.addAddressScreen);
+                          var params = {
+                            "enumType": con.addressEnum,
+                            "AddressId": con.addressId.value,
+                            "place": con.place,
+                            "lat": con.latValue.value,
+                            "lng": con.longValue.value,
+                          };
+                          log(params.toString());
+                          Get.toNamed(
+                            AppRoutes.addAddressScreen,
+                            arguments: {
+                              "enumType": con.addressEnum,
+                              "AddressId": con.addressId.value,
+                              "place": con.place,
+                              "lat": con.latValue.value,
+                              "lng": con.longValue.value,
+                            },
+                          );
+                          // Get.toNamed(AppRoutes.addAddressScreen, arguments: [
+                          //   con.addressEnum,
+                          //   con.addressId,
+                          //   con.place,
+                          //   con.latValue.value,
+                          //   con.longValue.value
+                          // ]);
                         },
                         child: Text(
                           "CONFIRM LOCATION",
