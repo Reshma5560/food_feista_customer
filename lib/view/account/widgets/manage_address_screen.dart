@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/manage_Address_controller.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_colors.dart';
+import 'package:foodapplication/res/app_enum.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -13,11 +16,20 @@ class ManageAddressScreen extends StatelessWidget {
   ManageAddressScreen({super.key});
 
   final con = Get.put(ManageAddressController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.toNamed(AppRoutes.locationScreen),
+          onPressed: () {
+            Get.toNamed(
+              AppRoutes.locationScreen,
+              arguments: {
+                "enumType": AddressEnum.add,
+              },
+            );
+            log("==========${AddressEnum.add}");
+          },
           backgroundColor: Theme.of(context).primaryColor,
           child: const Icon(Icons.add),
         ),
@@ -125,9 +137,25 @@ class ManageAddressScreen extends StatelessWidget {
                                                     SizedBox(
                                                       width: 10.w,
                                                     ),
-                                                    Icon(Icons.edit,
-                                                        color: Theme.of(context)
-                                                            .primaryColor)
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                          AppRoutes
+                                                              .locationScreen,
+                                                          arguments: {
+                                                            "enumType":
+                                                                AddressEnum
+                                                                    .edit,
+                                                            "AddressId":
+                                                                item?.id
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Icon(Icons.edit,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                    )
                                                   ],
                                                 ),
                                                 SizedBox(height: 10.w),

@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 class AddAddressScreen extends StatelessWidget {
   AddAddressScreen({super.key});
 
-  final AddAddressController con = Get.find<AddAddressController>();
+  final AddAddressController con = Get.put(AddAddressController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +44,12 @@ class AddAddressScreen extends StatelessWidget {
                     ),
                     Expanded(
                         child: ListView(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       children: [
+                        _floorHouseModule(),
+                        SizedBox(height: 10.w),
                         _addressModule(),
                         SizedBox(height: 10.w),
                         Text(
@@ -123,6 +125,22 @@ class AddAddressScreen extends StatelessWidget {
       con.receiveerNameError.value = "";
     }
 
+    if (con.floorCon.value.text.isEmpty) {
+      con.floorValidation.value = true;
+      con.floorError.value = "Please Enter your floor.";
+    } else {
+      con.floorValidation.value = false;
+      con.floorError.value = "";
+    }
+
+    if (con.houseCon.value.text.isEmpty) {
+      con.houseValidation.value = true;
+      con.houseError.value = "Please Enter your house .";
+    } else {
+      con.houseValidation.value = false;
+      con.houseError.value = "";
+    }
+
     if (con.zipcodeCon.value.text.isEmpty) {
       con.zipcodeValidation.value = true;
       con.zipcodeError.value = "Please Enter your zipcode.";
@@ -146,7 +164,9 @@ class AddAddressScreen extends StatelessWidget {
         "city_id": con.cityDropDownValue.id,
         "zip_code": con.zipcodeCon.text,
         "latitude": con.latTextEditingController.text,
-        "longitude": con.logTextEditingController.text
+        "longitude": con.logTextEditingController.text,
+        'floor': con.floorCon.text,
+        "house": con.houseCon.text
       };
 
       print(params);
@@ -187,6 +207,46 @@ class AddAddressScreen extends StatelessWidget {
       onChanged: (value) {
         con.addressValidation.value = false;
       },
+    );
+  }
+
+  Widget _floorHouseModule() {
+    return Row(
+      children: [
+        Expanded(
+          child: AppTextField(
+            controller: con.floorCon,
+            errorMessage: con.floorError.value,
+            showError: con.floorValidation.value,
+            titleText: "Floor",
+            hintStyle:
+                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintText: "Enter fllor",
+            keyboardType: TextInputType.text,
+            readOnly: false,
+            onChanged: (value) {
+              con.floorValidation.value = false;
+            },
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: AppTextField(
+            controller: con.houseCon,
+            errorMessage: con.houseError.value,
+            showError: con.houseValidation.value,
+            readOnly: false,
+            titleText: "House",
+            hintStyle:
+                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintText: "Enter house",
+            keyboardType: TextInputType.text,
+            onChanged: (value) {
+              con.houseValidation.value = false;
+            },
+          ),
+        )
+      ],
     );
   }
 
@@ -351,7 +411,7 @@ class AddAddressScreen extends StatelessWidget {
           decoration: InputDecoration(
             fillColor: AppColors.white,
             filled: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 18.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
             enabledBorder: OutlineInputBorder(
               // borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: AppColors.grey),
@@ -409,7 +469,7 @@ class AddAddressScreen extends StatelessWidget {
           decoration: InputDecoration(
             fillColor: AppColors.white,
             filled: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 18.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 18.0),
             enabledBorder: OutlineInputBorder(
               // borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: AppColors.grey),
@@ -481,7 +541,7 @@ class AddAddressScreen extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: AppTextField(
             controller: con.logTextEditingController,
