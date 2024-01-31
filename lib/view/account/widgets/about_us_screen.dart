@@ -5,8 +5,6 @@ import 'package:foodapplication/res/app_style.dart';
 import 'package:get/get.dart';
 
 import '../../../res/app_appbar.dart';
-import '../../../res/app_colors.dart';
-import '../../../res/widgets/app_bar.dart';
 
 class AboutUsScreen extends StatelessWidget {
   AboutUsScreen({super.key});
@@ -29,7 +27,9 @@ class AboutUsScreen extends StatelessWidget {
               children: [
                 CommonAppBar(
                   title: "About Us",
-                  onPressed: () {Get.back();},
+                  onPressed: () {
+                    Get.back();
+                  },
                 ),
                 Expanded(
                   child: ListView(

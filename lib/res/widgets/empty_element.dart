@@ -6,7 +6,6 @@ import '../../utils/utils.dart';
 import '../app_assets.dart';
 import '../app_style.dart';
 
-
 class EmptyElement extends StatelessWidget {
   final String? imagePath;
   final String title;
@@ -48,7 +47,7 @@ class EmptyElement extends StatelessWidget {
           children: [
             if (imageHeight != 0) ...[
               Image.asset(
-                imagePath ?? AppAssets.searchDataEmpty,
+                imagePath ?? AppAssets.emptyData,
                 width: imageWidth ?? Get.width / 3,
                 height: imageHeight ?? Get.width / 2.8,
               ),

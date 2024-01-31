@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -23,16 +21,16 @@ class Prefs {
   static const String deviceType = "DEVICE_TYPE";
   static const String deviceFCMToken = "DEVICE_FCM_TOKEN";
 
-  // static const String isGuestUser = "GUEST_USER";
-  // static const String showPreview = "SHOW_PREVIEW";
-  // static const String likeConcept = "LIKE_CONCEPT";
-  //
-  // static const String privacyPolicyLink = "PRIVACY_POLICY_LINK";
-  // static const String termsAndConditionsLink = "TERMS_AND_CONDITIONS_LINK";
-  // static const String faqLink = "FAQ_LINK";
-  // static const String aboutUsLink = "ABOUT_US_LINK";
-  // static const String playStoreLink = "PLAY_STORE_LINK";
-  // static const String appStoreLink = "APP_STORE_LINK";
+// static const String isGuestUser = "GUEST_USER";
+// static const String showPreview = "SHOW_PREVIEW";
+// static const String likeConcept = "LIKE_CONCEPT";
+//
+// static const String privacyPolicyLink = "PRIVACY_POLICY_LINK";
+// static const String termsAndConditionsLink = "TERMS_AND_CONDITIONS_LINK";
+// static const String faqLink = "FAQ_LINK";
+// static const String aboutUsLink = "ABOUT_US_LINK";
+// static const String playStoreLink = "PLAY_STORE_LINK";
+// static const String appStoreLink = "APP_STORE_LINK";
 }
 
 class LocalStorage {
@@ -52,18 +50,6 @@ class LocalStorage {
   static RxString deviceId = "".obs;
   static RxString deviceToken = "".obs;
   static RxString deviceType = "".obs;
-
-  // static RxBool isGuestUser = true.obs;
-  // static RxBool showPreview = true.obs;
-  // static RxBool likeConcept = true.obs;
-  //
-  // //! Don't clear any links in local storage
-  // static RxString privacyPolicyLink = "".obs;
-  // static RxString termsAndConditionsLink = "".obs;
-  // static RxString faqLink = "".obs;
-  // static RxString aboutUsLink = "".obs;
-  // static RxString playStoreLink = "".obs;
-  // static RxString appStoreLink = "".obs;
 
   static Future storeDataInfo({required Map<String, dynamic> data}) async {
     prefs.write(Prefs.userId, data['id'] ?? "");
@@ -133,6 +119,13 @@ class LocalStorage {
     token.value = prefs.read(Prefs.token) ?? "";
   }
 
+  static Future<void> setCity({required String city}) async {
+    await prefs.write(Prefs.isUserCity, city.isNotEmpty ? city : userCity);
+    userCity.value = prefs.read(Prefs.isUserCity) ?? "";
+
+    printAction("------${userCity.value}");
+  }
+
   /// Store device info
   static Future<void> storeDeviceInfo({
     String? deviceID,
@@ -163,7 +156,7 @@ class LocalStorage {
     firstName = "".obs;
     lastName = "".obs;
     userImage = "".obs;
-    userCity="".obs;
+    userCity = "".obs;
     mobileNumber = 0.obs;
     isUserActive = false.obs;
     isUserVerify = false.obs;
@@ -189,7 +182,7 @@ class LocalStorage {
     mobileNumber.value = int.parse("${prefs.read(Prefs.mobileNumber) ?? 0}");
     isUserActive.value = prefs.read(Prefs.isUserActive) ?? false;
     isUserVerify.value = prefs.read(Prefs.isUserVerify) ?? false;
-
+    userCity.value = prefs.read(Prefs.isUserCity) ?? "";
     // isGuestUser.value = prefs.read(Prefs.isGuestUser) ?? true;
     // showPreview.value = prefs.read(Prefs.showPreview) ?? true;
     // likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
@@ -210,7 +203,6 @@ class LocalStorage {
   static Future<void> printLocalStorageData() async {
     printData(key: "Device Id", value: LocalStorage.deviceId.value);
     printData(key: "Device Token", value: LocalStorage.deviceToken.value);
-    // printData(key: "Guest User", value: LocalStorage.isGuestUser.value);
     printData(key: "User access token", value: LocalStorage.token.value);
     printData(key: "User userId", value: LocalStorage.userId.value);
     printData(key: "User roleSlags", value: LocalStorage.roleSlags);
@@ -220,7 +212,6 @@ class LocalStorage {
     printData(key: "User mobileNumber", value: LocalStorage.mobileNumber.value);
     printData(key: "User isUserActive", value: LocalStorage.isUserActive.value);
     printData(key: "User isUserVerify", value: LocalStorage.isUserVerify.value);
-    // printData(key: "Show Preview", value: LocalStorage.showPreview.value);
-    // printData(key: "Like Concept", value: LocalStorage.likeConcept.value);
+    printData(key: "User CITY", value: LocalStorage.userCity.value);
   }
 }

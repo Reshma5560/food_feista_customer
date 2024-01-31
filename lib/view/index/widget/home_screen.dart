@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/common_widgets/title_button_row_widget.dart';
 import 'package:foodapplication/controller/home_controller.dart';
+import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
@@ -12,13 +13,14 @@ import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/home_data_model.dart';
+import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../res/app_loader.dart';
 import '../../../res/box_shadow.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final HomeController homeController = Get.put(HomeController());
+  final HomeController con = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class HomeScreen extends StatelessWidget {
             opacity: value == 20 ? 0 : 1,
             duration: const Duration(milliseconds: 700),
             child: Obx(
-              () => homeController.isLoading.isTrue
+              () => con.isLoading.isTrue
                   ? const AppLoader()
                   : Column(
                       children: [
@@ -51,11 +53,11 @@ class HomeScreen extends StatelessWidget {
 
   Widget _appHeader(BuildContext context) {
     return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(defaultRadius * 3),
-        bottomRight: Radius.circular(defaultRadius * 3),
-      ),
-      child:  AppBar(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(defaultRadius * 3),
+          bottomRight: Radius.circular(defaultRadius * 3),
+        ),
+        child: AppBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           centerTitle: true,
           leading: InkWell(
@@ -79,14 +81,13 @@ class HomeScreen extends StatelessWidget {
                   color: AppColors.white,
                 ),
               ),
-
-            GestureDetector(
-              onTap: () {},
-              child: Text(
-                "abc",
-                style: AppStyle.customAppBarTitleStyle()
-                    .copyWith(color: AppColors.black, fontSize: 18),
-              ),),
+              GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "abc",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 18),
+                ),
+              ),
               GestureDetector(
                 onTap: () {},
                 child: Text(
@@ -107,9 +108,7 @@ class HomeScreen extends StatelessWidget {
               width: 20.w,
             ).paddingOnly(right: 15)
           ],
-
-    ));
-
+        ));
   }
 
   Widget _bodyModule() {
@@ -118,7 +117,7 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           AppTextField(
-            controller: homeController.searchCon,
+            controller: con.searchCon,
             fillColor: AppColors.greyShad1,
             hintText: "search",
             hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
@@ -127,41 +126,35 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 10),
           _sliderModule(),
           const SizedBox(height: 10),
-          homeController.categoryList.isEmpty
+          con.categoryList.isEmpty
               ? Container()
               : TitleButtonRowWidget(
                   title: "BROWSE FOOD CATEGORY",
                   buttonText: "View All",
                   onPressed: () {},
                 ).paddingSymmetric(horizontal: 5),
-          homeController.categoryList.isEmpty
-              ? Container()
-              : const SizedBox(height: 10),
-          homeController.categoryList.isEmpty ? Container() : _categoryModule(),
+          con.categoryList.isEmpty ? Container() : const SizedBox(height: 10),
+          con.categoryList.isEmpty ? Container() : _categoryModule(),
           const SizedBox(height: 20),
-          homeController.restaurantList.isEmpty
+          con.restaurantList.isEmpty
               ? Container()
               : TitleButtonRowWidget(
                   title: "OUR SPECIAL RESTAURANT",
                   buttonText: "View All",
                   onPressed: () {},
                 ).paddingSymmetric(horizontal: 5),
-          homeController.restaurantList.isEmpty
-              ? Container()
-              : _restaurantModule(),
+          con.restaurantList.isEmpty ? Container() : _restaurantModule(),
           const SizedBox(height: 20),
-          homeController.blogList.isEmpty
+          con.blogList.isEmpty
               ? Container()
               : TitleButtonRowWidget(
                   title: "LATEST NEWS",
                   buttonText: "View All",
                   onPressed: () {},
                 ).paddingSymmetric(horizontal: 5),
-          homeController.blogList.isEmpty
-              ? Container()
-              : const SizedBox(height: 20),
-          homeController.blogList.isEmpty ? Container() : _blogModule(),
-          homeController.trendingFoodList.isEmpty
+          con.blogList.isEmpty ? Container() : const SizedBox(height: 20),
+          con.blogList.isEmpty ? Container() : _blogModule(),
+          con.trendingFoodList.isEmpty
               ? Container()
               : TitleButtonRowWidget(
                   title: "trending Foods".toUpperCase(),
@@ -169,9 +162,7 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {},
                 ).paddingSymmetric(horizontal: 5),
           const SizedBox(height: 10),
-          homeController.trendingFoodList.isEmpty
-              ? Container()
-              : _trendingFoodsModule()
+          con.trendingFoodList.isEmpty ? Container() : _trendingFoodsModule()
         ],
       ).paddingSymmetric(horizontal: 10),
     );
@@ -182,7 +173,7 @@ class HomeScreen extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         CarouselSlider.builder(
-          itemCount: homeController.bannerList.length,
+          itemCount: con.bannerList.length,
           itemBuilder: (context, i, realIndex) {
             return Stack(
               children: [
@@ -192,7 +183,7 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl: homeController.bannerList[i].image ?? "",
+                    imageUrl: con.bannerList[i].image ?? "",
                     width: Get.width,
                     fit: BoxFit.cover,
                     height: Get.height * 0.25,
@@ -213,17 +204,17 @@ class HomeScreen extends StatelessWidget {
               viewportFraction: 1.0,
               height: Get.height * 0.25,
               onPageChanged: (index, reason) {
-                homeController.activeSliderIndex.value = index;
+                con.activeSliderIndex.value = index;
               }
               // aspectRatio: 2.5,
               ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: homeController.bannerList.map((url) {
-            int index = homeController.bannerList.indexOf(url);
+          children: con.bannerList.map((url) {
+            int index = con.bannerList.indexOf(url);
             return Obx(
-              () => homeController.activeSliderIndex.value == index
+              () => con.activeSliderIndex.value == index
                   ? Container(
                       width: 8,
                       height: 8,
@@ -257,9 +248,9 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: homeController.categoryList.length,
+        itemCount: con.categoryList.length,
         itemBuilder: (BuildContext context, int index) {
-          var item = homeController.categoryList[index];
+          var item = con.categoryList[index];
           return Container(
             width: 100,
             margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -289,55 +280,73 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _restaurantModule() {
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: homeController.restaurantList.length,
-        itemBuilder: (context, i) {
-          Restaurant item = homeController.restaurantList[i];
-          return Container(
-            width: 150,
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(
-              color: AppColors.greyShad1,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  item.restaurantName ?? "".toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.red, fontSize: 12),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  item.address ?? "".toUpperCase(),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: AppColors.groupSubText, fontSize: 12),
-                ),
-                const SizedBox(height: 10),
-                CachedNetworkImage(
-                  imageUrl: item.logo ?? "",
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                  errorWidget: (context, str, obj) {
-                    return Image.asset(
-                      AppAssets.appLogo,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ],
-            ).paddingSymmetric(horizontal: 10, vertical: 10),
-          );
-        },
+    return Obx(
+      () => SizedBox(
+        height: 200,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: con.restaurantList.length,
+          itemBuilder: (context, i) {
+            Restaurant item = con.restaurantList[i];
+            return Container(
+              width: 150,
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                color: AppColors.greyShad1,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        item.restaurantName ?? "".toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: AppColors.red, fontSize: 12),
+                      ),
+                      Obx(
+                        () => InkWell(
+                          onTap: () async {
+                            await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
+                          },
+                          child: Icon(
+                            item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    item.address ?? "".toUpperCase(),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: AppColors.groupSubText, fontSize: 12),
+                  ),
+                  const SizedBox(height: 10),
+                  CachedNetworkImage(
+                    imageUrl: item.logo ?? "",
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, str, obj) {
+                      return Image.asset(
+                        AppAssets.appLogo,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 10, vertical: 10),
+            );
+          },
+        ),
       ),
     );
   }
@@ -349,27 +358,27 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: homeController.sellingTypeList.length,
+        itemCount: con.sellingTypeList.length,
         itemBuilder: (BuildContext context, int index) {
           return Obx(() => InkWell(
                 onTap: () {
-                  homeController.selectSellType.value = index;
+                  con.selectSellType.value = index;
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   width: 100,
                   decoration: BoxDecoration(
-                      color: homeController.selectSellType.value == index ? Theme.of(context).primaryColor : AppColors.white,
+                      color: con.selectSellType.value == index ? Theme.of(context).primaryColor : AppColors.white,
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
                       ),
                       borderRadius: BorderRadius.circular(8)),
                   child: Center(
                     child: Text(
-                      homeController.sellingTypeList[index],
+                      con.sellingTypeList[index],
                       style: TextStyle(
                           fontSize: 11,
-                          color: homeController.selectSellType.value == index ? AppColors.white : Theme.of(context).primaryColor,
+                          color: con.selectSellType.value == index ? AppColors.white : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -385,9 +394,9 @@ class HomeScreen extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       shrinkWrap: true,
-      itemCount: homeController.foodList.length,
+      itemCount: con.foodList.length,
       itemBuilder: (BuildContext context, int index) {
-        var item = homeController.foodList[index];
+        var item = con.foodList[index];
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 5),
@@ -405,42 +414,43 @@ class HomeScreen extends StatelessWidget {
                 width: 10,
               ),
               Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title ?? "",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23, color: Theme.of(context).primaryColor),
-                  ),
-                  Text(
-                    item.descripton ?? "",
-                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10, color: AppColors.black),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "\$${item.price?.toString()}",
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.black),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title ?? "",
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23, color: Theme.of(context).primaryColor),
+                    ),
+                    Text(
+                      item.descripton ?? "",
+                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10, color: AppColors.black),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "\$${item.price?.toString()}",
+                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.black),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "Type - ${item.type?.toString()}",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
+                        Expanded(
+                          child: Text(
+                            "Type - ${item.type?.toString()}",
+                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "Qty - ${item.qty?.toString()}",
-                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
+                        Expanded(
+                          child: Text(
+                            "Qty - ${item.qty?.toString()}",
+                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
-              )),
+                      ],
+                    )
+                  ],
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
@@ -461,24 +471,20 @@ class HomeScreen extends StatelessWidget {
       height: 140,
       width: 250,
       child: ListView.builder(
-        itemCount: homeController.blogList.length,
+        itemCount: con.blogList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, i) {
-          Blog item = homeController.blogList[i];
+          Blog item = con.blogList[i];
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              MFNetworkImage(
                 height: 100,
                 width: 250,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                      item.image,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                backgroundColor: Colors.grey,
+                imageUrl: item.image ?? "",
+                fit: BoxFit.cover,
+                shape: BoxShape.rectangle,
               ).paddingOnly(bottom: 5),
               Text(
                 item.blogName ?? "",
@@ -495,7 +501,7 @@ class HomeScreen extends StatelessWidget {
   Widget _trendingFoodsModule() {
     return GridView.builder(
       padding: EdgeInsets.zero,
-      itemCount: homeController.trendingFoodList.length,
+      itemCount: con.trendingFoodList.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: 20,
@@ -505,7 +511,7 @@ class HomeScreen extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, i) {
-        TrendingFood item = homeController.trendingFoodList[i];
+        TrendingFood item = con.trendingFoodList[i];
         return Container(
           width: 200,
           decoration: BoxDecoration(

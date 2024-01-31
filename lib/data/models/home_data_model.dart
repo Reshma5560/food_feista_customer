@@ -4,8 +4,9 @@
 
 import 'dart:convert';
 
-HomeDataModel homeDataModelFromJson(String str) =>
-    HomeDataModel.fromJson(json.decode(str));
+import 'package:get/get.dart';
+
+HomeDataModel homeDataModelFromJson(String str) => HomeDataModel.fromJson(json.decode(str));
 
 class HomeDataModel {
   final bool? status;
@@ -13,7 +14,7 @@ class HomeDataModel {
   final List<Restaurant>? restaurant;
   final List<Category>? categories;
   final List<Blog>? blogs;
-    final List<TrendingFood>? trendingFoods;
+  final List<TrendingFood>? trendingFoods;
 
   HomeDataModel({
     this.status,
@@ -26,24 +27,11 @@ class HomeDataModel {
 
   factory HomeDataModel.fromJson(Map<String, dynamic> json) => HomeDataModel(
         status: json["status"],
-        banner: json["banner"] == null
-            ? []
-            : List<BannerData>.from(json["banner"]!.map((x) => BannerData.fromJson(x))),
-        restaurant: json["restaurant"] == null
-            ? []
-            : List<Restaurant>.from(
-                json["restaurant"]!.map((x) => Restaurant.fromJson(x))),
-        categories: json["categories"] == null
-            ? []
-            : List<Category>.from(
-                json["categories"]!.map((x) => Category.fromJson(x))),
-        blogs: json["blogs"] == null
-            ? []
-            : List<Blog>.from(json["blogs"]!.map((x) => Blog.fromJson(x))),
-        trendingFoods: json["trendingFoods"] == null
-            ? []
-            : List<TrendingFood>.from(
-                json["trendingFoods"]!.map((x) => TrendingFood.fromJson(x))),
+        banner: json["banner"] == null ? [] : List<BannerData>.from(json["banner"]!.map((x) => BannerData.fromJson(x))),
+        restaurant: json["restaurant"] == null ? [] : List<Restaurant>.from(json["restaurant"]!.map((x) => Restaurant.fromJson(x))),
+        categories: json["categories"] == null ? [] : List<Category>.from(json["categories"]!.map((x) => Category.fromJson(x))),
+        blogs: json["blogs"] == null ? [] : List<Blog>.from(json["blogs"]!.map((x) => Blog.fromJson(x))),
+        trendingFoods: json["trendingFoods"] == null ? [] : List<TrendingFood>.from(json["trendingFoods"]!.map((x) => TrendingFood.fromJson(x))),
       );
 }
 
@@ -93,12 +81,8 @@ class BannerData {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }
 
@@ -144,15 +128,9 @@ class Blog {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        blogType: json["blog_type"] == null
-            ? null
-            : BlogType.fromJson(json["blog_type"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        blogType: json["blog_type"] == null ? null : BlogType.fromJson(json["blog_type"]),
       );
 }
 
@@ -184,12 +162,8 @@ class BlogType {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }
 
@@ -241,17 +215,11 @@ class Category {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         priority: json["priority"],
         parentname: json["parentname"],
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
         parent: json["parent"],
       );
 }
@@ -321,7 +289,7 @@ class Restaurant {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final bool? orderSubscriptionActive;
-  final int? favorite;
+  final RxInt? favorite;
   final bool? gstStatus;
   final String? gstCode;
   final bool? freeDeliveryDistanceStatus;
@@ -422,9 +390,7 @@ class Restaurant {
         perKmShippingCharge: json["per_km_shipping_charge"],
         freeDelivery: json["free_delivery"],
         userId: json["user_id"],
-        rating: json["rating"] == null
-            ? []
-            : List<int>.from(json["rating"]!.map((x) => x)),
+        rating: json["rating"] == null ? [] : List<int>.from(json["rating"]!.map((x) => x)),
         homeDelivery: json["home_delivery"],
         takeAway: json["take_away"],
         cutlery: json["cutlery"],
@@ -437,9 +403,7 @@ class Restaurant {
         slug: json["slug"],
         qrCode: json["qr_code"],
         offDay: json["off_day"],
-        openingTime: json["opening_time"] == null
-            ? null
-            : DateTime.parse(json["opening_time"]),
+        openingTime: json["opening_time"] == null ? null : DateTime.parse(json["opening_time"]),
         closingTime: json["closing_time"],
         zoneId: json["zone_id"],
         announcement: json["announcement"],
@@ -467,21 +431,15 @@ class Restaurant {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         orderSubscriptionActive: json["order_subscription_active"],
-        favorite: json["favorite"],
+        favorite: RxInt(json["favorite"]),
         gstStatus: json["gst_status"],
         gstCode: json["gst_code"],
         freeDeliveryDistanceStatus: json["free_delivery_distance_status"],
         freeDeliveryDistanceValue: json["free_delivery_distance_value"],
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
       );
 }
 
@@ -595,15 +553,9 @@ class TrendingFood {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         commentsCount: json["comments_count"],
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
       );
 }

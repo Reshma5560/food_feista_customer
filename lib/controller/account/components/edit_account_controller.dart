@@ -1,11 +1,7 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 class EditAccountController extends GetxController {
   TextEditingController mobileNumberCon = TextEditingController();
@@ -25,7 +21,7 @@ class EditAccountController extends GetxController {
 
   RxBool isLoader = false.obs;
   RxBool isLoading = false.obs;
-  File? selectedProfileImage;
+  RxString imagePath = "".obs;
 
   showImagePickerBottomSheet() {
     showModalBottomSheet<dynamic>(
@@ -49,8 +45,7 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.camera_alt_rounded,
                 color: AppColors.grey,
@@ -59,13 +54,12 @@ class EditAccountController extends GetxController {
               title: const Text("Camera"),
               onTap: () {
                 Get.back();
-                getImageFromCamera();
+                selectImage(pickFromCamera: true);
               },
             ),
             ListTile(
               dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.perm_media_rounded,
                 color: AppColors.grey,
@@ -74,13 +68,12 @@ class EditAccountController extends GetxController {
               title: const Text("Library"),
               onTap: () {
                 Get.back();
-                getImageFromGallery();
+                selectImage(pickFromCamera: false);
               },
             ),
             ListTile(
               dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.close,
                 color: AppColors.grey,
@@ -94,36 +87,14 @@ class EditAccountController extends GetxController {
           ]);
         });
   }
-String name='';
-  // Get from gallery
-  getImageFromGallery() async {
-    isLoading(true);
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      selectedProfileImage = File(pickedFile.path);
-       name= basename(pickedFile.path);
-    }
-    isLoading(false);
-  }
 
-  //Get from Camera
-  getImageFromCamera() async {
-    isLoading(true);
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      selectedProfileImage = File(pickedFile.path);
+  String name = '';
 
-      log("Image pathg ${selectedProfileImage?.path}");
+  selectImage({bool pickFromCamera = false}) async {
+    XFile? pickedImage = await ImagePicker().pickImage(source: pickFromCamera == true ? ImageSource.camera : ImageSource.gallery);
+    if (pickedImage != null) {
+      imagePath.value = pickedImage.path;
     }
-    isLoading(false);
   }
 
   @override

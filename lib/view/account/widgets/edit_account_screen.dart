@@ -1,3 +1,5 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,10 +12,14 @@ import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
 
+import '../../../packages/cached_network_image/cached_network_image.dart';
+import '../../../utils/local_storage.dart';
+
 class EditAccountScreen extends StatelessWidget {
   EditAccountScreen({super.key});
 
   final editAccountController = Get.put(EditAccountController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +58,7 @@ class EditAccountScreen extends StatelessWidget {
                       ),
                       controller: editAccountController.firstNameCon,
                       errorMessage: editAccountController.firstNameError.value,
-                      showError:
-                          editAccountController.firstNameValidation.value,
+                      showError: editAccountController.firstNameValidation.value,
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
@@ -80,7 +85,8 @@ class EditAccountScreen extends StatelessWidget {
                     SizedBox(height: 10.w),
                     AppTextField(
                       // titleText: "Email",
-                      hintText: "Enter Email", readOnly: true,
+                      hintText: "Enter Email",
+                      readOnly: true,
                       prefixIcon: Icon(
                         Icons.email,
                         color: AppColors.greyFontColor,
@@ -110,9 +116,7 @@ class EditAccountScreen extends StatelessWidget {
                         LengthLimitingTextInputFormatter(10),
                       ],
                       onChanged: (value) {
-                        if (editAccountController
-                                .mobileNumberCon.value.text.length ==
-                            10) {
+                        if (editAccountController.mobileNumberCon.value.text.length == 10) {
                           FocusScope.of(context).unfocus();
                         }
                         editAccountController.isMobileValid.value = false;
@@ -126,7 +130,7 @@ class EditAccountScreen extends StatelessWidget {
                         DesktopRepository().editProfileApiCall(
                           isLoader: editAccountController.isLoader,
                           // params: {
-                           
+
                           //   "image":editAccountController.name
                           //       // editAccountController.selectedProfileImage?.path
                           // },
@@ -154,41 +158,30 @@ class EditAccountScreen extends StatelessWidget {
             borderRadius: const BorderRadius.all(
               Radius.circular(200),
             ),
-            child: editAccountController.selectedProfileImage != null
-                ? Container(
-                    height: 180,
-                    width: 180,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: FileImage(
-                          editAccountController.selectedProfileImage!,
-                        ),
-                        onError: (exception, stackTrace) =>
-                            // Image.asset(AppImages.appLogoImage),
-                            Image.network(
-                                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+            child: Container(
+              height: 180,
+              width: 180,
+              decoration: const BoxDecoration(
+                color: Colors.grey,
+                shape: BoxShape.circle,
+              ),
+              child: Obx(
+                () => editAccountController.imagePath.isNotEmpty
+                    ? Image.file(
+                        io.File(editAccountController.imagePath.value),
                         fit: BoxFit.cover,
-                      ),
-                    ),
-                  )
-                : Container(
-                    height: 180,
-                    width: 180,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: const NetworkImage(
-                              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'), //userProfileImage),
-                          fit: BoxFit.cover,
-                          onError: (exception, stackTrace) =>
-                              // Image.asset(AppImages.appLogoImage),
-                              Image.network(
-                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
-                    ),
-                  ),
+                      )
+                    : LocalStorage.userImage.value.contains("https://") || LocalStorage.userImage.value.contains("http://")
+                        ? MFNetworkImage(
+                            imageUrl: LocalStorage.userImage.value,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                            fit: BoxFit.cover,
+                          ),
+              ),
+            ),
           ),
         ),
       ),
@@ -201,7 +194,7 @@ class EditAccountScreen extends StatelessWidget {
                 editAccountController.showImagePickerBottomSheet();
               },
               child: Container(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: Theme.of(Get.context!).primaryColor,
                     // colorScheme.background,

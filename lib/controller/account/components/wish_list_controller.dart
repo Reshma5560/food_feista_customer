@@ -10,7 +10,7 @@ class WishListController extends GetxController {
   RxBool nextPageStop = true.obs;
   RxInt page = 1.obs;
   ScrollController scrollController = ScrollController();
-  RxList<WishDatum> wishListData = <WishDatum>[].obs;
+  RxList<WishRestaurant> wishListData = <WishRestaurant>[].obs;
 
   @override
   void onReady() {
@@ -20,7 +20,7 @@ class WishListController extends GetxController {
 
   void manageScrollController() async {
     scrollController.addListener(
-      () {
+          () {
         if (scrollController.position.maxScrollExtent == scrollController.position.pixels && isLoading.isFalse) {
           if (nextPageStop.isTrue && paginationLoading.isFalse) {
             paginationLoading.value = true;

@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:dio/dio.dart' as dio;
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
@@ -10,6 +11,7 @@ import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
+
 import '../controller/home_controller.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';
@@ -79,7 +81,7 @@ class DesktopRepository {
         "last_name": editAccountController.lastNameCon.text.trim(),
         "email": editAccountController.emailCon.text.trim(),
         "phone": editAccountController.mobileNumberCon.text.trim(),
-        "image": await dio.MultipartFile.fromFile(editAccountController.selectedProfileImage!.path, filename: editAccountController.name),
+        "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.name),
       });
       await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
         (response) async {
@@ -157,7 +159,15 @@ class DesktopRepository {
           await APIFunction().getApiCall(apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}").then(
             (response) async {
               GetWishListDataModel homeTipModel = GetWishListDataModel.fromJson(response);
-              con.wishListData.value += homeTipModel.data?.data ?? [];
+
+              homeTipModel.data?.data?.forEach((element) {
+                log("-------------${element.restaurant}");
+                log("-------------${element.restaurant != null}");
+                if (element.restaurant != null) {
+                  con.wishListData.add(element.restaurant!);
+                }
+              });
+
               con.page.value++;
               printData(key: "WISH LIST length", value: con.wishListData.length);
               if (con.wishListData.length == homeTipModel.data?.total) {
@@ -173,6 +183,37 @@ class DesktopRepository {
     } finally {
       con.isLoading.value = false;
       con.paginationLoading.value = false;
+    }
+  }
+
+  ///post wish list api
+  Future<dynamic> postWishListAPI({required String id, required int index, required bool isWishList}) async {
+    try {
+      final HomeController homeCom = Get.find<HomeController>();
+      await APIFunction().postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id").then(
+        (response) async {
+          if (!isValEmpty(response["message"])) {
+            if (isWishList == true) {
+              final WishListController con = Get.find<WishListController>();
+              con.wishListData.removeAt(index);
+
+              toast(response["message"].toString());
+              await getHomeData();
+            } else {
+              if (homeCom.restaurantList[index].favorite?.value == 1) {
+                homeCom.restaurantList[index].favorite?.value = 0;
+              } else {
+                homeCom.restaurantList[index].favorite?.value = 1;
+              }
+            }
+          }
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      printWhite("WISH LIST SUCCESS");
     }
   }
 }

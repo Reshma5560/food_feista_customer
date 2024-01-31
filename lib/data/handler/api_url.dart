@@ -31,7 +31,8 @@ class ApiUrls {
   static String homeDataUrl = "home/city/1";
 
   ///wish list
-  static String getWishListUrl = "home/city/1";
+  static String getWishListUrl = "get-wishlist";
+  static String postWishListUrl = "wishlist-action";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";
