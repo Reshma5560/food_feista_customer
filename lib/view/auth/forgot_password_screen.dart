@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodapplication/controller/auth/forgot_password_controller.dart';
+import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
-import 'package:foodapplication/route/app_routes.dart';
+import 'package:foodapplication/res/ui_utils.dart';
+import 'package:foodapplication/utils/helper.dart';
+import 'package:foodapplication/view/auth/components/auth_header.dart';
+import 'package:foodapplication/view/gradient_container/gradient_container.dart';
 import 'package:get/get.dart';
 
-import '../../controller/auth/login_controller.dart';
-import '../../repositories/auth_repositories.dart';
-import '../../res/ui_utils.dart';
-import '../../utils/helper.dart';
-import '../gradient_container/gradient_container.dart';
-import 'components/auth_header.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class ForgotPasswordScreen extends StatelessWidget {
+  ForgotPasswordScreen({super.key});
 
-  final LoginController con = Get.put(LoginController());
+  final ForgotPasswordcontroller con = Get.put(ForgotPasswordcontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +49,13 @@ class LoginScreen extends StatelessWidget {
                                 SizedBox(
                                     height: double.parse(value.toString())),
                                 Text(
-                                  "Welcome",
+                                  "Forgot Password",
                                   style: AppStyle.authTitleStyle(),
                                 ),
                                 SizedBox(height: defaultPadding.w),
                                 Text(
-                                  "Are you ready to continue your culinary journey, Foodie? Log in to your account now.",
-                                  style: AppStyle.authSubtitleStyle(),
+                                 "Enter your email and we will send you instruction to reset your password.",
+                                   style: AppStyle.authSubtitleStyle(),
                                 ),
                                 SizedBox(height: defaultPadding.w),
                                 AppTextField(
@@ -70,57 +69,6 @@ class LoginScreen extends StatelessWidget {
                                     con.emailValidation.value = false;
                                   },
                                 ),
-                                SizedBox(height: defaultPadding.w),
-                                AppTextField(
-                                  titleText: "Password",
-                                  hintText: "Enter Password",
-                                  controller: con.passwordCon.value,
-                                  errorMessage: con.passwordError.value,
-                                  showError: con.passwordValidation.value,
-                                  keyboardType: TextInputType.emailAddress,
-                                  onChanged: (value) {
-                                    if (con.passwordCon.value.text.length ==
-                                        16) {
-                                          
-                                      con.passwordValidation.value = false;
-                                      con.passwordError.value = "";
-                                      FocusScope.of(context).unfocus();
-                                    } else if (con
-                                            .passwordCon.value.text.length <
-                                        8) {
-                                      con.passwordValidation.value = true;
-                                      con.passwordError.value =
-                                          "Please Enter your password at least 8 digits.";
-                                    } else {
-                                      con.passwordValidation.value = false;
-                                      con.passwordError.value = "";
-                                    }
-                                  },
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    LengthLimitingTextInputFormatter(16),
-                                  ],
-                                ),
-                                SizedBox(height: 10.w),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.toNamed(
-                                            AppRoutes.forgotPasswordScreen);
-                                      },
-                                      child: Text(
-                                        "Forgot password",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 14.sp,
-                                          decoration: TextDecoration.underline,
-                                          decorationThickness: 1.5,
-                                          color: Theme.of(context).primaryColor,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    )),
                                 SizedBox(
                                     height: MediaQuery.of(context)
                                             .viewInsets
@@ -139,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                                         scale: value,
                                         child: Obx(
                                           () => AppButton(
-                                            title: "LOGIN",
+                                            title: "CONTINUE",
                                             loader: con.isLoading.value,
                                             onHighlightChanged: (press) {
                                               con.buttonPress.value = press;
@@ -167,42 +115,19 @@ class LoginScreen extends StatelessWidget {
                                                       false;
                                                 }
 
-                                                ///password validation
-
-                                                if (con.passwordCon.value.text
-                                                    .isEmpty) {
-                                                  con.passwordValidation.value =
-                                                      true;
-                                                  con.passwordError.value =
-                                                      "Please Enter your password.";
-                                                } else if (con.passwordCon.value
-                                                        .text.length <
-                                                    8) {
-                                                  con.passwordValidation.value =
-                                                      true;
-                                                  con.passwordError.value =
-                                                      "Please Enter your password at least 8 digits.";
-                                                } else {
-                                                  con.passwordValidation.value =
-                                                      false;
-                                                  con.passwordError.value = "";
-                                                }
+                                             
 
                                                 if (con
                                                     .emailValidation.isFalse) {
                                                   FocusScope.of(context)
                                                       .unfocus();
-                                                  AuthRepository().loginApi(
+                                                  AuthRepository().forgotPasswordApiCall(
                                                     isLoader: con.isLoading,
                                                     params: {
                                                       "email": con
                                                           .emailCon.value.text
                                                           .trim(),
-                                                      "password": con
-                                                          .passwordCon
-                                                          .value
-                                                          .text
-                                                          .trim(),
+                                                     
                                                     },
                                                   );
                                                 }

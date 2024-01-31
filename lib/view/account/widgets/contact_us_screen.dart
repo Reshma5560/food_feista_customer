@@ -111,7 +111,7 @@ class ContactUsScreen extends StatelessWidget {
             // errorMessage: con.passwordError.value,
             // showError: con.passwordValidation.value,
             fillColor: AppColors.greyShad1,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.text,
             onChanged: (value) {
               // if (con.passwordCon.value.text.length == 8) {
               //   con.passwordError.value = "";
