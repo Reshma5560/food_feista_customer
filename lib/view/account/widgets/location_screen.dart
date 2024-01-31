@@ -99,7 +99,7 @@ class LocationScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w500,
                                               color: AppColors.black),
                                         )
-                                      : const Text("Loading..."),
+                                      : const Text("Select address"),
                             ),
                           ),
                         ],
@@ -112,7 +112,7 @@ class LocationScreen extends StatelessWidget {
                         onTap: () {
                           var params = {
                             "enumType": con.addressEnum,
-                            "AddressId": con.addressId.value,
+                            "addressId": con.addressId.value,
                             "place": con.place,
                             "lat": con.latValue.value,
                             "lng": con.longValue.value,
@@ -122,7 +122,7 @@ class LocationScreen extends StatelessWidget {
                             AppRoutes.addAddressScreen,
                             arguments: {
                               "enumType": con.addressEnum,
-                              "AddressId": con.addressId.value,
+                              "addressId": con.addressId.value,
                               "place": con.place,
                               "lat": con.latValue.value,
                               "lng": con.longValue.value,

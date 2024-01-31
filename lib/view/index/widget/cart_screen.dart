@@ -191,7 +191,7 @@ class CartScreen extends StatelessWidget {
                         } else {
                           itemCount--;
                           total.value = (total.value!.toDouble() -
-                              item.price!.toDouble())!;
+                              item.price!.toDouble());
 
                           cartController.totalAmount.value =
                               cartController.totalAmount.value -

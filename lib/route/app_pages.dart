@@ -4,6 +4,7 @@ import 'package:foodapplication/view/account/widgets/edit_account_screen.dart';
 import 'package:foodapplication/view/account/widgets/location_screen.dart';
 import 'package:foodapplication/view/account/widgets/manage_address_screen.dart';
 import 'package:foodapplication/view/account/widgets/update_password.dart';
+import 'package:foodapplication/view/auth/forgot_password_screen.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
 import 'package:foodapplication/view/index/widget/home_screen.dart';
@@ -34,6 +35,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.registerScreen,
       page: () => SignUpScreen(),
+    ),
+     GetPage(
+      name: AppRoutes.forgotPasswordScreen,
+      page: () => ForgotPasswordScreen(),
     ),
     GetPage(
       name: AppRoutes.aboutUsScreen,

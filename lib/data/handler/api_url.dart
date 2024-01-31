@@ -9,6 +9,7 @@ class ApiUrls {
   static String verifyToken = "auth/verify-token";
   static String changePassword = "users/change-password";
   static String deleteAccount = "users/delete-account";
+  static String forgotPasswordUrl = "forgot-password";
   static String logoutUrl = "logout";
   static String getProfileUrl = "get-profile";
   static String updateUserProfileUrl = "update-profile";
@@ -16,8 +17,9 @@ class ApiUrls {
   static String addAddressUrl = "add-address";
   static String getAddressUrl = "get-address";
   static String getCountryUrl = "get-country";
-  static String getStateUrl = "get-state/";
-  static String getCityUrl = "get-city/";
+  static String getStateUrl = "get-state";
+  static String getAllStateUrl = "get-state-all";
+  static String getCityUrl = "get-city";
   static String removeAddressUrl = "remove-address/";
   static String updateAddressUrl = "update-address/";
   static String getAddressByIdUrl = "address-detail/";
@@ -27,6 +29,9 @@ class ApiUrls {
 
   //home data
   static String homeDataUrl = "home/city/1";
+
+//order api
+  static String getOrderListUrl = 'get-order';
 
   ///wish list
   static String getWishListUrl = "home/city/1";

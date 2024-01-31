@@ -38,14 +38,15 @@ class AddAddressScreen extends StatelessWidget {
                 CommonAppBar(
                   title: "Add Address",
                   onPressed: () {
-                    //   Get.back();
-                    // Get.back();
-                    Get.offNamedUntil('/MANAGE_ADDRESS_SCREEN', (Route<dynamic> route) => route.isFirst);
+                    Get.back();
+                    Get.back();
+                    // Get.offNamedUntil('/MANAGE_ADDRESS_SCREEN', (Route<dynamic> route) => route.isFirst);
                   },
                 ),
                 Expanded(
                   child: ListView(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
                     physics: const AlwaysScrollableScrollPhysics(),
                     children: [
                       _floorHouseModule(),
@@ -155,26 +156,31 @@ class AddAddressScreen extends StatelessWidget {
       con.zipcodeError.value = "";
     }
 
-    if (con.mobileNoValidation.isFalse && con.receiveerNameValidation.isFalse && con.addressValidation.isFalse && con.zipcodeValidation.isFalse) {
+    if (con.mobileNoValidation.isFalse &&
+        con.receiveerNameValidation.isFalse &&
+        con.addressValidation.isFalse &&
+        con.zipcodeValidation.isFalse) {
       FocusScope.of(Get.context!).unfocus();
       var params = {
         "address": con.addressCon.text,
         "address_type": con.typeValue.value,
         "contact_person_name": con.receiverNameCon.text,
         "contact_person_number": con.mobilenoCon.text,
-        "country_id": con.countryDropDownValue.id,
-        "state_id": con.stateDropDownValue.id,
-        "city_id": con.cityDropDownValue.id,
+        "country_id": con.countryDropDownValue.value.id,
+        "state_id": con.stateDropDownValue.value.id,
+        "city_id": con.cityDropDownValue.value.id,
         "zip_code": con.zipcodeCon.text,
         "latitude": con.latTextEditingController.text,
         "longitude": con.logTextEditingController.text,
         'floor': con.floorCon.text,
+        'road': "test",
         "house": con.houseCon.text
       };
 
       print(params);
 
-      AuthRepository().addAddressApiCall(params: params, isLoader: con.isLoader);
+      AuthRepository()
+          .addAddressApiCall(params: params, isLoader: con.isLoader);
     }
   }
 
@@ -221,7 +227,8 @@ class AddAddressScreen extends StatelessWidget {
             errorMessage: con.floorError.value,
             showError: con.floorValidation.value,
             titleText: "Floor",
-            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle:
+                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter fllor",
             keyboardType: TextInputType.text,
             readOnly: false,
@@ -238,7 +245,8 @@ class AddAddressScreen extends StatelessWidget {
             showError: con.houseValidation.value,
             readOnly: false,
             titleText: "House",
-            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle:
+                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter house",
             keyboardType: TextInputType.text,
             onChanged: (value) {
@@ -362,7 +370,7 @@ class AddAddressScreen extends StatelessWidget {
             ),
           ),
           hint: const Text("Select country"),
-          value: con.countryDropDownValue,
+          value: con.countryDropDownValue.value,
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
             color: AppColors.grey,
@@ -391,12 +399,12 @@ class AddAddressScreen extends StatelessWidget {
           ),
           onChanged: (value) async {
             con.isLoader(true);
-            con.countryDropDownValue = value ?? Country();
+            con.countryDropDownValue.value = value ?? Country();
             // con.stateList.clear();
             // con.stateList.add(StateList(stateName: 'Select state'));
             if (Get.isRegistered<AddAddressController>()) {
               await AuthRepository().getStateListOnlyCall(
-                countryId: "${con.countryDropDownValue.id}",
+                countryId: "${con.countryDropDownValue.value.id}",
                 // usingStateId: true,
               );
             }
@@ -422,12 +430,13 @@ class AddAddressScreen extends StatelessWidget {
             ),
           ),
           hint: const Text("Select state"),
-          value: con.stateDropDownValue,
+          value: con.stateDropDownValue.value,
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
             color: AppColors.grey,
           ),
-          items: con.stateList.map<DropdownMenuItem<StateList>>((StateList value) {
+          items:
+              con.stateList.map<DropdownMenuItem<StateList>>((StateList value) {
             log("value.name ${value.stateName}");
             return DropdownMenuItem<StateList>(
               value: value,
@@ -450,11 +459,11 @@ class AddAddressScreen extends StatelessWidget {
           ),
           onChanged: (value) async {
             con.isLoader(true);
-            con.stateDropDownValue = value!;
+            con.stateDropDownValue.value = value!;
 
             con.cityList.clear();
             await AuthRepository().getCityListOnlyCall(
-              cityId: "${con.stateDropDownValue.id}",
+              cityId: "${con.stateDropDownValue.value.id}",
               // usingStateId: true,
             );
 
@@ -479,7 +488,7 @@ class AddAddressScreen extends StatelessWidget {
             ),
           ),
           hint: const Text("Select city"),
-          value: con.cityDropDownValue,
+          value: con.cityDropDownValue.value,
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
             color: AppColors.grey,
@@ -507,7 +516,7 @@ class AddAddressScreen extends StatelessWidget {
           ),
           onChanged: (value) async {
             con.isLoader(true);
-            con.cityDropDownValue = value!;
+            con.cityDropDownValue.value = value!;
 
             con.isLoader(false);
           },
@@ -523,7 +532,8 @@ class AddAddressScreen extends StatelessWidget {
             errorMessage: con.latError.value,
             showError: con.latValidation.value,
             titleText: "Latitude",
-            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle:
+                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter Latitude",
             keyboardType: TextInputType.number,
             readOnly: true,
@@ -547,7 +557,8 @@ class AddAddressScreen extends StatelessWidget {
             showError: con.longValidation.value,
             readOnly: true,
             titleText: "Longitude",
-            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle:
+                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter Longitude",
             keyboardType: TextInputType.number,
             inputFormatters: [

@@ -4,8 +4,10 @@ import 'package:dio/dio.dart' as dio;
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/controller/account/components/wish_list_controller.dart';
+import 'package:foodapplication/controller/my_order_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
+import 'package:foodapplication/data/models/get_order_model.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -81,9 +83,13 @@ class DesktopRepository {
         "last_name": editAccountController.lastNameCon.text.trim(),
         "email": editAccountController.emailCon.text.trim(),
         "phone": editAccountController.mobileNumberCon.text.trim(),
-        "image": await dio.MultipartFile.fromFile(editAccountController.selectedProfileImage!.path, filename: editAccountController.name),
+        "image": await dio.MultipartFile.fromFile(
+            editAccountController.selectedProfileImage!.path,
+            filename: editAccountController.name),
       });
-      await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData)
+          .then(
         (response) async {
           printData(key: "update profile response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -156,12 +162,17 @@ class DesktopRepository {
         }
 
         if (con.nextPageStop.isTrue) {
-          await APIFunction().getApiCall(apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}").then(
+          await APIFunction()
+              .getApiCall(
+                  apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}")
+              .then(
             (response) async {
-              GetWishListDataModel homeTipModel = GetWishListDataModel.fromJson(response);
+              GetWishListDataModel homeTipModel =
+                  GetWishListDataModel.fromJson(response);
               con.wishListData.value += homeTipModel.data?.data ?? [];
               con.page.value++;
-              printData(key: "WISH LIST length", value: con.wishListData.length);
+              printData(
+                  key: "WISH LIST length", value: con.wishListData.length);
               if (con.wishListData.length == homeTipModel.data?.total) {
                 con.nextPageStop.value = false;
               }
@@ -177,4 +188,70 @@ class DesktopRepository {
       con.paginationLoading.value = false;
     }
   }
+
+  //get order list
+  Future<dynamic> getOrderApiCall({RxBool? isLoader}) async {
+    final con = Get.find<MyOrderController>();
+
+    try {
+      isLoader?.value = true;
+      await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
+        (response) async {
+          printData(key: "get order  response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            GetOrderModel data = GetOrderModel.fromJson(response);
+
+            con.getOrderModel = data;
+            log("${con.getOrderModel}");
+
+            con.orderList.value.addAll(con.getOrderModel.data!);
+            print("ORDER LENGTH ${con.orderList.length}");
+          }
+          return response;
+        },
+      );
+    } on dio.DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        printWarning(e.response?.statusCode);
+        printError(type: this, errText: "$e");
+      }
+      rethrow;
+    } finally {
+      isLoader?.value = false;
+    }
+  }
+
+//get order details by idlist
+  Future<dynamic> getOrderDetailsByIdApiCall({RxBool? isLoader}) async {
+    final con = Get.find<MyOrderController>();
+
+    try {
+      isLoader?.value = true;
+      await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
+        (response) async {
+          printData(key: "get order detail response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            GetOrderModel data = GetOrderModel.fromJson(response);
+
+            con.getOrderModel = data;
+            log("${con.getOrderModel}");
+
+            con.orderList.value.addAll(con.getOrderModel.data!);
+            print("ORDER LENGTH ${con.orderList.length}");
+          }
+          return response;
+        },
+      );
+    } on dio.DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        printWarning(e.response?.statusCode);
+        printError(type: this, errText: "$e");
+      }
+      rethrow;
+    } finally {
+      isLoader?.value = false;
+    }
+  }
+
+
 }

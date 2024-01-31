@@ -23,7 +23,9 @@ class AuthRepository {
     try {
       isLoader?.value = true;
       printData(key: "Login params", value: params);
-      await APIFunction().postApiCall(apiName: ApiUrls.loginUrl, params: params).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.loginUrl, params: params)
+          .then(
         (response) async {
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
@@ -62,17 +64,20 @@ class AuthRepository {
     }
   }
 
-  Future<dynamic> updatePasswordApiCall({RxBool? isLoader, dynamic params}) async {
+  Future<dynamic> updatePasswordApiCall(
+      {RxBool? isLoader, dynamic params}) async {
     try {
       isLoader?.value = true;
-      await APIFunction().postApiCall(apiName: ApiUrls.updatePasswordUrl, params: params).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.updatePasswordUrl, params: params)
+          .then(
         (response) async {
           printData(key: "update password response", value: response);
-          if (!isValEmpty(response) && response["success"] == true) {
+          if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
               Get.back();
-              Get.offAllNamed(AppRoutes.indexScreen);
+              Get.offAllNamed(AppRoutes.loginScreen);
             }
           }
           return response;
@@ -91,7 +96,9 @@ class AuthRepository {
   Future<dynamic> addAddressApiCall({RxBool? isLoader, dynamic params}) async {
     try {
       isLoader?.value = true;
-      await APIFunction().postApiCall(apiName: ApiUrls.addAddressUrl, params: params).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.addAddressUrl, params: params)
+          .then(
         (response) async {
           printData(key: "add address response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -128,12 +135,13 @@ class AuthRepository {
         (response) async {
           printData(key: "get country response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
-            GetCountryModel getCountryModel = GetCountryModel.fromJson(response);
+            GetCountryModel getCountryModel =
+                GetCountryModel.fromJson(response);
             isSuccessStatus.value = getCountryModel.status!;
             if (isSuccessStatus.value) {
               con.countryList.add(Country(countryName: 'Select country'));
               con.countryList.addAll(getCountryModel.data!);
-              con.countryDropDownValue = con.countryList[0];
+              con.countryDropDownValue.value = con.countryList[0];
               con.countryList.refresh();
             } else {
               log("getCountryApiFunction else");
@@ -153,14 +161,17 @@ class AuthRepository {
   }
 
   // get state api
-  Future<void> getStateListOnlyCall({RxBool? isLoader, String? countryId}) async {
+  Future<void> getStateListOnlyCall(
+      {RxBool? isLoader, String? countryId}) async {
     final AddAddressController con = Get.find<AddAddressController>();
     RxBool isSuccessStatus = false.obs;
     try {
       isLoader?.value = true;
       await APIFunction()
           .getApiCall(
-        apiName: "${ApiUrls.getStateUrl}$countryId",
+        apiName: countryId != null
+            ? "${ApiUrls.getStateUrl}/$countryId"
+            : "${ApiUrls.getAllStateUrl}",
       )
           .then(
         (response) async {
@@ -171,9 +182,10 @@ class AuthRepository {
               con.stateList.add(StateList(stateName: 'Select state'));
               con.stateList.value = getStateModel.data ?? [];
               if (con.stateList.isNotEmpty) {
-                con.stateDropDownValue = con.stateList[0];
+                con.stateDropDownValue.value = con.stateList[0];
               }
               printData(key: "get state response", value: con.stateList.length);
+              await AuthRepository().getCityListOnlyCall();
               // con.stateList.refresh();
             } else {
               log("getStateApiFunction else");
@@ -200,7 +212,9 @@ class AuthRepository {
       isLoader?.value = true;
       await APIFunction()
           .getApiCall(
-        apiName: "${ApiUrls.getCityUrl}$cityId",
+        apiName: cityId != null
+            ? "${ApiUrls.getCityUrl}/$cityId"
+            : "${ApiUrls.getCityUrl}",
       )
           .then(
         (response) async {
@@ -211,7 +225,7 @@ class AuthRepository {
             if (isSuccessStatus.value) {
               con.cityList.add(City(cityName: 'Select city'));
               con.cityList.addAll(getCityModel.data!);
-              con.cityDropDownValue = con.cityList[0];
+              con.cityDropDownValue.value = con.cityList[0];
               con.cityList.refresh();
             } else {
               log("getCityApiFunction else");
@@ -230,12 +244,11 @@ class AuthRepository {
     }
   }
 
-//get all address api
-  Future<dynamic> getAddressApiCall({RxBool? isLoader}) async {
+//get all address list api
+  Future<dynamic> getAddressApiCall({required RxBool isLoader}) async {
     final con = Get.find<ManageAddressController>();
 
     try {
-      isLoader?.value = true;
       await APIFunction().getApiCall(apiName: ApiUrls.getAddressUrl).then(
         (response) async {
           printData(key: "get address  response", value: response);
@@ -244,6 +257,8 @@ class AuthRepository {
 
             con.getAddressData = data;
             log("${con.getAddressData}");
+
+            con.addressList.addAll(con.getAddressData!.data);
           }
           return response;
         },
@@ -255,14 +270,17 @@ class AuthRepository {
       }
       rethrow;
     } finally {
-      isLoader?.value = false;
+      isLoader.value = false;
     }
   }
 
-  Future<dynamic> updateAddressApiCall({RxBool? isLoader, dynamic params}) async {
+  Future<dynamic> updateAddressApiCall(
+      {RxBool? isLoader, dynamic params}) async {
     try {
       isLoader?.value = true;
-      await APIFunction().postApiCall(apiName: ApiUrls.updateAddressUrl, params: params).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.updateAddressUrl, params: params)
+          .then(
         (response) async {
           printData(key: "update address response", value: response);
           if (!isValEmpty(response) && response["success"] == true) {
@@ -286,7 +304,8 @@ class AuthRepository {
   }
 
   // get address by id api
-  Future<void> getAddressByIdApiCall({RxBool? isLoader, String? addressId}) async {
+  Future<void> getAddressByIdApiCall(
+      {RxBool? isLoader, String? addressId}) async {
     final AddAddressController con = Get.find<AddAddressController>();
     try {
       isLoader?.value = true;
@@ -296,20 +315,43 @@ class AuthRepository {
       )
           .then(
         (response) async {
-          printData(key: "get address  response", value: response);
+          printData(key: "get address by id  response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
             GetAddressByIdModel data = GetAddressByIdModel.fromJson(response);
-
             con.getAddressData = data;
-            con.receiverNameCon.text = con.getAddressData!.data.contactPersonName;
+            con.receiverNameCon.text =
+                con.getAddressData!.data.contactPersonName;
             con.mobilenoCon.text = con.getAddressData!.data.contactPersonNumber;
             con.zipcodeCon.text = con.getAddressData!.data.zipCode;
-            con.countryDropDownValue =
-                Country(countryName: "${con.getAddressData!.data.country}");
-            con.stateDropDownValue =
-                StateList(stateName: "${con.getAddressData!.data.state}");
-            con.cityDropDownValue =
-                City(cityName: "${con.getAddressData!.data.city}");
+
+            for (int i = 0; i < con.countryList.length; i++) {
+              if (con.getAddressData!.data.countryId == con.countryList[i].id) {
+                con.countryDropDownValue.value = con.countryList[i];
+                printAction("===========   ${con.countryDropDownValue} ");
+              }
+            }
+
+            print(con.stateList.length);
+            for (int i = 0; i < con.stateList.length; i++) {
+              // log("state 123");
+              // log("getAddressModel.data.stateId  ${con.getAddressData!.data.stateId}");
+              // log("stateList[i].id.toString()  ${con.stateList[i].id}");
+              if (con.getAddressData!.data.stateId == con.stateList[i].id) {
+                con.stateDropDownValue.value = con.stateList[i];
+                log("stateDropDownValue ${con.stateDropDownValue}");
+              }
+            }
+
+            print(con.cityList.length);
+            for (int i = 0; i < con.cityList.length; i++) {
+              // log("city 123");
+              // log("getAddressModel.data.cityId  ${con.getAddressData!.data.cityId}");
+              // log("cityList[i].id.toString()  ${con.cityList[i].id}");
+              if (con.getAddressData!.data.cityId == con.cityList[i].id) {
+                con.cityDropDownValue.value = con.cityList[i];
+                log("cityDropDownValue ${con.cityDropDownValue}");
+              }
+            }
 
             log("${con.getAddressData}");
           }
@@ -328,8 +370,8 @@ class AuthRepository {
   }
 
   // remove address by id api
-  Future<void> removeAddressByIdApiCall({RxBool? isLoader, String? addressId}) async {
-    final ManageAddressController con = Get.find<ManageAddressController>();
+  Future<void> removeAddressByIdApiCall(
+      {RxBool? isLoader, String? addressId}) async {
     RxBool isSuccessStatus = false.obs;
     try {
       isLoader?.value = true;
@@ -342,9 +384,39 @@ class AuthRepository {
           log(response['status'].toString());
           if (!isValEmpty(response) && response["status"] == true) {
             if (isSuccessStatus.value) {
-              await getAddressApiCall().then((value) => isLoader?.value = false);
+              await getAddressApiCall(isLoader: false.obs)
+                  .then((value) => isLoader?.value = false);
             } else {
               log("getAddressByIdApiCall else");
+            }
+          }
+          return response;
+        },
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        printWarning(e.response?.statusCode);
+        printError(type: this, errText: "$e");
+      }
+    } finally {
+      isLoader?.value = false;
+    }
+  }
+
+//forgot passwprd api
+  Future<dynamic> forgotPasswordApiCall(
+      {RxBool? isLoader, dynamic params}) async {
+    try {
+      isLoader?.value = true;
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.forgotPasswordUrl, params: params)
+          .then(
+        (response) async {
+          printData(key: "forgot password response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            if (!isValEmpty(response["message"])) {
+              toast(response["message"].toString());
+              Get.offAllNamed(AppRoutes.loginScreen);
             }
           }
           return response;

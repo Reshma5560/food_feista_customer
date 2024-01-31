@@ -4,14 +4,10 @@ import 'package:get/get.dart';
 import '../../../data/models/get_address_model.dart';
 
 class ManageAddressController extends GetxController {
-  late GetAddressModel getAddressData;
-  RxBool isLoader = false.obs;
+  GetAddressModel? getAddressData;
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-  }
+  RxList<AddressList> addressList = <AddressList>[].obs;
+  RxBool isLoader = true.obs;
 
   @override
   void onReady() {

@@ -48,8 +48,8 @@ class LocationController extends GetxController {
         printAction("===$addressEnum");
       }
 
-      if (Get.arguments["AddressId"] != null) {
-        addressId.value = Get.arguments["AddressId"];
+      if (Get.arguments["addressId"] != null) {
+        addressId.value = Get.arguments["addressId"];
         printAction("===${addressId.value}");
       }
     }

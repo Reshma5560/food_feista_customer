@@ -451,7 +451,7 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(
-                      item.image,
+                      item.image??"",
                     ),
                     fit: BoxFit.cover,
                   ),

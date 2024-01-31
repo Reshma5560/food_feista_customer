@@ -14,7 +14,7 @@ GetAddressModel getAddressModelFromJson(String str) =>
 
 class GetAddressModel {
   bool status;
-  List<Datum> data;
+  List<AddressList> data;
 
   GetAddressModel({
     required this.status,
@@ -24,7 +24,7 @@ class GetAddressModel {
   factory GetAddressModel.fromJson(Map<String, dynamic> json) =>
       GetAddressModel(
         status: json["status"],
-        data: List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: List<AddressList>.from(json["data"]!.map((x) => AddressList.fromJson(x))),
       );
 
   // Map<String, dynamic> toJson() => {
@@ -33,7 +33,7 @@ class GetAddressModel {
   //     };
 }
 
-class Datum {
+class AddressList {
   String id;
   String addressType;
   String contactPersonNumber;
@@ -61,7 +61,7 @@ class Datum {
   StateList state;
   City city;
 
-  Datum({
+  AddressList({
     required this.id,
     required this.addressType,
     required this.contactPersonNumber,
@@ -90,7 +90,7 @@ class Datum {
     required this.city,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory AddressList.fromJson(Map<String, dynamic> json) => AddressList(
         id: json["id"] ?? "",
         addressType: json["address_type"] ?? "",
         contactPersonNumber: json["contact_person_number"] ?? "",
