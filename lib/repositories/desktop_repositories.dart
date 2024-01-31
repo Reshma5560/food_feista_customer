@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart' as dio;
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
@@ -11,7 +10,6 @@ import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
-
 import '../controller/home_controller.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';

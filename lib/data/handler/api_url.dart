@@ -21,6 +21,8 @@ class ApiUrls {
   static String removeAddressUrl = "remove-address/";
   static String updateAddressUrl = "update-address/";
   static String getAddressByIdUrl = "address-detail/";
+  static String getAllCityUrl = "get-city";
+  static String searchCityUrl = "search-city";
 
 //account api
   static String contactUsUrl = "contact-us";

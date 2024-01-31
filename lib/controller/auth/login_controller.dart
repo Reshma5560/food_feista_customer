@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  // Rx<TextEditingController> mobileNumberCon = TextEditingController().obs;
-  // RxString mobileError = "".obs;
-  // RxBool isMobileValid = false.obs;
   Rx<TextEditingController> emailCon = TextEditingController(text: kDebugMode ? "flutterdemo1234@gmail.com" : "").obs;
   RxBool emailValidation = false.obs;
   RxString emailError = ''.obs;

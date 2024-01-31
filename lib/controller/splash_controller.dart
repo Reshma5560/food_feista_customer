@@ -25,7 +25,10 @@ class SplashController extends GetxController {
 
         if(LocalStorage.token.value.isEmpty){
           Get.offAllNamed(AppRoutes.loginScreen);
-        }else{
+        }else if (LocalStorage.userCity.value.isEmpty){
+          Get.offAllNamed(AppRoutes.getCityScreen);
+        }
+        else{
           Get.offAllNamed(AppRoutes.indexScreen);
         }
       },

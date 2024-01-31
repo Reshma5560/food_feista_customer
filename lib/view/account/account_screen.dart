@@ -53,10 +53,12 @@ class AccountScreen extends StatelessWidget {
             yesButtonText: "Yes",
             onYesPressed: () {
               profileController.isLoader.value = true;
-              LocalStorage.clearLocalStorage().then((value) {
-                profileController.isLoader.value = false;
-                Get.offAllNamed(AppRoutes.loginScreen);
-              });
+              LocalStorage.clearLocalStorage().then(
+                (value) {
+                  profileController.isLoader.value = false;
+                  Get.offAllNamed(AppRoutes.loginScreen);
+                },
+              );
             },
             //  () async => await DesktopRepository()
             //     .logOutApiCall(isLoader: profileController.isLoader),

@@ -17,6 +17,7 @@ class Prefs {
   static const String userImage = "USER_IMAGE";
   static const String isUserActive = "USER_ACTIVE";
   static const String isUserVerify = "USER_VERIFY";
+  static const String isUserCity = "USER_CITY";
 
   static const String deviceId = "DEVICE_ID";
   static const String deviceType = "DEVICE_TYPE";
@@ -43,6 +44,7 @@ class LocalStorage {
   static RxString firstName = "".obs;
   static RxString lastName = "".obs;
   static RxString userImage = "".obs;
+  static RxString userCity = "".obs;
   static RxInt mobileNumber = 0.obs;
   static RxBool isUserActive = false.obs;
   static RxBool isUserVerify = false.obs;
@@ -69,6 +71,7 @@ class LocalStorage {
     prefs.write(Prefs.firstName, data['first_name'] ?? "");
     prefs.write(Prefs.lastName, data['last_name'] ?? "");
     prefs.write(Prefs.userImage, data['image'] ?? "");
+    prefs.write(Prefs.mobileNumber, data['phone'] ?? "");
     prefs.write(Prefs.mobileNumber, data['phone'] ?? "");
     prefs.write(Prefs.isUserActive, data['is_active'] == 0 ? false : true);
     prefs.write(Prefs.isUserVerify, data['is_verified'] == 0 ? false : true);
@@ -160,6 +163,7 @@ class LocalStorage {
     firstName = "".obs;
     lastName = "".obs;
     userImage = "".obs;
+    userCity="".obs;
     mobileNumber = 0.obs;
     isUserActive = false.obs;
     isUserVerify = false.obs;

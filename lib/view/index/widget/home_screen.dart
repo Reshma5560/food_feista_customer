@@ -51,11 +51,11 @@ class HomeScreen extends StatelessWidget {
 
   Widget _appHeader(BuildContext context) {
     return ClipRRect(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(defaultRadius * 3),
-          bottomRight: Radius.circular(defaultRadius * 3),
-        ),
-        child: AppBar(
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(defaultRadius * 3),
+        bottomRight: Radius.circular(defaultRadius * 3),
+      ),
+      child:  AppBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           centerTitle: true,
           leading: InkWell(
@@ -79,9 +79,14 @@ class HomeScreen extends StatelessWidget {
                   color: AppColors.white,
                 ),
               ),
-              const SizedBox(
-                width: 10,
-              ),
+
+            GestureDetector(
+              onTap: () {},
+              child: Text(
+                "abc",
+                style: AppStyle.customAppBarTitleStyle()
+                    .copyWith(color: AppColors.black, fontSize: 18),
+              ),),
               GestureDetector(
                 onTap: () {},
                 child: Text(
@@ -102,7 +107,9 @@ class HomeScreen extends StatelessWidget {
               width: 20.w,
             ).paddingOnly(right: 15)
           ],
-        ));
+
+    ));
+
   }
 
   Widget _bodyModule() {
@@ -120,35 +127,51 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 10),
           _sliderModule(),
           const SizedBox(height: 10),
-          TitleButtonRowWidget(
-            title: "BROWSE FOOD CATEGORY",
-            buttonText: "View All",
-            onPressed: () {},
-          ).paddingSymmetric(horizontal: 5),
+          homeController.categoryList.isEmpty
+              ? Container()
+              : TitleButtonRowWidget(
+                  title: "BROWSE FOOD CATEGORY",
+                  buttonText: "View All",
+                  onPressed: () {},
+                ).paddingSymmetric(horizontal: 5),
+          homeController.categoryList.isEmpty
+              ? Container()
+              : const SizedBox(height: 10),
+          homeController.categoryList.isEmpty ? Container() : _categoryModule(),
+          const SizedBox(height: 20),
+          homeController.restaurantList.isEmpty
+              ? Container()
+              : TitleButtonRowWidget(
+                  title: "OUR SPECIAL RESTAURANT",
+                  buttonText: "View All",
+                  onPressed: () {},
+                ).paddingSymmetric(horizontal: 5),
+          homeController.restaurantList.isEmpty
+              ? Container()
+              : _restaurantModule(),
+          const SizedBox(height: 20),
+          homeController.blogList.isEmpty
+              ? Container()
+              : TitleButtonRowWidget(
+                  title: "LATEST NEWS",
+                  buttonText: "View All",
+                  onPressed: () {},
+                ).paddingSymmetric(horizontal: 5),
+          homeController.blogList.isEmpty
+              ? Container()
+              : const SizedBox(height: 20),
+          homeController.blogList.isEmpty ? Container() : _blogModule(),
+          homeController.trendingFoodList.isEmpty
+              ? Container()
+              : TitleButtonRowWidget(
+                  title: "trending Foods".toUpperCase(),
+                  buttonText: "View All",
+                  onPressed: () {},
+                ).paddingSymmetric(horizontal: 5),
           const SizedBox(height: 10),
-          _categoryModule(),
-          const SizedBox(height: 20),
-          TitleButtonRowWidget(
-            title: "OUR SPECIAL RESTAURANT",
-            buttonText: "View All",
-            onPressed: () {},
-          ).paddingSymmetric(horizontal: 5),
-          _restaurantModule(),
-          const SizedBox(height: 20),
-          TitleButtonRowWidget(
-            title: "LATEST NEWS",
-            buttonText: "View All",
-            onPressed: () {},
-          ).paddingSymmetric(horizontal: 5),
-          const SizedBox(height: 20),
-          _blogModule(),
-          TitleButtonRowWidget(
-            title: "trending Foods".toUpperCase(),
-            buttonText: "View All",
-            onPressed: () {},
-          ).paddingSymmetric(horizontal: 5),
-          // const SizedBox(height: 10),
-          _trendingFoodsModule()
+          homeController.trendingFoodList.isEmpty
+              ? Container()
+              : _trendingFoodsModule()
         ],
       ).paddingSymmetric(horizontal: 10),
     );
