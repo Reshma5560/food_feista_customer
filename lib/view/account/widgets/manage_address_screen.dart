@@ -51,9 +51,11 @@ class ManageAddressScreen extends StatelessWidget {
                     ),
                     Obx(
                       () => con.isLoader.value
-                          ? const AppLoader()
+                          ? AppLoader()
                           : con.getAddressData!.data!.isEmpty
-                              ? const Align(alignment: Alignment.center, child: Text("No Address Found"))
+                              ? Align(
+                                  alignment: Alignment.center,
+                                  child: Text("No Address Found"))
                               : Expanded(
                                   child: ListView(
                                     children: [
@@ -65,10 +67,13 @@ class ManageAddressScreen extends StatelessWidget {
                                         height: 10.w,
                                       ),
                                       ListView.builder(
-                                        itemCount: con.getAddressData?.data?.length,
+                                        itemCount:
+                                            con.getAddressData!.data!.length,
                                         shrinkWrap: true,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          var item = con.getAddressData?.data?[index];
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          var item =
+                                              con.getAddressData?.data![index];
                                           return Container(
                                             margin: const EdgeInsets.symmetric(vertical: 5),
                                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),

@@ -1,14 +1,17 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:foodapplication/data/models/get_city_model.dart';
+import 'package:foodapplication/data/models/get_country_model.dart';
+import 'package:foodapplication/data/models/get_state_model.dart';
+// import 'package:foodapplication/model/get_city_model.dart';
+// import 'package:foodapplication/model/get_country_model.dart';
+// import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_enum.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/get_add_by_id_model.dart';
-import '../../../data/models/get_city_model.dart';
-import '../../../data/models/get_country_model.dart';
-import '../../../data/models/get_state_model.dart';
 import '../../../res/color_print.dart';
 
 class AddAddressController extends GetxController {

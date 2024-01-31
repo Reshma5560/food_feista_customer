@@ -304,9 +304,12 @@ class AuthRepository {
             con.receiverNameCon.text = con.getAddressData!.data.contactPersonName;
             con.mobilenoCon.text = con.getAddressData!.data.contactPersonNumber;
             con.zipcodeCon.text = con.getAddressData!.data.zipCode;
-            con.countryDropDownValue = con.getAddressData!.data.country;
-            con.stateDropDownValue = con.getAddressData!.data.state;
-            con.cityDropDownValue = con.getAddressData!.data.city;
+            con.countryDropDownValue =
+                Country(countryName: "${con.getAddressData!.data.country}");
+            con.stateDropDownValue =
+                StateList(stateName: "${con.getAddressData!.data.state}");
+            con.cityDropDownValue =
+                City(cityName: "${con.getAddressData!.data.city}");
 
             log("${con.getAddressData}");
           }

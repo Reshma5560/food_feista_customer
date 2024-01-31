@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../data/models/get_address_model.dart';
 
 class ManageAddressController extends GetxController {
-  GetAddressModel? getAddressData;
+  late GetAddressModel getAddressData;
   RxBool isLoader = false.obs;
 
   @override

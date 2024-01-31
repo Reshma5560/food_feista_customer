@@ -4,22 +4,21 @@
 
 import 'dart:convert';
 
-import 'get_city_model.dart';
-import 'get_country_model.dart';
+import 'package:foodapplication/data/models/get_city_model.dart';
+import 'package:foodapplication/data/models/get_country_model.dart';
+
 import 'get_state_model.dart';
-
-
 
 GetAddressModel getAddressModelFromJson(String str) =>
     GetAddressModel.fromJson(json.decode(str));
 
 class GetAddressModel {
-  bool? status;
-  List<Datum>? data;
+  bool status;
+  List<Datum> data;
 
   GetAddressModel({
-     this.status,
-     this.data,
+    required this.status,
+    required this.data,
   });
 
   factory GetAddressModel.fromJson(Map<String, dynamic> json) =>
