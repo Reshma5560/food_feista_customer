@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-import 'package:foodapplication/model/get_add_by_id_model.dart';
-import 'package:foodapplication/model/get_address_model.dart';
-import 'package:foodapplication/model/get_city_model.dart';
-import 'package:foodapplication/model/get_country_model.dart';
-import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_enum.dart';
 import 'package:get/get.dart';
 
+import '../../../data/models/get_add_by_id_model.dart';
+import '../../../data/models/get_city_model.dart';
+import '../../../data/models/get_country_model.dart';
+import '../../../data/models/get_state_model.dart';
 import '../../../res/color_print.dart';
 
 class AddAddressController extends GetxController {
@@ -17,7 +16,6 @@ class AddAddressController extends GetxController {
   RxString addressId = "".obs;
   var place; //= Get.arguments['place'] ?? "";
   GetAddressByIdModel? getAddressData;
-  
 
   TextEditingController addressCon = TextEditingController();
   TextEditingController floorCon = TextEditingController();
@@ -76,7 +74,7 @@ class AddAddressController extends GetxController {
       if (Get.arguments["place"] != null) {
         place = Get.arguments["place"];
         printAction("===$place");
-       }
+      }
       if (Get.arguments["lat"] != null) {
         latTextEditingController.text = Get.arguments["lat"];
         printAction("===${latTextEditingController.text}");
@@ -94,13 +92,11 @@ class AddAddressController extends GetxController {
   Future<void> onReady() async {
     AuthRepository().getCountryApiCall();
     if (Get.arguments['AddressId'] != null) {
-         floorCon.text = " ${place.subThoroughfare}";
-        houseCon.text = "${place.thoroughfare}";
-        addressCon.text =
-            "${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
-    
-      await AuthRepository().getAddressByIdApiCall(
-          isLoader: isLoader, addressId: addressId.value);
+      floorCon.text = " ${place.subThoroughfare}";
+      houseCon.text = "${place.thoroughfare}";
+      addressCon.text = "${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+
+      await AuthRepository().getAddressByIdApiCall(isLoader: isLoader, addressId: addressId.value);
     }
     super.onReady();
   }

@@ -10,7 +10,8 @@ import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
-import '../../../data/model/home_data_model.dart';
+
+import '../../../data/models/home_data_model.dart';
 import '../../../res/app_loader.dart';
 import '../../../res/box_shadow.dart';
 
@@ -70,9 +71,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(20)),
                 child: Image.asset(
                   AppAssets.profileIcon,
                   height: 16.h,
@@ -87,8 +86,7 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {},
                 child: Text(
                   "abc",
-                  style: AppStyle.customAppBarTitleStyle()
-                      .copyWith(color: AppColors.black, fontSize: 18),
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 18),
                 ),
               ),
               const SizedBox(
@@ -116,10 +114,7 @@ class HomeScreen extends StatelessWidget {
             controller: homeController.searchCon,
             fillColor: AppColors.greyShad1,
             hintText: "search",
-            hintStyle: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.hintColor),
+            hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
             prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
           ),
           const SizedBox(height: 10),
@@ -219,8 +214,7 @@ class HomeScreen extends StatelessWidget {
                   : Container(
                       width: 6,
                       height: 6,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.grey,
@@ -261,8 +255,7 @@ class HomeScreen extends StatelessWidget {
                   item.categoryName ?? "",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, fontSize: 13),
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                 ),
               ],
             ),
@@ -343,9 +336,7 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   width: 100,
                   decoration: BoxDecoration(
-                      color: homeController.selectSellType.value == index
-                          ? Theme.of(context).primaryColor
-                          : AppColors.white,
+                      color: homeController.selectSellType.value == index ? Theme.of(context).primaryColor : AppColors.white,
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
                       ),
@@ -355,9 +346,7 @@ class HomeScreen extends StatelessWidget {
                       homeController.sellingTypeList[index],
                       style: TextStyle(
                           fontSize: 11,
-                          color: homeController.selectSellType.value == index
-                              ? AppColors.white
-                              : Theme.of(context).primaryColor,
+                          color: homeController.selectSellType.value == index ? AppColors.white : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -379,9 +368,7 @@ class HomeScreen extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(
-              color: AppColors.greyShad1,
-              borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(color: AppColors.greyShad1, borderRadius: BorderRadius.circular(15)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,45 +388,30 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     item.title ?? "",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 23,
-                        color: Theme.of(context).primaryColor),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23, color: Theme.of(context).primaryColor),
                   ),
                   Text(
                     item.descripton ?? "",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                        color: AppColors.black),
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10, color: AppColors.black),
                   ),
                   Row(
                     children: [
                       Expanded(
                         child: Text(
                           "\$${item.price?.toString()}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                              color: AppColors.black),
+                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.black),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           "Type - ${item.type?.toString()}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 8.5,
-                              color: AppColors.black),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           "Qty - ${item.qty?.toString()}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 8.5,
-                              color: AppColors.black),
+                          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
                         ),
                       ),
                     ],
@@ -448,9 +420,7 @@ class HomeScreen extends StatelessWidget {
               )),
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(25)),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                 child: Icon(
                   Icons.add,
                   color: AppColors.white,
@@ -575,19 +545,13 @@ class HomeScreen extends StatelessWidget {
 
               // Coupon code show
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.red.shade900,
-                    boxShadow: BoxShadows().shadow(),
-                    shape: BoxShape.circle
+                decoration: BoxDecoration(color: Colors.red.shade900, boxShadow: BoxShadows().shadow(), shape: BoxShape.circle
                     // borderRadius: BorderRadius.circular(25),
                     ),
                 child: Text(
                   "${item.discount!}${item.discountType == "percent" ? "%" : "₹"}\nOFF",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.white),
                 ).paddingAll(10),
               ).paddingOnly(top: 10),
             ],

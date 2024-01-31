@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../data/model/wish_list_data_model.dart';
+import '../../../data/models/wish_list_data_model.dart';
 import '../../../repositories/desktop_repositories.dart';
 
 class WishListController extends GetxController {

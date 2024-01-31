@@ -12,89 +12,95 @@ import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
 
-import '../../../data/model/get_city_model.dart';
-import '../../../data/model/get_country_model.dart';
-import '../../../data/model/get_state_model.dart';
+import '../../../data/models/get_city_model.dart';
+import '../../../data/models/get_country_model.dart';
+import '../../../data/models/get_state_model.dart';
 
 class AddAddressScreen extends StatelessWidget {
   AddAddressScreen({super.key});
 
   final AddAddressController con = Get.put(AddAddressController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: TweenAnimationBuilder(
-            duration: const Duration(milliseconds: 1000),
-            curve: Curves.easeOutCubic,
-            tween: Tween(begin: 20.0, end: 1.0),
-            builder: (context, value, child) {
-              return AnimatedOpacity(
-                  opacity: value == 20 ? 0 : 1,
-                  duration: const Duration(milliseconds: 700),
-                  child: Column(children: [
-                    CommonAppBar(
-                      title: "Add Address",
-                      onPressed: () {
-                        //   Get.back();
-                        // Get.back();
-                        Get.offNamedUntil('/MANAGE_ADDRESS_SCREEN',
-                            (Route<dynamic> route) => route.isFirst);
-                      },
-                    ),
-                    Expanded(
-                        child: ListView(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: [
-                        _floorHouseModule(),
-                        SizedBox(height: 10.w),
-                        _addressModule(),
-                        SizedBox(height: 10.w),
-                        Text(
-                          "Address Type",
-                          style: AppStyle.textFieldTitleStyle(),
-                        ).paddingOnly(bottom: 10),
-                        _addressType(),
-                        SizedBox(height: 10.w),
-                        _receiverNameModule(),
-                        SizedBox(height: 10.w),
-                        _mobileNoModule(),
-                        SizedBox(height: 10.w),
-                        Text(
-                          "Country",
-                          style: AppStyle.textFieldTitleStyle(),
-                        ).paddingOnly(bottom: 10),
-                        _countryDropDownModule(),
-                        SizedBox(height: 10.w),
-                        Text(
-                          "State",
-                          style: AppStyle.textFieldTitleStyle(),
-                        ).paddingOnly(bottom: 10),
-                        _stateDropDownModule(),
-                        SizedBox(height: 10.w),
-                        Text(
-                          "City",
-                          style: AppStyle.textFieldTitleStyle(),
-                        ).paddingOnly(bottom: 10),
-                        _cityDropDownModule(),
-                        SizedBox(height: 10.w),
-                        _zipcodeModule(),
-                        SizedBox(height: 10.w),
-                        _latLongModule(),
-                        SizedBox(height: 10.w),
-                        AppButton(
-                            onPressed: addAddressFunction,
-                            child: Text(
-                              "Add Address",
-                              style: AppStyle.mediumWhite(),
-                            )),
-                        SizedBox(height: 10.w)
-                      ],
-                    ))
-                  ]));
-            }));
+      resizeToAvoidBottomInset: true,
+      body: TweenAnimationBuilder(
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeOutCubic,
+        tween: Tween(begin: 20.0, end: 1.0),
+        builder: (context, value, child) {
+          return AnimatedOpacity(
+            opacity: value == 20 ? 0 : 1,
+            duration: const Duration(milliseconds: 700),
+            child: Column(
+              children: [
+                CommonAppBar(
+                  title: "Add Address",
+                  onPressed: () {
+                    //   Get.back();
+                    // Get.back();
+                    Get.offNamedUntil('/MANAGE_ADDRESS_SCREEN', (Route<dynamic> route) => route.isFirst);
+                  },
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      _floorHouseModule(),
+                      SizedBox(height: 10.w),
+                      _addressModule(),
+                      SizedBox(height: 10.w),
+                      Text(
+                        "Address Type",
+                        style: AppStyle.textFieldTitleStyle(),
+                      ).paddingOnly(bottom: 10),
+                      _addressType(),
+                      SizedBox(height: 10.w),
+                      _receiverNameModule(),
+                      SizedBox(height: 10.w),
+                      _mobileNoModule(),
+                      SizedBox(height: 10.w),
+                      Text(
+                        "Country",
+                        style: AppStyle.textFieldTitleStyle(),
+                      ).paddingOnly(bottom: 10),
+                      _countryDropDownModule(),
+                      SizedBox(height: 10.w),
+                      Text(
+                        "State",
+                        style: AppStyle.textFieldTitleStyle(),
+                      ).paddingOnly(bottom: 10),
+                      _stateDropDownModule(),
+                      SizedBox(height: 10.w),
+                      Text(
+                        "City",
+                        style: AppStyle.textFieldTitleStyle(),
+                      ).paddingOnly(bottom: 10),
+                      _cityDropDownModule(),
+                      SizedBox(height: 10.w),
+                      _zipcodeModule(),
+                      SizedBox(height: 10.w),
+                      _latLongModule(),
+                      SizedBox(height: 10.w),
+                      AppButton(
+                        onPressed: addAddressFunction,
+                        child: Text(
+                          "Add Address",
+                          style: AppStyle.mediumWhite(),
+                        ),
+                      ),
+                      SizedBox(height: 10.w)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void addAddressFunction() {
@@ -149,10 +155,7 @@ class AddAddressScreen extends StatelessWidget {
       con.zipcodeError.value = "";
     }
 
-    if (con.mobileNoValidation.isFalse &&
-        con.receiveerNameValidation.isFalse &&
-        con.addressValidation.isFalse &&
-        con.zipcodeValidation.isFalse) {
+    if (con.mobileNoValidation.isFalse && con.receiveerNameValidation.isFalse && con.addressValidation.isFalse && con.zipcodeValidation.isFalse) {
       FocusScope.of(Get.context!).unfocus();
       var params = {
         "address": con.addressCon.text,
@@ -171,8 +174,7 @@ class AddAddressScreen extends StatelessWidget {
 
       print(params);
 
-      AuthRepository()
-          .addAddressApiCall(params: params, isLoader: con.isLoader);
+      AuthRepository().addAddressApiCall(params: params, isLoader: con.isLoader);
     }
   }
 
@@ -219,8 +221,7 @@ class AddAddressScreen extends StatelessWidget {
             errorMessage: con.floorError.value,
             showError: con.floorValidation.value,
             titleText: "Floor",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter fllor",
             keyboardType: TextInputType.text,
             readOnly: false,
@@ -237,8 +238,7 @@ class AddAddressScreen extends StatelessWidget {
             showError: con.houseValidation.value,
             readOnly: false,
             titleText: "House",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter house",
             keyboardType: TextInputType.text,
             onChanged: (value) {
@@ -427,8 +427,7 @@ class AddAddressScreen extends StatelessWidget {
             Icons.keyboard_arrow_down_rounded,
             color: AppColors.grey,
           ),
-          items:
-              con.stateList.map<DropdownMenuItem<StateList>>((StateList value) {
+          items: con.stateList.map<DropdownMenuItem<StateList>>((StateList value) {
             log("value.name ${value.stateName}");
             return DropdownMenuItem<StateList>(
               value: value,
@@ -524,8 +523,7 @@ class AddAddressScreen extends StatelessWidget {
             errorMessage: con.latError.value,
             showError: con.latValidation.value,
             titleText: "Latitude",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter Latitude",
             keyboardType: TextInputType.number,
             readOnly: true,
@@ -549,8 +547,7 @@ class AddAddressScreen extends StatelessWidget {
             showError: con.longValidation.value,
             readOnly: true,
             titleText: "Longitude",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter Longitude",
             keyboardType: TextInputType.number,
             inputFormatters: [

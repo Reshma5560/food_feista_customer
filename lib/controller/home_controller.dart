@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../data/model/food_list_model.dart';
-import '../data/model/home_data_model.dart';
+import '../data/models/food_list_model.dart';
+import '../data/models/home_data_model.dart';
 import '../repositories/desktop_repositories.dart';
 
 class HomeController extends GetxController {
@@ -16,7 +16,6 @@ class HomeController extends GetxController {
   RxList<Restaurant> restaurantList = <Restaurant>[].obs;
   RxList<Blog> blogList = <Blog>[].obs;
   RxList<TrendingFood> trendingFoodList = <TrendingFood>[].obs;
-
 
   List<FoodListModel> foodList = [
     FoodListModel(
@@ -37,12 +36,7 @@ class HomeController extends GetxController {
         qty: "150gms")
   ];
 
-  List<String> sellingTypeList = [
-    "Recent Selling",
-    "Top Selling",
-    "Whats New",
-    "Deal Products"
-  ];
+  List<String> sellingTypeList = ["Recent Selling", "Top Selling", "Whats New", "Deal Products"];
 
   @override
   void onReady() {

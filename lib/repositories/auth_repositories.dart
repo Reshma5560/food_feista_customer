@@ -1,20 +1,18 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:foodapplication/controller/account/components/add_address_controller.dart';
 import 'package:foodapplication/controller/account/components/manage_Address_controller.dart';
-import 'package:foodapplication/model/get_add_by_id_model.dart';
-import 'package:foodapplication/model/get_address_model.dart';
-import 'package:foodapplication/model/get_city_model.dart';
-import 'package:foodapplication/model/get_country_model.dart';
-import 'package:foodapplication/model/get_state_model.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../data/api/api_function.dart';
 import '../data/handler/api_url.dart';
+import '../data/models/get_add_by_id_model.dart';
+import '../data/models/get_address_model.dart';
+import '../data/models/get_city_model.dart';
+import '../data/models/get_country_model.dart';
+import '../data/models/get_state_model.dart';
 import '../res/color_print.dart';
 import '../res/ui_utils.dart';
 import '../utils/local_storage.dart';
@@ -25,9 +23,7 @@ class AuthRepository {
     try {
       isLoader?.value = true;
       printData(key: "Login params", value: params);
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.loginUrl, params: params)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.loginUrl, params: params).then(
         (response) async {
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
@@ -66,13 +62,10 @@ class AuthRepository {
     }
   }
 
-  Future<dynamic> updatePasswordApiCall(
-      {RxBool? isLoader, dynamic params}) async {
+  Future<dynamic> updatePasswordApiCall({RxBool? isLoader, dynamic params}) async {
     try {
       isLoader?.value = true;
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.updatePasswordUrl, params: params)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.updatePasswordUrl, params: params).then(
         (response) async {
           printData(key: "update password response", value: response);
           if (!isValEmpty(response) && response["success"] == true) {
@@ -98,9 +91,7 @@ class AuthRepository {
   Future<dynamic> addAddressApiCall({RxBool? isLoader, dynamic params}) async {
     try {
       isLoader?.value = true;
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.addAddressUrl, params: params)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.addAddressUrl, params: params).then(
         (response) async {
           printData(key: "add address response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -137,12 +128,11 @@ class AuthRepository {
         (response) async {
           printData(key: "get country response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
-            GetCountryModel getCountryModel =
-                GetCountryModel.fromJson(response);
+            GetCountryModel getCountryModel = GetCountryModel.fromJson(response);
             isSuccessStatus.value = getCountryModel.status!;
             if (isSuccessStatus.value) {
               con.countryList.add(Country(countryName: 'Select country'));
-              con.countryList.value.addAll(getCountryModel.data!);
+              con.countryList.addAll(getCountryModel.data!);
               con.countryDropDownValue = con.countryList[0];
               con.countryList.refresh();
             } else {
@@ -163,8 +153,7 @@ class AuthRepository {
   }
 
   // get state api
-  Future<void> getStateListOnlyCall(
-      {RxBool? isLoader, String? countryId}) async {
+  Future<void> getStateListOnlyCall({RxBool? isLoader, String? countryId}) async {
     final AddAddressController con = Get.find<AddAddressController>();
     RxBool isSuccessStatus = false.obs;
     try {
@@ -221,7 +210,7 @@ class AuthRepository {
             isSuccessStatus.value = getCityModel.status!;
             if (isSuccessStatus.value) {
               con.cityList.add(City(cityName: 'Select city'));
-              con.cityList.value.addAll(getCityModel.data!);
+              con.cityList.addAll(getCityModel.data!);
               con.cityDropDownValue = con.cityList[0];
               con.cityList.refresh();
             } else {
@@ -270,13 +259,10 @@ class AuthRepository {
     }
   }
 
-  Future<dynamic> updateAddressApiCall(
-      {RxBool? isLoader, dynamic params}) async {
+  Future<dynamic> updateAddressApiCall({RxBool? isLoader, dynamic params}) async {
     try {
       isLoader?.value = true;
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.updateAddressUrl, params: params)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.updateAddressUrl, params: params).then(
         (response) async {
           printData(key: "update address response", value: response);
           if (!isValEmpty(response) && response["success"] == true) {
@@ -300,8 +286,7 @@ class AuthRepository {
   }
 
   // get address by id api
-  Future<void> getAddressByIdApiCall(
-      {RxBool? isLoader, String? addressId}) async {
+  Future<void> getAddressByIdApiCall({RxBool? isLoader, String? addressId}) async {
     final AddAddressController con = Get.find<AddAddressController>();
     try {
       isLoader?.value = true;
@@ -316,8 +301,7 @@ class AuthRepository {
             GetAddressByIdModel data = GetAddressByIdModel.fromJson(response);
 
             con.getAddressData = data;
-            con.receiverNameCon.text =
-                con.getAddressData!.data.contactPersonName;
+            con.receiverNameCon.text = con.getAddressData!.data.contactPersonName;
             con.mobilenoCon.text = con.getAddressData!.data.contactPersonNumber;
             con.zipcodeCon.text = con.getAddressData!.data.zipCode;
             con.countryDropDownValue = con.getAddressData!.data.country;
@@ -341,8 +325,7 @@ class AuthRepository {
   }
 
   // remove address by id api
-  Future<void> removeAddressByIdApiCall(
-      {RxBool? isLoader, String? addressId}) async {
+  Future<void> removeAddressByIdApiCall({RxBool? isLoader, String? addressId}) async {
     final ManageAddressController con = Get.find<ManageAddressController>();
     RxBool isSuccessStatus = false.obs;
     try {
@@ -356,8 +339,7 @@ class AuthRepository {
           log(response['status'].toString());
           if (!isValEmpty(response) && response["status"] == true) {
             if (isSuccessStatus.value) {
-              await getAddressApiCall()
-                  .then((value) => isLoader?.value = false);
+              await getAddressApiCall().then((value) => isLoader?.value = false);
             } else {
               log("getAddressByIdApiCall else");
             }

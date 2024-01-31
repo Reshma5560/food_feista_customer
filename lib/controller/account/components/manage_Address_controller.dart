@@ -1,7 +1,7 @@
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:get/get.dart';
 
-import '../../../data/model/get_address_model.dart';
+import '../../../data/models/get_address_model.dart';
 
 class ManageAddressController extends GetxController {
   GetAddressModel? getAddressData;

@@ -13,9 +13,9 @@ import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../controller/home_controller.dart';
-import '../data/model/get_profile_model.dart';
-import '../data/model/home_data_model.dart';
-import '../data/model/wish_list_data_model.dart';
+import '../data/models/get_profile_model.dart';
+import '../data/models/home_data_model.dart';
+import '../data/models/wish_list_data_model.dart';
 
 class DesktopRepository {
   // Future<dynamic> logOutApiCall({RxBool? isLoader}) async {
@@ -143,6 +143,7 @@ class DesktopRepository {
     }
   }
 
+  ///get wish list api
   Future<dynamic> getWishListAPI({required bool isInitial}) async {
     final WishListController con = Get.find<WishListController>();
     try {

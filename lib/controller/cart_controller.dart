@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../data/model/food_list_model.dart';
+import '../data/models/food_list_model.dart';
 
 class CartController extends GetxController {
   Rx<double> totalAmount = 0.00.obs;
