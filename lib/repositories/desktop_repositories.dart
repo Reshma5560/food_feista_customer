@@ -85,9 +85,7 @@ class DesktopRepository {
         "phone": editAccountController.mobileNumberCon.text.trim(),
         "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.name),
       });
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
         (response) async {
           printData(key: "update profile response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -160,10 +158,7 @@ class DesktopRepository {
         }
 
         if (con.nextPageStop.isTrue) {
-          await APIFunction()
-              .getApiCall(
-                  apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}")
-              .then(
+          await APIFunction().getApiCall(apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}").then(
             (response) async {
               GetWishListDataModel homeTipModel = GetWishListDataModel.fromJson(response);
 
@@ -176,8 +171,7 @@ class DesktopRepository {
               });
 
               con.page.value++;
-              printData(
-                  key: "WISH LIST length", value: con.wishListData.length);
+              printData(key: "WISH LIST length", value: con.wishListData.length);
               if (con.wishListData.length == homeTipModel.data?.total) {
                 con.nextPageStop.value = false;
               }
@@ -225,8 +219,6 @@ class DesktopRepository {
     }
   }
 
-
-
   //get order details by idlist
   Future<dynamic> getOrderDetailsByIdApiCall({RxBool? isLoader}) async {
     final con = Get.find<MyOrderController>();
@@ -236,6 +228,38 @@ class DesktopRepository {
       await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
         (response) async {
           printData(key: "get order detail response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            GetOrderModel data = GetOrderModel.fromJson(response);
+
+            con.getOrderModel = data;
+            log("${con.getOrderModel}");
+
+            con.orderList.addAll(con.getOrderModel.data!);
+            log("ORDER LENGTH ${con.orderList.length}");
+          }
+          return response;
+        },
+      );
+    } on dio.DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        printWarning(e.response?.statusCode);
+        printError(type: this, errText: "$e");
+      }
+      rethrow;
+    } finally {
+      isLoader?.value = false;
+    }
+  }
+
+  ///get order list
+  Future<dynamic> getOrderApiCall({RxBool? isLoader}) async {
+    final con = Get.find<MyOrderController>();
+
+    try {
+      isLoader?.value = true;
+      await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
+        (response) async {
+          printData(key: "get order  response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
             GetOrderModel data = GetOrderModel.fromJson(response);
 
