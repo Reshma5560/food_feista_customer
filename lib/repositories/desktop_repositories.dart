@@ -6,6 +6,7 @@ import 'package:foodapplication/controller/account/components/edit_account_contr
 import 'package:foodapplication/controller/account/components/wish_list_controller.dart';
 import 'package:foodapplication/controller/cart_controller.dart';
 import 'package:foodapplication/controller/my_order_controller.dart';
+import 'package:foodapplication/controller/search_screen_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/data/models/get_order_model.dart';
@@ -19,6 +20,7 @@ import '../controller/home_controller.dart';
 import '../data/models/get_cart_data_model.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';
+import '../data/models/search_item_data_model.dart';
 import '../data/models/wish_list_data_model.dart';
 
 class DesktopRepository {
@@ -311,6 +313,27 @@ class DesktopRepository {
     } finally {
       con.isLoading.value = false;
       // con.paginationLoading.value = false;
+    }
+  }
+
+  ///get wish list api
+  Future<dynamic> getSearchItemAPI() async {
+    final SearchScreenController con = Get.find<SearchScreenController>();
+    try {
+      await APIFunction().getApiCall(apiName: "${ApiUrls.searchUrl}?value=${con.searchCon.value.text.trim()}").then(
+        (response) async {
+          GetSearchDataModel searchModel = GetSearchDataModel.fromJson(response);
+          con.searchItemData.value = searchModel.data ?? [];
+
+          printData(key: "SEARCH LIST length", value: con.searchItemData.length);
+
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      con.isLoading.value = false;
     }
   }
 }

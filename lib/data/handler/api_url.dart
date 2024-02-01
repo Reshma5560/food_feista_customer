@@ -41,6 +41,9 @@ class ApiUrls {
 
   ///cart URLs
   static String getCartUrl = "get-cart";
+
+  ///search URL
+  static String searchUrl = "search";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";
