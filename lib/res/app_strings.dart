@@ -53,6 +53,8 @@ class AppStrings {
   static String notificationNotFoundSubtitle = "We'll notify you when something arrives.";
   static String wishListNotFoundTitle = "No Favorite";
   static String wishListNotFoundSubtitle = "We'll notify you when something arrives.";
+  static String cartNotFoundTitle = "No Item";
+  static String cartListNotFoundSubtitle = "We'll notify you when something arrives.";
   static String deleteNotificationConfirmation = "This will permanently delete the item. Confirm deletion?";
   static String giveYourFirstLike = "Give your first like";
 

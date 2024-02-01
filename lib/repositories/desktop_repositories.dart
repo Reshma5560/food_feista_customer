@@ -4,6 +4,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/controller/account/components/wish_list_controller.dart';
+import 'package:foodapplication/controller/cart_controller.dart';
 import 'package:foodapplication/controller/my_order_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
@@ -15,6 +16,7 @@ import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../controller/home_controller.dart';
+import '../data/models/get_cart_data_model.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';
 import '../data/models/wish_list_data_model.dart';
@@ -219,7 +221,7 @@ class DesktopRepository {
     }
   }
 
-  //get order details by idlist
+  ///get order details by idlist
   Future<dynamic> getOrderDetailsByIdApiCall({RxBool? isLoader}) async {
     final con = Get.find<MyOrderController>();
 
@@ -280,6 +282,35 @@ class DesktopRepository {
       rethrow;
     } finally {
       isLoader?.value = false;
+    }
+  }
+
+  ///get wish list api
+  Future<dynamic> getCartAPI() async {
+    final CartController con = Get.find<CartController>();
+    try {
+      await APIFunction().getApiCall(apiName: ApiUrls.getCartUrl).then(
+        (response) async {
+          GetCartDataModel cartDataModel = GetCartDataModel.fromJson(response);
+          con.cartData.value = cartDataModel;
+          con.cartItemData.value = cartDataModel.data?.cartDetails ?? [];
+          if (con.cartItemData.isNotEmpty) {
+            for (var i = 0; i < con.cartItemData.length; i++) {
+              con.totalAmount.value = con.totalAmount.value + double.parse(con.cartItemData[i].price ?? "0");
+
+              printData(key: "TOTAL ", value: con.totalAmount.value);
+            }
+          }
+          printData(key: "CART LIST length", value: con.cartItemData.length);
+
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+      // con.paginationLoading.value = false;
     }
   }
 }

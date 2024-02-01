@@ -26,18 +26,21 @@ class ApiUrls {
   static String getAllCityUrl = "get-city";
   static String searchCityUrl = "search-city";
 
-//account api
+  ///account api
   static String contactUsUrl = "contact-us";
 
-  //home data
+  ///home data
   static String homeDataUrl = "home/city/1";
 
-//order api
+  ///order api
   static String getOrderListUrl = 'get-order';
 
   ///wish list
   static String getWishListUrl = "get-wishlist";
   static String postWishListUrl = "wishlist-action";
+
+  ///cart URLs
+  static String getCartUrl = "get-cart";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";
