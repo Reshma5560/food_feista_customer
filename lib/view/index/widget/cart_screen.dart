@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/cart_controller.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
@@ -8,7 +9,9 @@ import 'package:foodapplication/res/widgets/app_bar.dart';
 import 'package:foodapplication/res/widgets/empty_element.dart';
 import 'package:get/get.dart';
 
+import '../../../data/models/get_cart_data_model.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
+import '../../../repositories/desktop_repositories.dart';
 import '../../../res/app_strings.dart';
 
 class CartScreen extends StatelessWidget {
@@ -29,6 +32,7 @@ class CartScreen extends StatelessWidget {
             opacity: value == 20 ? 0 : 1,
             duration: const Duration(milliseconds: 700),
             child: Column(
+              // physics: const NeverScrollableScrollPhysics(),
               // padding: EdgeInsets.zero,
               children: [
                 _appHeader(context),
@@ -36,124 +40,202 @@ class CartScreen extends StatelessWidget {
                   child: Obx(
                     () => con.isLoading.isFalse
                         ? con.cartItemData.isNotEmpty
-                            ? ListView.builder(
-                                padding: const EdgeInsets.only(top: 0, bottom: 10),
-                                itemCount: con.cartItemData.length,
-                                // physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  var item = con.cartItemData[index];
-                                  RxInt itemCount = 1.obs;
-                                  Rx<double?> total = double.parse(item.price ?? "0").obs;
-
-                                  return Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: defaultPadding - 6),
-                                    decoration: BoxDecoration(color: AppColors.greyShad1, borderRadius: BorderRadius.circular(15)),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: MFNetworkImage(
-                                            backgroundColor: Colors.grey,
-                                            imageUrl: item.food?.image ?? "",
-                                            fit: BoxFit.cover,
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.circular(defaultRadius),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                item.food?.foodName ?? "",
-                                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: Theme.of(context).primaryColor),
-                                              ),
-                                              Obx(
-                                                () => Text(
-                                                  total.value == double.parse(item.price ?? "0") ? "\$${item.price?.toString()}" : "\$${total.value}",
-                                                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                if (itemCount.value < item.quantity!.toInt()) {
-                                                } else {
-                                                  itemCount--;
-                                                  total.value = (total.value!.toDouble() - double.parse(item.price ?? "0"));
-
-                                                  con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
-                                                }
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.all(7),
-                                                decoration:
-                                                    BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
-                                                child: Icon(
-                                                  Icons.remove,
-                                                  size: 13,
-                                                  color: AppColors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Obx(
-                                              () => Text(
-                                                itemCount.value.toString(),
-                                                style: const TextStyle(fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                itemCount++;
-
-                                                total.value = (total.value!.toDouble() + double.parse(item.price ?? "0"));
-
-                                                con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.all(7),
-                                                decoration:
-                                                    BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
-                                                child: Icon(
-                                                  Icons.add,
-                                                  size: 13,
-                                                  color: AppColors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  );
+                            ? RefreshIndicator(
+                                onRefresh: () async {
+                                  con.totalAmount.value = 0.0;
+                                  await DesktopRepository().getCartAPI();
                                 },
+                                child: ListView.separated(
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(
+                                      height: defaultPadding - 6,
+                                    );
+                                  },
+                                  padding: const EdgeInsets.only(top: 10, bottom: 0),
+                                  itemCount: con.cartItemData.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    var item = con.cartItemData[index];
+
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: defaultPadding - 6),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        boxShadow: AppStyle.boxShadow(),
+                                        borderRadius: BorderRadius.circular(defaultRadius),
+                                      ),
+                                      child: Row(
+                                        // mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: MFNetworkImage(
+                                              height: 100,
+                                              // backgroundColor: Colors.grey,
+                                              imageUrl: item.food?.image ?? "",
+                                              fit: BoxFit.cover,
+                                              shape: BoxShape.rectangle,
+                                              borderRadius: BorderRadius.circular(defaultRadius),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(defaultPadding - 6),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        item.food?.foodName ?? "",
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight.w600, fontSize: 20, color: Theme.of(context).primaryColor),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: InkWell(
+                                                              onTap: () async {
+                                                                await DesktopRepository().getFoodItemDataAPI(id: item.foodId ?? "").then((value) {
+                                                                  _editItem(context, data: item);
+                                                                });
+
+                                                                // con.totalAmount.value - double.parse(item.totalPrice?.value.toString() ?? "0.0");
+
+                                                                // con.cartItemData.removeAt(index);
+                                                              },
+                                                              child: Icon(
+                                                                Icons.edit,
+                                                                color: Theme.of(context).primaryColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10.w,
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                con.totalAmount.value - double.parse(item.totalPrice?.value.toString() ?? "0.0");
+                                                                con.cartItemData.removeAt(index);
+                                                              },
+                                                              child: Icon(
+                                                                Icons.delete_outlined,
+                                                                color: Theme.of(context).primaryColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: defaultPadding - 6,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Obx(
+                                                        () => Text(
+                                                          item.totalPrice?.value == double.parse(item.price ?? "0")
+                                                              ? "${item.price?.toString()}"
+                                                              : "${item.totalPrice?.value}",
+                                                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          InkWell(
+                                                            onTap: () {
+                                                              if (item.itemCount!.value < item.quantity!.toInt()) {
+                                                              } else {
+                                                                item.itemCount?.value--;
+                                                                item.totalPrice?.value = (item.totalPrice!.value - double.parse(item.price ?? "0"));
+
+                                                                con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
+                                                              }
+                                                            },
+                                                            child: Container(
+                                                              padding: const EdgeInsets.all(8),
+                                                              decoration: BoxDecoration(
+                                                                  color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
+                                                              child: Icon(
+                                                                Icons.remove,
+                                                                size: 15,
+                                                                color: AppColors.white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Obx(
+                                                            () => Text(
+                                                              item.itemCount?.value.toString() ?? "",
+                                                              style: const TextStyle(fontWeight: FontWeight.w700),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          InkWell(
+                                                            onTap: () {
+                                                              if (item.itemCount!.value >= item.food!.maximumCartQuantity!.toInt()) {
+                                                              } else {
+                                                                // itemCount++;
+                                                                item.itemCount?.value++;
+                                                                item.totalPrice?.value = (item.totalPrice!.value + double.parse(item.price ?? "0"));
+
+                                                                con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
+                                                              }
+                                                            },
+                                                            child: Container(
+                                                              padding: const EdgeInsets.all(8),
+                                                              decoration: BoxDecoration(
+                                                                  color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
+                                                              child: Icon(
+                                                                Icons.add,
+                                                                size: 15,
+                                                                color: AppColors.white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                               )
-                            : EmptyElement(
-                                height: Get.height / 1.8,
-                                imageHeight: Get.width / 2.4,
-                                imageWidth: Get.width / 2,
-                                spacing: 0,
-                                title: AppStrings.wishListNotFoundTitle,
-                                subtitle: AppStrings.wishListNotFoundSubtitle,
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  con.totalAmount.value = 0.0;
+                                  await DesktopRepository().getCartAPI();
+                                },
+                                child: ListView(
+                                  children: [
+                                    EmptyElement(
+                                      height: Get.height / 1.8,
+                                      imageHeight: Get.width / 2.4,
+                                      imageWidth: Get.width / 2,
+                                      spacing: 0,
+                                      title: AppStrings.wishListNotFoundTitle,
+                                      subtitle: AppStrings.wishListNotFoundSubtitle,
+                                    ),
+                                  ],
+                                ),
                               )
                         : const AppLoader(),
                   ),
@@ -206,6 +288,68 @@ class CartScreen extends StatelessWidget {
         title: "Cart",
         centerTitle: true,
         titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+      ),
+    );
+  }
+
+  _editItem(BuildContext context, {required CartDetail data}) {
+    return Get.bottomSheet(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(defaultRadius * 3),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(defaultRadius * 3),
+        ),
+        width: Get.width,
+        child: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    data.food?.foodName ?? "",
+                    style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Icon(
+                      Icons.close,
+                      color: AppColors.black,
+                      size: 24,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: defaultPadding - 6,
+              ),
+              Text(
+                "Classic Nachos",
+                style: AppStyle.authTitleStyle().copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Column(
+                children: List.generate(
+                  2,
+                  (index) => const Row(
+                    children: [
+                      Text("ncvnsdnv"),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -2,10 +2,13 @@ import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:get/get.dart';
 
 import '../data/models/get_cart_data_model.dart';
+import '../data/models/get_food_item_data_model.dart';
 
 class CartController extends GetxController {
   RxBool isLoading = true.obs;
   RxList<CartDetail> cartItemData = <CartDetail>[].obs;
+  RxList<ItemAddon> foodItemAddonData = <ItemAddon>[].obs;
+  RxList<FoodVariant> foodItemVariantData = <FoodVariant>[].obs;
   Rx<GetCartDataModel> cartData = GetCartDataModel().obs;
 
   Rx<double> totalAmount = 0.00.obs;

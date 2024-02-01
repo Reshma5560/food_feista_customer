@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 GetCartDataModel getCartDataModelFromJson(String str) => GetCartDataModel.fromJson(json.decode(str));
 
 String getCartDataModelToJson(GetCartDataModel data) => json.encode(data.toJson());
@@ -94,6 +96,8 @@ class CartDetail {
   final String? foodId;
   final String? restaurantId;
   final int? quantity;
+  final RxInt? itemCount;
+  final RxDouble? totalPrice;
   final String? subtotal;
   final String? price;
   final dynamic tax;
@@ -101,7 +105,7 @@ class CartDetail {
   final List<String>? variantIds;
   final List<dynamic>? addonIds;
   final List<CartFoodVariant>? variant;
-  final List<dynamic>? addon;
+  final List<CartFoodAddon>? addon;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final CartFood? food;
@@ -112,6 +116,8 @@ class CartDetail {
     this.foodId,
     this.restaurantId,
     this.quantity,
+    this.itemCount,
+    this.totalPrice,
     this.subtotal,
     this.price,
     this.tax,
@@ -131,6 +137,8 @@ class CartDetail {
         foodId: json["food_id"],
         restaurantId: json["restaurant_id"],
         quantity: json["quantity"],
+        itemCount: RxInt(1),
+        totalPrice: RxDouble(0.0),
         subtotal: json["subtotal"],
         price: json["price"],
         tax: json["tax"],
@@ -138,7 +146,7 @@ class CartDetail {
         variantIds: json["variant_ids"] == null ? [] : List<String>.from(json["variant_ids"]!.map((x) => x)),
         addonIds: json["addon_ids"] == null ? [] : List<dynamic>.from(json["addon_ids"]!.map((x) => x)),
         variant: json["variant"] == null ? [] : List<CartFoodVariant>.from(json["variant"]!.map((x) => CartFoodVariant.fromJson(x))),
-        addon: json["addon"] == null ? [] : List<dynamic>.from(json["addon"]!.map((x) => x)),
+        addon: json["addon"] == null ? [] : List<CartFoodAddon>.from(json["addon"]!.map((x) => CartFoodAddon.fromJson(x))),
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         food: json["food"] == null ? null : CartFood.fromJson(json["food"]),
@@ -157,7 +165,7 @@ class CartDetail {
         "variant_ids": variantIds == null ? [] : List<dynamic>.from(variantIds!.map((x) => x)),
         "addon_ids": addonIds == null ? [] : List<dynamic>.from(addonIds!.map((x) => x)),
         "variant": variant == null ? [] : List<dynamic>.from(variant!.map((x) => x.toJson())),
-        "addon": addon == null ? [] : List<dynamic>.from(addon!.map((x) => x)),
+        "addon": addon == null ? [] : List<dynamic>.from(addon!.map((x) => x.toJson())),
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "food": food?.toJson(),
@@ -317,6 +325,58 @@ class CartFood {
         "updated_at": updatedAt?.toIso8601String(),
         "comments_count": commentsCount,
         "translations": translations == null ? [] : List<dynamic>.from(translations!.map((x) => x)),
+      };
+}
+
+class CartFoodAddon {
+  final String? id;
+  final String? addonName;
+  final int? price;
+  final String? restaurantId;
+  final int? isActive;
+  final dynamic createdBy;
+  final dynamic updatedBy;
+  final dynamic deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  CartFoodAddon({
+    this.id,
+    this.addonName,
+    this.price,
+    this.restaurantId,
+    this.isActive,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory CartFoodAddon.fromJson(Map<String, dynamic> json) => CartFoodAddon(
+        id: json["id"],
+        addonName: json["addon_name"],
+        price: json["price"],
+        restaurantId: json["restaurant_id"],
+        isActive: json["is_active"],
+        createdBy: json["created_by"],
+        updatedBy: json["updated_by"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "addon_name": addonName,
+        "price": price,
+        "restaurant_id": restaurantId,
+        "is_active": isActive,
+        "created_by": createdBy,
+        "updated_by": updatedBy,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }
 

@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 
 import '../controller/home_controller.dart';
 import '../data/models/get_cart_data_model.dart';
+import '../data/models/get_food_item_data_model.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';
 import '../data/models/search_item_data_model.dart';
@@ -223,7 +224,7 @@ class DesktopRepository {
     }
   }
 
-  ///get order details by idlist
+  ///get order details by id list
   Future<dynamic> getOrderDetailsByIdApiCall({RxBool? isLoader}) async {
     final con = Get.find<MyOrderController>();
 
@@ -298,6 +299,7 @@ class DesktopRepository {
           con.cartItemData.value = cartDataModel.data?.cartDetails ?? [];
           if (con.cartItemData.isNotEmpty) {
             for (var i = 0; i < con.cartItemData.length; i++) {
+              con.cartItemData[i].totalPrice?.value = double.parse(con.cartItemData[i].price ?? "0");
               con.totalAmount.value = con.totalAmount.value + double.parse(con.cartItemData[i].price ?? "0");
 
               printData(key: "TOTAL ", value: con.totalAmount.value);
@@ -326,6 +328,29 @@ class DesktopRepository {
           con.searchItemData.value = searchModel.data ?? [];
 
           printData(key: "SEARCH LIST length", value: con.searchItemData.length);
+
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+    }
+  }
+
+  ///get wish list api
+  Future<dynamic> getFoodItemDataAPI({required String id}) async {
+    final CartController con = Get.find<CartController>();
+    try {
+      await APIFunction().getApiCall(apiName: "${ApiUrls.getFoodDataUrl}/$id").then(
+        (response) async {
+          GetFoodItemDataModel searchModel = GetFoodItemDataModel.fromJson(response);
+          con.foodItemAddonData.value = searchModel.data?.addons ?? [];
+          printData(key: "foodItemAddonData length", value: con.foodItemAddonData.length);
+          con.foodItemVariantData.value = searchModel.data?.foodVariant ?? [];
+
+          printData(key: "foodItemAddonData length", value: con.foodItemVariantData.length);
 
           return response;
         },
