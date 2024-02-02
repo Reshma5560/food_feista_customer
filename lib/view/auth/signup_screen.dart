@@ -43,12 +43,10 @@ class SignUpScreen extends StatelessWidget {
                           child: Obx(
                             () => ListView(
                               padding: EdgeInsets.all(defaultPadding.w),
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               physics: const RangeMaintainingScrollPhysics(),
                               children: [
-                                SizedBox(
-                                    height: double.parse(value.toString())),
+                                SizedBox(height: double.parse(value.toString())),
                                 Text(
                                   "SignUp",
                                   style: AppStyle.authTitleStyle(),
@@ -131,6 +129,7 @@ class SignUpScreen extends StatelessWidget {
                                   controller: con.emailCon.value,
                                   errorMessage: con.emailError.value,
                                   showError: con.emailValidation.value,
+                                  textInputAction: TextInputAction.next,
                                   keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
                                     con.emailValidation.value = false;
@@ -141,6 +140,7 @@ class SignUpScreen extends StatelessWidget {
                                   controller: con.mobileNumberCon.value,
                                   errorMessage: con.mobileError.value,
                                   showError: con.isMobileValid.value,
+                                  textInputAction: TextInputAction.next,
                                   titleText: "Mobile Number",
                                   hintText: "Mobile Number",
                                   keyboardType: TextInputType.phone,
@@ -149,8 +149,7 @@ class SignUpScreen extends StatelessWidget {
                                     LengthLimitingTextInputFormatter(10),
                                   ],
                                   onChanged: (value) {
-                                    if (con.mobileNumberCon.value.text.length ==
-                                        10) {
+                                    if (con.mobileNumberCon.value.text.length == 10) {
                                       FocusScope.of(context).unfocus();
                                     }
                                     con.isMobileValid.value = false;
@@ -163,19 +162,16 @@ class SignUpScreen extends StatelessWidget {
                                   controller: con.passwordCon.value,
                                   errorMessage: con.passwordError.value,
                                   showError: con.passwordValidation.value,
+                                  textInputAction: TextInputAction.done,
                                   keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
-                                    if (con.passwordCon.value.text.length ==
-                                        16) {
+                                    if (con.passwordCon.value.text.length == 16) {
                                       con.passwordValidation.value = false;
                                       con.passwordError.value = "";
                                       FocusScope.of(context).unfocus();
-                                    } else if (con
-                                            .passwordCon.value.text.length <
-                                        8) {
+                                    } else if (con.passwordCon.value.text.length < 8) {
                                       con.passwordValidation.value = true;
-                                      con.passwordError.value =
-                                          "Please Enter your password at least 8 digits.";
+                                      con.passwordError.value = "Please Enter your password at least 8 digits.";
                                     } else {
                                       con.passwordValidation.value = false;
                                       con.passwordError.value = "";
@@ -196,25 +192,16 @@ class SignUpScreen extends StatelessWidget {
                                         )),
                                     Text(
                                       'Subsribe to the newsletter',
-                                      style: TextStyle(
-                                          color: AppColors.blackColor,
-                                          fontWeight: FontWeight.w300),
+                                      style: TextStyle(color: AppColors.blackColor, fontWeight: FontWeight.w300),
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                    height: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom +
-                                        defaultPadding.w),
+                                SizedBox(height: MediaQuery.of(context).viewInsets.bottom + defaultPadding.w),
                                 Obx(
                                   () => TweenAnimationBuilder(
-                                    duration:
-                                        const Duration(milliseconds: 1000),
+                                    duration: const Duration(milliseconds: 1000),
                                     curve: Curves.elasticOut,
-                                    tween: con.buttonPress.value
-                                        ? Tween(begin: 0.9, end: 0.97)
-                                        : Tween(begin: 1.0, end: 1.0),
+                                    tween: con.buttonPress.value ? Tween(begin: 0.9, end: 0.97) : Tween(begin: 1.0, end: 1.0),
                                     builder: (context, value, child) {
                                       return Transform.scale(
                                         scale: value,
@@ -228,103 +215,62 @@ class SignUpScreen extends StatelessWidget {
                                             onPressed: () {
                                               if (con.isLoading.isFalse) {
                                                 /// First name Validation
-                                                if (con.firstNameCon.value.text
-                                                    .trim()
-                                                    .isEmpty) {
-                                                  con.firstNameValidation
-                                                      .value = true;
-                                                  con.firstNameError.value =
-                                                      "Please enter your first name";
+                                                if (con.firstNameCon.value.text.trim().isEmpty) {
+                                                  con.firstNameValidation.value = true;
+                                                  con.firstNameError.value = "Please enter your first name";
                                                 } else {
-                                                  con.firstNameValidation
-                                                      .value = false;
+                                                  con.firstNameValidation.value = false;
                                                 }
 
                                                 /// Last name Validation
-                                                if (con.lastNameCon.value.text
-                                                    .trim()
-                                                    .isEmpty) {
-                                                  con.lastNameValidation.value =
-                                                      true;
-                                                  con.lastNameError.value =
-                                                      "Please enter your last name";
+                                                if (con.lastNameCon.value.text.trim().isEmpty) {
+                                                  con.lastNameValidation.value = true;
+                                                  con.lastNameError.value = "Please enter your last name";
                                                 } else {
-                                                  con.lastNameValidation.value =
-                                                      false;
+                                                  con.lastNameValidation.value = false;
                                                 }
 
                                                 ///password validation
-                                                if (con.passwordCon.value.text
-                                                    .isEmpty) {
-                                                  con.passwordValidation.value =
-                                                      true;
-                                                  con.passwordError.value =
-                                                      "Please Enter your password.";
-                                                } else if (con.passwordCon.value
-                                                        .text.length <
-                                                    8) {
-                                                  con.passwordValidation.value =
-                                                      true;
-                                                  con.passwordError.value =
-                                                      "Please Enter your password at least 8 digits.";
+                                                if (con.passwordCon.value.text.isEmpty) {
+                                                  con.passwordValidation.value = true;
+                                                  con.passwordError.value = "Please Enter your password.";
+                                                } else if (con.passwordCon.value.text.length < 8) {
+                                                  con.passwordValidation.value = true;
+                                                  con.passwordError.value = "Please Enter your password at least 8 digits.";
                                                 } else {
-                                                  con.passwordValidation.value =
-                                                      false;
+                                                  con.passwordValidation.value = false;
                                                   con.passwordError.value = "";
                                                 }
 
                                                 // email validation
-                                                if (con.emailCon.value.text
-                                                    .trim()
-                                                    .isEmpty) {
-                                                  con.emailValidation.value =
-                                                      true;
-                                                  con.emailError.value =
-                                                      "Please enter your email address";
-                                                } else if (Helper.isEmail(con
-                                                        .emailCon.value.text
-                                                        .trim()) !=
-                                                    true) {
-                                                  con.emailValidation.value =
-                                                      true;
-                                                  con.emailError.value =
-                                                      "Please enter valid email address";
+                                                if (con.emailCon.value.text.trim().isEmpty) {
+                                                  con.emailValidation.value = true;
+                                                  con.emailError.value = "Please enter your email address";
+                                                } else if (Helper.isEmail(con.emailCon.value.text.trim()) != true) {
+                                                  con.emailValidation.value = true;
+                                                  con.emailError.value = "Please enter valid email address";
                                                 } else {
-                                                  con.emailValidation.value =
-                                                      false;
+                                                  con.emailValidation.value = false;
                                                 }
 
 //mobile no validation
-                                                if (con.mobileNumberCon.value
-                                                    .text.isEmpty) {
-                                                  con.isMobileValid.value =
-                                                      true;
-                                                  con.mobileError.value =
-                                                      "Please Enter your mobile number.";
-                                                } else if (con.mobileNumberCon
-                                                        .value.text.length <
-                                                    10) {
-                                                  con.isMobileValid.value =
-                                                      true;
-                                                  con.mobileError.value =
-                                                      "Please Enter your mobile number 10 digits.";
+                                                if (con.mobileNumberCon.value.text.isEmpty) {
+                                                  con.isMobileValid.value = true;
+                                                  con.mobileError.value = "Please Enter your mobile number.";
+                                                } else if (con.mobileNumberCon.value.text.length < 10) {
+                                                  con.isMobileValid.value = true;
+                                                  con.mobileError.value = "Please Enter your mobile number 10 digits.";
                                                 } else {
-                                                  con.isMobileValid.value =
-                                                      false;
+                                                  con.isMobileValid.value = false;
                                                   con.mobileError.value = "";
                                                 }
 
-                                                if (con.firstNameValidation
-                                                        .isFalse &&
-                                                    con.emailValidation
-                                                        .isFalse &&
-                                                    con.passwordValidation
-                                                        .isFalse &&
-                                                    con.lastNameValidation
-                                                        .isFalse &&
+                                                if (con.firstNameValidation.isFalse &&
+                                                    con.emailValidation.isFalse &&
+                                                    con.passwordValidation.isFalse &&
+                                                    con.lastNameValidation.isFalse &&
                                                     con.isMobileValid.isFalse) {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
+                                                  FocusScope.of(context).unfocus();
                                                   AuthRepository().signUpApi(
                                                     // mobileNumber: int.parse(
                                                     //     loginCon.mobileNumberCon
@@ -332,34 +278,12 @@ class SignUpScreen extends StatelessWidget {
                                                     //         .trim()),
                                                     isLoader: con.isLoading,
                                                     params: {
-                                                      "first_name": con
-                                                          .firstNameCon
-                                                          .value
-                                                          .text
-                                                          .trim(),
-                                                      "last_name": con
-                                                          .lastNameCon
-                                                          .value
-                                                          .text
-                                                          .trim(),
-                                                      "email": con
-                                                          .emailCon.value.text
-                                                          .trim(),
-                                                      "phone": con
-                                                          .mobileNumberCon
-                                                          .value
-                                                          .text
-                                                          .trim(),
-                                                      "password": con
-                                                          .passwordCon
-                                                          .value
-                                                          .text
-                                                          .trim(),
-                                                      "newsletter_subscribe":
-                                                          con.isChecked.value ==
-                                                                  true
-                                                              ? 1
-                                                              : 0,
+                                                      "first_name": con.firstNameCon.value.text.trim(),
+                                                      "last_name": con.lastNameCon.value.text.trim(),
+                                                      "email": con.emailCon.value.text.trim(),
+                                                      "phone": con.mobileNumberCon.value.text.trim(),
+                                                      "password": con.passwordCon.value.text.trim(),
+                                                      "newsletter_subscribe": con.isChecked.value == true ? 1 : 0,
                                                     },
                                                   );
                                                 }
@@ -381,22 +305,14 @@ class SignUpScreen extends StatelessWidget {
                                     child: RichText(
                                       text: TextSpan(
                                         text: '',
-                                        style:
-                                            DefaultTextStyle.of(context).style,
+                                        style: DefaultTextStyle.of(context).style,
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: 'Already have an account?',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                fontWeight: FontWeight.w300),
+                                            style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w300),
                                           ),
                                           TextSpan(
-                                              text: ' Login',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  fontWeight: FontWeight.bold)),
+                                              text: ' Login', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
                                         ],
                                       ),
                                     ),
