@@ -29,8 +29,8 @@ class ApiUrls {
   ///account api
   static String contactUsUrl = "contact-us";
 
-  ///home data
-  static String homeDataUrl = "home/city/1";
+  //home data
+  static String homeDataUrl = "home/city";
 
   ///order api
   static String getOrderListUrl = 'get-order';
@@ -45,6 +45,8 @@ class ApiUrls {
 
   ///search URL
   static String searchUrl = "search";
+  ///restaurant
+  static String restaurantDetailsUrl = "restaurant-detail";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";

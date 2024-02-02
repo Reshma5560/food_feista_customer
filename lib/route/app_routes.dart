@@ -16,9 +16,10 @@ class AppRoutes {
   static String addAddressScreen = "/ADD_ADDRESS_SCREEN";
   static String locationScreen = "/LOCATION_SCREEN";
   static String wishListScreen = "/WISH_LIST_SCREEN";
-  static String getCityScreen="/City_SCREEN";
-  static String forgotPasswordScreen="/FORGOT_PASSWORD_SCREEN";
-/*  static String bottomBarScreen = '/BOTTOMBAR_SCREEN';
+  static String getCityScreen = "/City_SCREEN";
+  static String restaurantDetailsScreen = "/RESTAURANT_DETAILS_SCREEN";
+  static String forgotPasswordScreen = "/FORGOT_PASSWORD_SCREEN";
+/* static String bottomBarScreen = '/BOTTOMBAR_SCREEN';
   static String createOrUpdateGroupScreen = '/CREATE_NEW_GROUP_SCREEN';
   static String notificationScreen = '/NOTIFICATION_SCREEN';
   static String peopleReactedScreen = '/PEOPLE_REACTED_SCREEN';

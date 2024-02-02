@@ -1,11 +1,9 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:foodapplication/controller/account/components/add_address_controller.dart';
 import 'package:foodapplication/controller/account/components/manage_Address_controller.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
-
 import '../controller/get_city_controller].dart';
 import '../data/api/api_function.dart';
 import '../data/handler/api_url.dart';
@@ -14,7 +12,6 @@ import '../data/models/get_address_model.dart';
 import '../data/models/get_city_model.dart';
 import '../data/models/get_country_model.dart';
 import '../data/models/get_state_model.dart';
-import '../data/models/search_city_model.dart';
 import '../res/color_print.dart';
 import '../res/ui_utils.dart';
 import '../utils/local_storage.dart';
@@ -415,18 +412,16 @@ class AuthRepository {
   Future<void> getSearchCityListOnlyCall({required String searchText}) async {
     final con = Get.find<GetCityController>();
     RxBool isSuccessStatus = false.obs;
-    con.isLoading.value = true;
     try {
       await APIFunction().getApiCall(apiName: "${ApiUrls.searchCityUrl}?city=$searchText").then(
         (response) async {
           printData(key: "get city response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
-            SearchCityModel searchCityModel = SearchCityModel.fromJson(response);
-            isSuccessStatus.value = searchCityModel.status!;
+            GetCityModel getCityModel = GetCityModel.fromJson(response);
+            isSuccessStatus.value = getCityModel.status!;
             if (isSuccessStatus.value) {
-              con.searchCityData = searchCityModel.data;
-              con.cityTextController.value.text = con.searchCityData!.cityName.toString();
-              log("con.cityTextController.value.text ${con.cityTextController.value.text}");
+              con.cityList.clear();
+              con.cityList.value=getCityModel.data??[];
             } else {
               log("getCityApiFunction else");
             }
@@ -442,5 +437,8 @@ class AuthRepository {
     } finally {
       con.isLoading.value = false;
     }
+    con.isLoading.value = true;
+    con.isLoading.value = false;
+
   }
 }
