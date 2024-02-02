@@ -1,12 +1,14 @@
 import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../controller/restaurant/restaurant_details_controller.dart';
+import '../../../data/models/get_review_model.dart';
 import '../../../data/models/restaurant_details_model.dart';
+import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../res/app_appbar.dart';
 import '../../../res/app_assets.dart';
 import '../../../res/app_colors.dart';
@@ -42,21 +44,14 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         : SingleChildScrollView(
                             child: Column(
                               children: [
-                                CachedNetworkImage(
-                                  imageUrl: con.restaurantDetails!.logo ?? "",
-                                  width: Get.width,
-                                  fit: BoxFit.contain,
-                                  height: 200,
-                                  errorWidget: (context, str, obj) {
-                                    return Image.asset(
-                                      AppAssets.appLogo,
-                                      fit: BoxFit.contain,
-                                      width: 200,
-                                    );
-                                  },
+                                MFNetworkImage(
+                                  imageUrl: con.restaurantDetails?.logo ?? "",
+                                  fit: BoxFit.fill,
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 _menuTypeListModule()
                                     .paddingSymmetric(horizontal: 10),
+                                const SizedBox(height: 20),
                                 _currentSelectedModule()
                                     .paddingSymmetric(horizontal: 10),
                               ],
@@ -88,13 +83,14 @@ class RestaurantDetailsScreen extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      color: con.selectMenu.value == index
-                          ? Theme.of(context).primaryColor
-                          : AppColors.white,
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(8)),
+                    color: con.selectMenu.value == index
+                        ? Theme.of(context).primaryColor
+                        : AppColors.white,
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Center(
                     child: Text(
                       con.menuList[index],
@@ -127,7 +123,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
       case "OVERVIEW":
         return _overViewListModule();
       case "REVIEW":
-        return _photosListModule();
+        return _reviewListModule();
       default:
         return _photosListModule();
     }
@@ -139,20 +135,92 @@ class RestaurantDetailsScreen extends StatelessWidget {
       shrinkWrap: true,
       itemBuilder: (context, i) {
         Food item = con.foodList[i];
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Stack(
-            children: [
-              Image.network(
-                item.image ?? "",
-                height: 120,
-                width: 120,
-                fit: BoxFit.cover,
-              )
-            ],
-          ),
+        return Row(
+          children: [
+            MFNetworkImage(
+              height: 100,
+              width: 100,
+              imageUrl: item.image ?? "",
+              fit: BoxFit.fill,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      item.veg == 0
+                          ? Image.asset(
+                              AppAssets.vegImg,
+                              height: 25,
+                            )
+                          : Image.asset(
+                              AppAssets.nonVegImg,
+                              height: 25,
+                            ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    item.foodName ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    item.description ?? "",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.searchFiledHintText,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "₹ ${item.price}",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: item.veg == 0
+                                ? AppColors.green
+                                : AppColors.nonVegRed,
+                            width: 2,
+                          ),
+                        ),
+                        child: Text(
+                          "ADD".toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ).paddingSymmetric(horizontal: 10),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         );
       },
       separatorBuilder: (context, index) =>
@@ -309,17 +377,103 @@ class RestaurantDetailsScreen extends StatelessWidget {
   }
 
   _photosListModule() {
-    return ListView.builder(
-      itemCount: 5,
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      itemCount: con.restaurantGalleryList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, i) {
-        return const Row(
-          children: [
-            Text("photos"),
-          ],
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 20,
+        childAspectRatio: 0.85,
+      ),
+      itemBuilder: (BuildContext context, int i) {
+        Gallery item = con.restaurantGalleryList[i];
+
+        return MFNetworkImage(
+          imageUrl: item.image ?? "",
+          fit: BoxFit.fill,
+          borderRadius: BorderRadius.circular(10),
         );
       },
+    );
+  }
+
+  _reviewListModule() {
+    return Column(
+      children: [
+        const Row(
+          children: [
+            Text(
+              "COMMENTS",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
+        ),
+        ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, i) {
+            ReviewComment item = con.restaurantReviewList[i];
+            String dateString = item.createdAt.toString();
+            DateTime dateTime = DateTime.parse(dateString);
+            String formattedDate =
+                DateFormat('yyyy-MM-dd').format(dateTime);
+
+            return Row(
+              children: [
+                MFNetworkImage(
+                  height: 100,
+                  width: 100,
+                  imageUrl: item.user?.image ?? "",
+                  fit: BoxFit.fill,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "${item.user?.firstName} ${item.user?.lastName}",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            formattedDate,
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        item.body ?? "",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+          separatorBuilder: (context, index) => const Divider(),
+          itemCount: con.restaurantReviewList.length,
+        ),
+      ],
     );
   }
 }
