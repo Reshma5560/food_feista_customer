@@ -19,16 +19,5 @@ class AppRoutes {
   static String getCityScreen = "/City_SCREEN";
   static String restaurantDetailsScreen = "/RESTAURANT_DETAILS_SCREEN";
   static String forgotPasswordScreen = "/FORGOT_PASSWORD_SCREEN";
-/* static String bottomBarScreen = '/BOTTOMBAR_SCREEN';
-  static String createOrUpdateGroupScreen = '/CREATE_NEW_GROUP_SCREEN';
-  static String notificationScreen = '/NOTIFICATION_SCREEN';
-  static String peopleReactedScreen = '/PEOPLE_REACTED_SCREEN';
-  static String invitedFriendScreen = '/INVITED_FRIEND_SCREEN';
-  static String groupChatScreen = '/GROUP_CHAT_SCREEN';
-  static String changePasswordScreen = '/CHANGE_PASSWORD_SCREEN';
-  static String editProfileScreen = '/EDIT_PROFILE_SCREEN';
-  static String addTipScreen = '/ADD_TIP_SCREEN';
-  static String myGroupScreen = '/MY_GROUP_SCREEN';
-  static String manageMemberScreen = '/MANAGE_MEMBER_SCREEN';
-  static String testScreen = '/TEST_SCREEN';*/
+  static String orderTrackScreen="/ORDER_TRACK_SCREEN";
 }

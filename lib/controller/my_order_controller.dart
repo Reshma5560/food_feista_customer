@@ -5,12 +5,9 @@ import 'package:get/get.dart';
 class MyOrderController extends GetxController {
   GetOrderModel getOrderModel = GetOrderModel();
 
-  RxList<OrderList> orderList = <OrderList>[].obs;RxBool isLoading=false.obs;
+  RxList<OrderList> orderList = <OrderList>[].obs;
+  RxBool isLoading = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   @override
   Future<void> onReady() async {

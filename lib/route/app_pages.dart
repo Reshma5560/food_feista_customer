@@ -9,6 +9,7 @@ import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
 import 'package:foodapplication/view/get_city/get_city_screen.dart';
 import 'package:foodapplication/view/index/widget/home_screen.dart';
+import 'package:foodapplication/view/index/widget/order/widgets/order_track_screen.dart';
 import 'package:foodapplication/view/restaurant/restaurant_details/restaurant_details_screen.dart';
 import 'package:get/get.dart';
 
@@ -86,7 +87,6 @@ class AppPages {
       name: AppRoutes.wishListScreen,
       page: () => WishListScreen(),
     ),
-
     GetPage(
       name: AppRoutes.getCityScreen,
       page: () => GetCityScreen(),
@@ -94,6 +94,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.restaurantDetailsScreen,
       page: () => RestaurantDetailsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.orderTrackScreen,
+      page: () => OrderTrackScreen(),
     ),
   ];
 }

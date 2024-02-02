@@ -15,30 +15,72 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: defaultPadding,
-            ),
-            _profileImageWidget(),
-            const SizedBox(
-              height: defaultPadding,
-            ),
-            Text("My Account",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Theme.of(context).primaryColor))
-                .paddingSymmetric(horizontal: defaultPadding),
-            const SizedBox(
-              height: defaultPadding,
-            ),
-            _bodyWidget(),
-          ],
-        ).paddingOnly(bottom: 20),
+      body: ListView(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: defaultPadding,
+          ),
+          _logoutWidget(),
+          const SizedBox(
+            height: defaultPadding,
+          ),
+          _profileImageWidget(),
+          const SizedBox(
+            height: defaultPadding,
+          ),
+          Text("My Account",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Theme.of(context).primaryColor))
+              .paddingSymmetric(horizontal: defaultPadding),
+          const SizedBox(
+            height: defaultPadding,
+          ),
+          _bodyWidget(),
+        ],
+      ),
+    );
+  }
+
+  Widget _logoutWidget() {
+    return TextButton(
+      onPressed: () => showDialog(
+        barrierDismissible: false,
+        context: Get.context!,
+        builder: (context) {
+          return CustomLogoutAlertDialog(
+            text: "Logout",
+            content: "Are you sure you want logout ?",
+            yesButtonText: "Yes",
+            onYesPressed: () {
+              profileController.isLoader.value = true;
+              LocalStorage.clearLocalStorage().then(
+                (value) {
+                  profileController.isLoader.value = false;
+                  Get.offAllNamed(AppRoutes.loginScreen);
+                },
+              );
+            },
+            //  () async => await DesktopRepository()
+            //     .logOutApiCall(isLoader: profileController.isLoader),
+            noButtonText: "No",
+            onNoPressed: () => Get.back(),
+            bgColor: Theme.of(context).primaryColor,
+          );
+        },
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text("Logout"),
+          SizedBox(
+            width: 7,
+          ),
+          Icon(Icons.logout)
+        ],
       ),
     );
   }
@@ -54,46 +96,46 @@ class AccountScreen extends StatelessWidget {
             // bottom: 20,
             child: Center(
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(200),
-                ),
-                child: profileController.getDataMap?.data.image != null
-                    ? Container(
-                        height: 180,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              profileController.getDataMap?.data.image ?? "",
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(200),
+                  ),
+                  child: Obx(
+                    () => profileController.userApiImageFile.value.isNotEmpty
+                        ? Container(
+                            height: 180,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  profileController.userApiImageFile.value,
+                                ),
+                                onError: (exception, stackTrace) =>
+                                    // Image.asset(AppImages.appLogoImage),
+                                    Image.network(
+                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            onError: (exception, stackTrace) =>
-                                // Image.asset(AppImages.appLogoImage),
-                                Image.network(
-                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
-                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            height: 180,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: const NetworkImage(
+                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'), //userProfileImage),
+                                  fit: BoxFit.cover,
+                                  onError: (exception, stackTrace) =>
+                                      // Image.asset(AppImages.appLogoImage),
+                                      Image.network(
+                                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(
-                        height: 180,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: const NetworkImage(
-                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
-                              //userProfileImage),
-                              fit: BoxFit.cover,
-                              onError: (exception, stackTrace) =>
-                                  // Image.asset(AppImages.appLogoImage),
-                                  Image.network(
-                                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
-                        ),
-                      ),
-              ),
+                  )),
             ),
           ),
         ],
@@ -101,14 +143,13 @@ class AccountScreen extends StatelessWidget {
       const SizedBox(
         height: 10,
       ),
-      Text(
-          "${profileController.getDataMap?.data.firstName} ${profileController.getDataMap?.data.lastName}",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-      Text("+91 ${profileController.getDataMap?.data.phone}",
+      Obx(() => Text("${profileController.userName}",
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16))),
+      Obx(() => Text("+91 ${profileController.phoneNoName.value}",
           style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 14,
-              color: AppColors.greyFontColor))
+              color: AppColors.greyFontColor)))
     ]);
   }
 
@@ -119,7 +160,16 @@ class AccountScreen extends StatelessWidget {
           icon: Icons.account_circle,
           title: 'Edit Account',
           onPressed: () {
-            Get.toNamed(AppRoutes.editAccountScreen);
+            Get.toNamed(
+              AppRoutes.editAccountScreen,
+              arguments: {
+                'image': profileController.userApiImageFile.value,
+                'firstName': profileController.firstName.value,
+                'lastName': profileController.lastName.value,
+                'email': profileController.email.value,
+                'mobileNo': profileController.phoneNoName.value
+              },
+            );
           },
         ),
         Divider(
@@ -195,46 +245,6 @@ class AccountScreen extends StatelessWidget {
         const CustomListTile(
           icon: Icons.settings,
           title: 'Setting',
-        ),
-        Divider(
-          color: AppColors.grey,
-        ),
-         CustomListTile(
-          icon: Icons.location_city,
-          title: 'Change City',
-          onPressed: () =>Get.toNamed(AppRoutes.getCityScreen),
-        ),
-        Divider(
-          color: AppColors.grey,
-        ),
-        CustomListTile(
-          icon: Icons.settings,
-          title: 'LogOut',
-          onPressed: () => showDialog(
-            barrierDismissible: false,
-            context: Get.context!,
-            builder: (context) {
-              return CustomLogoutAlertDialog(
-                text: "Logout",
-                content: "Are you sure you want logout ?",
-                yesButtonText: "Yes",
-                onYesPressed: () {
-                  profileController.isLoader.value = true;
-                  LocalStorage.clearLocalStorage().then(
-                    (value) {
-                      profileController.isLoader.value = false;
-                      Get.offAllNamed(AppRoutes.loginScreen);
-                    },
-                  );
-                },
-                //  () async => await DesktopRepository()
-                //     .logOutApiCall(isLoader: profileController.isLoader),
-                noButtonText: "No",
-                onNoPressed: () => Get.back(),
-                bgColor: Theme.of(context).primaryColor,
-              );
-            },
-          ),
         ),
       ],
     );

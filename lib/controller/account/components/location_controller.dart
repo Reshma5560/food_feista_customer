@@ -17,8 +17,12 @@ class LocationController extends GetxController {
   RxBool isLoader = false.obs;
   RxString latValue = "".obs;
   RxString longValue = "".obs;
+  RxBool isDisable = true.obs;
 
-  void handleTap(TapPosition position, LatLng latLng) async {
+  void handleTap(
+    LatLng latLng, {
+    TapPosition? position,
+  }) async {
     isLoader(true);
     tappedLocation.value = latLng;
 
@@ -31,7 +35,7 @@ class LocationController extends GetxController {
       longValue.value = latLng.longitude.toString();
       log('Tapped Location: ${latLng.latitude}, ${latLng.longitude}');
       log('Address: ${place?.name}, ${place?.subThoroughfare}, ${place?.thoroughfare}, ${place?.subLocality}, ${place?.locality}, ${place?.administrativeArea}, ${place?.postalCode}, ${place?.country}');
-
+      isDisable(false);
       isLoader(false);
     } catch (e) {
       log('Error: $e');
@@ -51,6 +55,14 @@ class LocationController extends GetxController {
       if (Get.arguments["addressId"] != null) {
         addressId.value = Get.arguments["addressId"];
         printAction("===${addressId.value}");
+      }
+
+      if (Get.arguments["lat"] != null && Get.arguments["long"] != null) {
+        double lat, long;
+        lat = double.parse(Get.arguments["lat"]);
+        long = double.parse(Get.arguments["long"]);
+        log("$lat $long");
+        handleTap(LatLng(lat, long));
       }
     }
     super.onInit();

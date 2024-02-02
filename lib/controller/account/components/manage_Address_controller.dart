@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:get/get.dart';
 

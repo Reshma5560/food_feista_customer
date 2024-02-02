@@ -2,6 +2,8 @@
 //
 //     final getStateModel = getStateModelFromJson(jsonString);
 
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 import 'get_country_model.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodapplication/view/account/account_screen.dart';
 import 'package:foodapplication/view/index/widget/cart_screen.dart';
 import 'package:foodapplication/view/index/widget/home_screen.dart';
-import 'package:foodapplication/view/index/widget/my_order_screen.dart';
+import 'package:foodapplication/view/index/widget/order/my_order_screen.dart';
 import 'package:foodapplication/view/index/widget/search_screen.dart';
 import 'package:get/get.dart';
 
@@ -21,19 +21,9 @@ class IndexController extends GetxController {
     HomeScreen(),
     // CategoryScreen(),
     MyOrderScreen(),
-    SearchScreen(),
+    const SearchScreen(),
     CartScreen(),
     AccountScreen()
   ];
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/res/app_button.dart';
-import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:foodapplication/route/app_routes.dart';

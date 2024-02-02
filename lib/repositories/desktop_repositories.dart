@@ -7,9 +7,11 @@ import 'package:foodapplication/controller/account/components/wish_list_controll
 import 'package:foodapplication/controller/cart_controller.dart';
 import 'package:foodapplication/controller/my_order_controller.dart';
 import 'package:foodapplication/controller/search_screen_controller.dart';
+import 'package:foodapplication/controller/order_tracker_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/data/models/get_order_model.dart';
+import 'package:foodapplication/data/models/order_track_model.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -64,6 +66,14 @@ class DesktopRepository {
             GetProfileModel data = GetProfileModel.fromJson(response);
 
             con.getDataMap = data;
+            con.userApiImageFile.value = con.getDataMap?.data.image ?? "";
+
+            con.userName.value =
+                "${con.getDataMap?.data.firstName} ${con.getDataMap?.data.lastName}";
+            con.phoneNoName.value = con.getDataMap?.data.phone ?? "";
+            con.firstName.value = con.getDataMap?.data.firstName ?? "";
+            con.lastName.value = con.getDataMap?.data.lastName ?? "";
+            con.email.value = con.getDataMap?.data.email ?? "";
             log("${con.getDataMap}");
           }
           return response;
@@ -91,7 +101,7 @@ class DesktopRepository {
         "phone": editAccountController.mobileNumberCon.text.trim(),
         "image": await dio.MultipartFile.fromFile(
             editAccountController.imagePath.value,
-            filename: editAccountController.name),
+            filename: editAccountController.imagePath.value),
       });
       await APIFunction()
           .postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData)
@@ -101,6 +111,7 @@ class DesktopRepository {
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
+              await getProfileApiCall();
               Get.back();
               Get.offNamed(AppRoutes.indexScreen);
             }
@@ -242,23 +253,25 @@ class DesktopRepository {
     }
   }
 
-  ///get order details by id list
-  Future<dynamic> getOrderDetailsByIdApiCall({RxBool? isLoader}) async {
-    final con = Get.find<MyOrderController>();
+  //order track api call
+  Future<dynamic> orderTrackApiCall(
+      {RxBool? isLoader, required String orderId}) async {
+    final con = Get.find<OrderTrackController>();
 
     try {
       isLoader?.value = true;
-      await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
+      await APIFunction()
+          .getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId")
+          .then(
         (response) async {
-          printData(key: "get order detail response", value: response);
+          printData(key: "order track response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
-            GetOrderModel data = GetOrderModel.fromJson(response);
+            OrderTrackModel data = OrderTrackModel.fromJson(response);
 
-            con.getOrderModel = data;
-            log("${con.getOrderModel}");
+            con.orderTrackModel.value = data;
+            log("${con.orderTrackModel}");
 
-            con.orderList.addAll(con.getOrderModel.data!);
-            log("ORDER LENGTH ${con.orderList.length}");
+            log("ORDER track data ${con.orderTrackModel.value.data}");
           }
           return response;
         },

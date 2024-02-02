@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:foodapplication/controller/account/components/about_us_controller.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/account/components/terms_and_conditions_controller.dart';
 import '../../../res/app_appbar.dart';
-import '../../../res/app_colors.dart';
-import '../../../res/widgets/app_bar.dart';
 
 class TermsConditionsScreen extends StatelessWidget {
   TermsConditionsScreen({super.key});

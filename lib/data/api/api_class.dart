@@ -4,8 +4,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' as getx;
-import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../res/color_print.dart';

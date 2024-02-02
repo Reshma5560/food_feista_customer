@@ -16,10 +16,6 @@ class VerifyOtpController extends GetxController {
   RxInt timeLimit = 0.obs;
   late Timer timer;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   @override
   void onReady() {
