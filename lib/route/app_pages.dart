@@ -7,8 +7,9 @@ import 'package:foodapplication/view/account/widgets/update_password.dart';
 import 'package:foodapplication/view/auth/forgot_password_screen.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
-import 'package:foodapplication/view/index/widget/home_screen.dart';
 import 'package:foodapplication/view/get_city/get_city_screen.dart';
+import 'package:foodapplication/view/index/widget/home_screen.dart';
+import 'package:foodapplication/view/restaurant/restaurant_details/restaurant_details_screen.dart';
 import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
@@ -29,15 +30,11 @@ class AppPages {
       name: AppRoutes.loginScreen,
       page: () => LoginScreen(),
     ),
-    // GetPage(
-    //   name: AppRoutes.otpVerificationScreen,
-    //   page: () => VerifyOtpScreen(),
-    // ),
     GetPage(
       name: AppRoutes.registerScreen,
       page: () => SignUpScreen(),
     ),
-     GetPage(
+    GetPage(
       name: AppRoutes.forgotPasswordScreen,
       page: () => ForgotPasswordScreen(),
     ),
@@ -57,7 +54,6 @@ class AppPages {
       name: AppRoutes.indexScreen,
       page: () => IndexScreen(),
     ),
-
     GetPage(
       name: AppRoutes.updatePasswordScreen,
       page: () => UpdatePasswordScreen(),
@@ -74,7 +70,6 @@ class AppPages {
       name: AppRoutes.homeScreen,
       page: () => HomeScreen(),
     ),
-
     GetPage(
       name: AppRoutes.manageAddressScreen,
       page: () => ManageAddressScreen(),
@@ -91,10 +86,14 @@ class AppPages {
       name: AppRoutes.wishListScreen,
       page: () => WishListScreen(),
     ),
-     
-     GetPage(
+
+    GetPage(
       name: AppRoutes.getCityScreen,
       page: () => GetCityScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.restaurantDetailsScreen,
+      page: () => RestaurantDetailsScreen(),
     ),
   ];
 }

@@ -11,6 +11,7 @@ import 'package:foodapplication/data/models/get_order_model.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -83,9 +84,13 @@ class DesktopRepository {
         "last_name": editAccountController.lastNameCon.text.trim(),
         "email": editAccountController.emailCon.text.trim(),
         "phone": editAccountController.mobileNumberCon.text.trim(),
-        "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.name),
+        "image": await dio.MultipartFile.fromFile(
+            editAccountController.imagePath.value,
+            filename: editAccountController.name),
       });
-      await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData)
+          .then(
         (response) async {
           printData(key: "update profile response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -112,7 +117,10 @@ class DesktopRepository {
     final HomeController con = Get.find<HomeController>();
 
     try {
-      await APIFunction().getApiCall(apiName: ApiUrls.homeDataUrl).then(
+      await APIFunction()
+          .getApiCall(
+              apiName: "${ApiUrls.homeDataUrl}/${LocalStorage.userCity.value}")
+          .then(
         (response) async {
           HomeDataModel homeDataModel = HomeDataModel.fromJson(response);
           if (homeDataModel.status == true) {
@@ -158,9 +166,13 @@ class DesktopRepository {
         }
 
         if (con.nextPageStop.isTrue) {
-          await APIFunction().getApiCall(apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}").then(
+          await APIFunction()
+              .getApiCall(
+                  apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}")
+              .then(
             (response) async {
-              GetWishListDataModel homeTipModel = GetWishListDataModel.fromJson(response);
+              GetWishListDataModel homeTipModel =
+                  GetWishListDataModel.fromJson(response);
 
               homeTipModel.data?.data?.forEach((element) {
                 log("-------------${element.restaurant}");
@@ -171,7 +183,8 @@ class DesktopRepository {
               });
 
               con.page.value++;
-              printData(key: "WISH LIST length", value: con.wishListData.length);
+              printData(
+                  key: "WISH LIST length", value: con.wishListData.length);
               if (con.wishListData.length == homeTipModel.data?.total) {
                 con.nextPageStop.value = false;
               }
@@ -189,10 +202,15 @@ class DesktopRepository {
   }
 
   ///post wish list api
-  Future<dynamic> postWishListAPI({required String id, required int index, required bool isWishList}) async {
+  Future<dynamic> postWishListAPI(
+      {required String id,
+      required int index,
+      required bool isWishList}) async {
     try {
       final HomeController homeCom = Get.find<HomeController>();
-      await APIFunction().postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id").then(
+      await APIFunction()
+          .postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id")
+          .then(
         (response) async {
           if (!isValEmpty(response["message"])) {
             if (isWishList == true) {

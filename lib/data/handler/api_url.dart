@@ -30,7 +30,7 @@ class ApiUrls {
   static String contactUsUrl = "contact-us";
 
   //home data
-  static String homeDataUrl = "home/city/1";
+  static String homeDataUrl = "home/city";
 
 //order api
   static String getOrderListUrl = 'get-order';
@@ -38,6 +38,9 @@ class ApiUrls {
   ///wish list
   static String getWishListUrl = "get-wishlist";
   static String postWishListUrl = "wishlist-action";
+
+  ///restaurant
+  static String restaurantDetailsUrl = "restaurant-detail";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";

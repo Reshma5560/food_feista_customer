@@ -72,7 +72,7 @@ class AppStyle {
       );
 
   static TextStyle customAppBarTitleStyle() => TextStyle(
-        fontSize: 20.sp,
+        fontSize: 15.sp,
         color: Colors.white,
         fontWeight: FontWeight.w600,
       );
