@@ -4,8 +4,7 @@
 
 import 'dart:convert';
 
-GetOrderModel getOrderModelFromJson(String str) =>
-    GetOrderModel.fromJson(json.decode(str));
+GetOrderModel getOrderModelFromJson(String str) => GetOrderModel.fromJson(json.decode(str));
 
 class GetOrderModel {
   bool? status;
@@ -18,8 +17,7 @@ class GetOrderModel {
 
   factory GetOrderModel.fromJson(Map<String, dynamic> json) => GetOrderModel(
         status: json["status"],
-        data: List<OrderList>.from(
-            json["data"].map((x) => OrderList.fromJson(x))),
+        data: List<OrderList>.from(json["data"].map((x) => OrderList.fromJson(x))),
       );
 }
 
@@ -256,8 +254,7 @@ class OrderList {
         paymentStatus: Status.fromJson(json["payment_status"]),
         paymentType: PaymentType.fromJson(json["payment_type"]),
         restaurant: Restaurant.fromJson(json["restaurant"]),
-        orderDetail: List<OrderDetail>.from(
-            json["order_detail"].map((x) => OrderDetail.fromJson(x))),
+        orderDetail: List<OrderDetail>.from(json["order_detail"].map((x) => OrderDetail.fromJson(x))),
       );
 }
 
@@ -302,8 +299,7 @@ class OrderDetail {
         totalAmount: json["total_amount"],
         tax: json["tax"],
         discount: json["discount"],
-        variant:
-            List<Variant>.from(json["variant"].map((x) => Variant.fromJson(x))),
+        variant: List<Variant>.from(json["variant"].map((x) => Variant.fromJson(x))),
         addon: List<dynamic>.from(json["addon"].map((x) => x)),
         quantity: json["quantity"],
         foodDetails: json["food_details"],
@@ -327,7 +323,7 @@ class Food {
   int price;
   int tax;
   String taxType;
-  int discount;
+  double discount;
   String discountType;
   dynamic availableTimeStarts;
   dynamic availableTimeEnds;
@@ -404,7 +400,7 @@ class Food {
         price: json["price"],
         tax: json["tax"],
         taxType: json["tax_type"],
-        discount: json["discount"],
+        discount: double.parse(json["discount"].toString()),
         discountType: json["discount_type"],
         availableTimeStarts: json["available_time_starts"],
         availableTimeEnds: json["available_time_ends"],

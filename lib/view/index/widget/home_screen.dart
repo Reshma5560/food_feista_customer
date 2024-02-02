@@ -74,9 +74,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(20)),
                 child: Image.asset(
                   AppAssets.profileIcon,
                   height: 16.h,
@@ -88,16 +86,14 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {},
                 child: Text(
                   "abc",
-                  style: AppStyle.customAppBarTitleStyle()
-                      .copyWith(color: AppColors.black, fontSize: 18),
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 18),
                 ),
               ),
               GestureDetector(
                 onTap: () {},
                 child: Text(
                   "abc",
-                  style: AppStyle.customAppBarTitleStyle()
-                      .copyWith(color: AppColors.black, fontSize: 18),
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 18),
                 ),
               ),
               const SizedBox(
@@ -125,14 +121,11 @@ class HomeScreen extends StatelessWidget {
             controller: con.searchCon,
             fillColor: AppColors.greyShad1,
             hintText: "search",
-            hintStyle: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.hintColor),
+            hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
             prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
           ),
           const SizedBox(height: 10),
-          _sliderModule(),
+          con.bannerList.isEmpty ? Container() : _sliderModule(),
           const SizedBox(height: 10),
           con.categoryList.isEmpty
               ? Container()
@@ -236,8 +229,7 @@ class HomeScreen extends StatelessWidget {
                   : Container(
                       width: 6,
                       height: 6,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.grey,
@@ -278,8 +270,7 @@ class HomeScreen extends StatelessWidget {
                   item.categoryName ?? "",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w800, fontSize: 13),
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                 ),
               ],
             ),
@@ -300,8 +291,7 @@ class HomeScreen extends StatelessWidget {
           itemBuilder: (context, i) {
             Restaurant item = con.restaurantList[i];
             return InkWell(
-              onTap: () =>
-                  Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+              onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
                 item.id.toString(),
                 item.restaurantName,
               ]),
@@ -323,22 +313,16 @@ class HomeScreen extends StatelessWidget {
                             // textAlign: TextAlign.center,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyle(color: AppColors.red, fontSize: 12),
+                            style: TextStyle(color: AppColors.red, fontSize: 12),
                           ),
                         ),
                         Obx(
                           () => InkWell(
                             onTap: () async {
-                              await DesktopRepository().postWishListAPI(
-                                  index: i,
-                                  id: item.id ?? "",
-                                  isWishList: false);
+                              await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
                             },
                             child: Icon(
-                              item.favorite?.value == 1
-                                  ? Icons.favorite_outlined
-                                  : Icons.favorite_outline_outlined,
+                              item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
                               color: Colors.red,
                             ),
                           ),
@@ -351,8 +335,7 @@ class HomeScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: AppColors.groupSubText, fontSize: 12),
+                      style: TextStyle(color: AppColors.groupSubText, fontSize: 12),
                     ),
                     const SizedBox(height: 10),
                     CachedNetworkImage(
@@ -396,9 +379,7 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   width: 100,
                   decoration: BoxDecoration(
-                      color: con.selectSellType.value == index
-                          ? Theme.of(context).primaryColor
-                          : AppColors.white,
+                      color: con.selectSellType.value == index ? Theme.of(context).primaryColor : AppColors.white,
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
                       ),
@@ -408,9 +389,7 @@ class HomeScreen extends StatelessWidget {
                       con.sellingTypeList[index],
                       style: TextStyle(
                           fontSize: 11,
-                          color: con.selectSellType.value == index
-                              ? AppColors.white
-                              : Theme.of(context).primaryColor,
+                          color: con.selectSellType.value == index ? AppColors.white : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -432,9 +411,7 @@ class HomeScreen extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(
-              color: AppColors.greyShad1,
-              borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(color: AppColors.greyShad1, borderRadius: BorderRadius.circular(15)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -454,45 +431,30 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       item.title ?? "",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 23,
-                          color: Theme.of(context).primaryColor),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23, color: Theme.of(context).primaryColor),
                     ),
                     Text(
                       item.descripton ?? "",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10,
-                          color: AppColors.black),
+                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10, color: AppColors.black),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: Text(
                             "\$${item.price?.toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20,
-                                color: AppColors.black),
+                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.black),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             "Type - ${item.type?.toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 8.5,
-                                color: AppColors.black),
+                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             "Qty - ${item.qty?.toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 8.5,
-                                color: AppColors.black),
+                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
                           ),
                         ),
                       ],
@@ -502,9 +464,7 @@ class HomeScreen extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(25)),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                 child: Icon(
                   Icons.add,
                   color: AppColors.white,
@@ -625,19 +585,13 @@ class HomeScreen extends StatelessWidget {
 
               // Coupon code show
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.red.shade900,
-                    boxShadow: BoxShadows().shadow(),
-                    shape: BoxShape.circle
+                decoration: BoxDecoration(color: Colors.red.shade900, boxShadow: BoxShadows().shadow(), shape: BoxShape.circle
                     // borderRadius: BorderRadius.circular(25),
                     ),
                 child: Text(
                   "${item.discount!}${item.discountType == "percent" ? "%" : "₹"}\nOFF",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.white),
                 ).paddingAll(10),
               ).paddingOnly(top: 10),
             ],

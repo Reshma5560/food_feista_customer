@@ -5,6 +5,7 @@ import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
+import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/widgets/app_bar.dart';
 import 'package:foodapplication/res/widgets/empty_element.dart';
 import 'package:get/get.dart';
@@ -100,13 +101,13 @@ class CartScreen extends StatelessWidget {
                                                             alignment: Alignment.topRight,
                                                             child: InkWell(
                                                               onTap: () async {
-                                                                await DesktopRepository().getFoodItemDataAPI(id: item.foodId ?? "").then((value) {
-                                                                  _editItem(context, data: item);
-                                                                });
+                                                                if (con.isOpen.isFalse) {
+                                                                  con.isOpen.value = true;
 
-                                                                // con.totalAmount.value - double.parse(item.totalPrice?.value.toString() ?? "0.0");
-
-                                                                // con.cartItemData.removeAt(index);
+                                                                  await DesktopRepository().getFoodItemDataAPI(id: item.foodId ?? "").then((value) {
+                                                                    _editItem(context, data: item);
+                                                                  });
+                                                                }
                                                               },
                                                               child: Icon(
                                                                 Icons.edit,
@@ -247,22 +248,31 @@ class CartScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Obx(
         () => con.cartItemData.isNotEmpty
-            ? BottomAppBar(
-                surfaceTintColor: AppColors.white,
+            ? Container(
                 height: 60,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    children: [
-                      Expanded(child: Text("${con.totalAmount.value}")),
-                      AppButton(
-                        width: 100,
-                        height: 30,
-                        onPressed: () {},
-                        title: "Continue",
-                      )
-                    ],
+                width: Get.width,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  boxShadow: AppStyle.boxShadow(
+                    offset: const Offset(0, -2),
                   ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "${con.totalAmount.value}",
+                        style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
+                      ),
+                    ),
+                    AppButton(
+                      width: 100,
+                      height: 30,
+                      onPressed: () {},
+                      title: "Continue",
+                    )
+                  ],
                 ),
               )
             : const SizedBox.shrink(),
@@ -294,55 +304,225 @@ class CartScreen extends StatelessWidget {
 
   _editItem(BuildContext context, {required CartDetail data}) {
     return Get.bottomSheet(
+      isDismissible: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(defaultRadius * 3),
       ),
       Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(defaultRadius * 3),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(defaultRadius * 3),
+            topRight: Radius.circular(defaultRadius * 3),
+          ),
         ),
         width: Get.width,
         child: Padding(
-          padding: const EdgeInsets.all(defaultPadding),
+          padding: const EdgeInsets.symmetric(vertical: defaultPadding).copyWith(bottom: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    data.food?.foodName ?? "",
-                    style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.close,
-                      color: AppColors.black,
-                      size: 24,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      data.food?.foodName ?? "",
+                      style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        con.isOpen.value = false;
+                        Get.back();
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: AppColors.black,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: defaultPadding - 6,
               ),
-              Text(
-                "Classic Nachos",
-                style: AppStyle.authTitleStyle().copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+              Container(
+                height: 1,
+                width: Get.width,
+                color: AppColors.black,
               ),
-              Column(
-                children: List.generate(
-                  2,
-                  (index) => const Row(
+              const SizedBox(
+                height: defaultPadding - 6,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      Text("ncvnsdnv"),
+                      con.foodItemVariantData.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                              child: Column(
+                                children: List.generate(
+                                  con.foodItemVariantData.length,
+                                  (index) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          con.foodItemVariantData[index].variationName ?? "",
+                                          style: AppStyle.authTitleStyle().copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: defaultPadding - 6,
+                                        ),
+                                        Column(
+                                          children: List.generate(
+                                            con.foodItemVariantData[index].foodVariantOption?.length ?? 0,
+                                            (index1) {
+                                              var data = con.foodItemVariantData[index].foodVariantOption?[index1];
+                                              return Padding(
+                                                padding: const EdgeInsets.only(right: defaultPadding - 6),
+                                                child: InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(bottom: defaultPadding),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          data?.variationOptionName ?? "",
+                                                          style: AppStyle.authTitleStyle().copyWith(
+                                                            fontSize: 15,
+                                                            color: AppColors.black,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          height: 15,
+                                                          width: 15,
+                                                          decoration: BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            border: Border.all(color: Theme.of(context).primaryColor, width: 2),
+                                                            // color: Theme.of(context).primaryColor,
+                                                          ),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(1.5),
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                shape: BoxShape.circle,
+                                                                color: Theme.of(context).primaryColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: defaultPadding - 6,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      con.foodItemAddonData.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "AddOns",
+                                    style: AppStyle.authTitleStyle().copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Column(
+                                    children: List.generate(
+                                      con.foodItemAddonData.length,
+                                      (index) {
+                                        var data = con.foodItemAddonData[index];
+                                        return Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              data.addonName ?? "",
+                                              style: AppStyle.authTitleStyle().copyWith(
+                                                fontSize: 15,
+                                                color: AppColors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Obx(
+                                              () => Transform.scale(
+                                                scale: 0.7,
+                                                child: Checkbox(
+                                                  value: data.isActive?.value == 1 ? true : false,
+                                                  onChanged: (value) {
+                                                    if (data.isActive?.value == 1) {
+                                                      data.isActive?.value = 0;
+                                                      printWhite(data.isActive?.value);
+                                                    } else {
+                                                      data.isActive?.value = 1;
+                                                      printWhite(data.isActive?.value);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          boxShadow: AppStyle.boxShadow(
+                            offset: const Offset(0, -4),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  data.price.toString(),
+                                  style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
+                                ),
+                              ),
+                              AppButton(
+                                width: 100,
+                                height: 30,
+                                onPressed: () {},
+                                title: "Continue",
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

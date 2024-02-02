@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 GetFoodItemDataModel getFoodItemDataModelFromJson(String str) => GetFoodItemDataModel.fromJson(json.decode(str));
 
 String getFoodItemDataModelToJson(GetFoodItemDataModel data) => json.encode(data.toJson());
@@ -197,7 +199,7 @@ class ItemAddon {
   final String? addonName;
   final int? price;
   final String? restaurantId;
-  final int? isActive;
+  final RxInt? isActive;
   final dynamic createdBy;
   final dynamic updatedBy;
   final dynamic deletedAt;
@@ -222,7 +224,7 @@ class ItemAddon {
         addonName: json["addon_name"],
         price: json["price"],
         restaurantId: json["restaurant_id"],
-        isActive: json["is_active"],
+        isActive: RxInt(json["is_active"]),
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
@@ -235,7 +237,7 @@ class ItemAddon {
         "addon_name": addonName,
         "price": price,
         "restaurant_id": restaurantId,
-        "is_active": isActive,
+        "is_active": isActive.obs,
         "created_by": createdBy,
         "updated_by": updatedBy,
         "deleted_at": deletedAt,
@@ -299,6 +301,7 @@ class FoodVariantOption {
   final String? foodId;
   final String? foodVariationId;
   final String? variationOptionName;
+  final RxBool? isSelected;
   final String? price;
   final dynamic createdBy;
   final dynamic updatedBy;
@@ -311,6 +314,7 @@ class FoodVariantOption {
     this.foodId,
     this.foodVariationId,
     this.variationOptionName,
+    this.isSelected,
     this.price,
     this.createdBy,
     this.updatedBy,
@@ -324,6 +328,7 @@ class FoodVariantOption {
         foodId: json["food_id"],
         foodVariationId: json["food_variation_id"],
         variationOptionName: json["variation_option_name"],
+        isSelected: false.obs,
         price: json["price"],
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
