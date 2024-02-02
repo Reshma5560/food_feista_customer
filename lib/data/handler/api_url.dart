@@ -49,6 +49,9 @@ class ApiUrls {
 
   ///restaurant
   static String restaurantDetailsUrl = "restaurant-detail";
+
+  ///review
+  static String restaurantReviewUrl = "get-restaurant-review";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";

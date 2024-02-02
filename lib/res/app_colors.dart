@@ -18,6 +18,7 @@ class AppColors {
   static Color red = Colors.red;
   static Color mediumRed = const Color(0xFFDE554F);
   static Color darkRed = const Color(0xffC50000);
+  static Color nonVegRed = const Color(0xffb83907);
   static Color blackColor = const Color(0xff1E2035);
   static Color grey = const Color(0xffD9D9D9);
   static Color greyShad1 = const Color(0xfff3f3f3);

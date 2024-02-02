@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodapplication/common_widgets/custom_alert_dislog.dart';
 import 'package:foodapplication/controller/account/account_controller.dart';
+import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -16,13 +17,7 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: defaultPadding,
-          ),
-          _logoutWidget(),
           const SizedBox(
             height: defaultPadding,
           ),
@@ -45,100 +40,53 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _logoutWidget() {
-    return TextButton(
-      onPressed: () => showDialog(
-        barrierDismissible: false,
-        context: Get.context!,
-        builder: (context) {
-          return CustomLogoutAlertDialog(
-            text: "Logout",
-            content: "Are you sure you want logout ?",
-            yesButtonText: "Yes",
-            onYesPressed: () {
-              profileController.isLoader.value = true;
-              LocalStorage.clearLocalStorage().then(
-                (value) {
-                  profileController.isLoader.value = false;
-                  Get.offAllNamed(AppRoutes.loginScreen);
-                },
-              );
-            },
-            //  () async => await DesktopRepository()
-            //     .logOutApiCall(isLoader: profileController.isLoader),
-            noButtonText: "No",
-            onNoPressed: () => Get.back(),
-            bgColor: Theme.of(context).primaryColor,
-          );
-        },
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text("Logout"),
-          SizedBox(
-            width: 7,
-          ),
-          Icon(Icons.logout)
-        ],
-      ),
-    );
-  }
-
   Widget _profileImageWidget() {
     return Column(children: [
-      Stack(
-        children: [
-          Positioned(
-            // left: 20,
-            // top: 20,
-            // right: 20,
-            // bottom: 20,
-            child: Center(
-              child: ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(200),
-                  ),
-                  child: Obx(
-                    () => profileController.userApiImageFile.value.isNotEmpty
-                        ? Container(
-                            height: 180,
-                            width: 180,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  profileController.userApiImageFile.value,
-                                ),
-                                onError: (exception, stackTrace) =>
-                                    // Image.asset(AppImages.appLogoImage),
-                                    Image.network(
-                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          )
-                        : Container(
-                            height: 180,
-                            width: 180,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: const NetworkImage(
-                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'), //userProfileImage),
-                                  fit: BoxFit.cover,
-                                  onError: (exception, stackTrace) =>
-                                      // Image.asset(AppImages.appLogoImage),
-                                      Image.network(
-                                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
-                            ),
-                          ),
-                  )),
+      Center(
+        child: ClipRRect(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(200),
             ),
-          ),
-        ],
+            child: Obx(
+              () => profileController.userApiImageFile.value.isNotEmpty
+                  ? Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            profileController.userApiImageFile.value,
+                          ),
+                          onError: (exception, stackTrace) =>
+                              // Image.asset(AppImages.appLogoImage),
+                              Image.asset(
+                            AppAssets.profileIcon,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage(AppAssets.profileIcon),
+                          //userProfileImage),
+                          fit: BoxFit.cover,
+                          onError: (exception, stackTrace) =>
+                              // Image.asset(AppImages.appLogoImage),
+                              Image.asset(
+                            AppAssets.profileIcon,
+                          ),
+                        ),
+                      ),
+                    ),
+            )),
       ),
       const SizedBox(
         height: 10,
@@ -245,6 +193,46 @@ class AccountScreen extends StatelessWidget {
         const CustomListTile(
           icon: Icons.settings,
           title: 'Setting',
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.location_city,
+          title: 'Change city',
+          onPressed: () => Get.toNamed(AppRoutes.getCityScreen),
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.logout,
+          title: 'LOGOUT',
+          onPressed: () => showDialog(
+            barrierDismissible: false,
+            context: Get.context!,
+            builder: (context) {
+              return CustomLogoutAlertDialog(
+                text: "Logout",
+                content: "Are you sure you want logout ?",
+                yesButtonText: "Yes",
+                onYesPressed: () {
+                  profileController.isLoader.value = true;
+                  LocalStorage.clearLocalStorage().then(
+                    (value) {
+                      profileController.isLoader.value = false;
+                      Get.offAllNamed(AppRoutes.loginScreen);
+                    },
+                  );
+                },
+                //  () async => await DesktopRepository()
+                //     .logOutApiCall(isLoader: profileController.isLoader),
+                noButtonText: "No",
+                onNoPressed: () => Get.back(),
+                bgColor: Theme.of(context).primaryColor,
+              );
+            },
+          ),
         ),
       ],
     );
