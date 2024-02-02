@@ -5,7 +5,7 @@ class ApiUrls {
 
   //? Auth Api's
   static String loginUrl = "customer-login";
-  static String registerUrl = "auth/sign-up";
+  static String registerUrl = "customer-register";
   static String verifyToken = "auth/verify-token";
   static String changePassword = "users/change-password";
   static String deleteAccount = "users/delete-account";
@@ -34,7 +34,7 @@ class ApiUrls {
 
   ///order api
   static String getOrderListUrl = 'get-order';
-  static String orderTrackUrl="order-detail";
+  static String orderTrackUrl = "order-detail";
 
   ///wish list
   static String getWishListUrl = "get-wishlist";
@@ -46,6 +46,7 @@ class ApiUrls {
 
   ///search URL
   static String searchUrl = "search";
+
   ///restaurant
   static String restaurantDetailsUrl = "restaurant-detail";
 // //? Bottombar Api's

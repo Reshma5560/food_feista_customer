@@ -80,7 +80,6 @@ class LoginScreen extends StatelessWidget {
                                   onChanged: (value) {
                                     if (con.passwordCon.value.text.length ==
                                         16) {
-                                          
                                       con.passwordValidation.value = false;
                                       con.passwordError.value = "";
                                       FocusScope.of(context).unfocus();
@@ -120,11 +119,12 @@ class LoginScreen extends StatelessWidget {
                                         ),
                                       ),
                                     )),
-                                SizedBox(
-                                    height: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom +
-                                        defaultPadding.w * 3),
+                                // SizedBox(
+                                //     height: MediaQuery.of(context)
+                                //             .viewInsets
+                                //             .bottom +
+                                //         defaultPadding.w * 3),
+                                SizedBox(height: defaultPadding.h),
                                 Obx(
                                   () => TweenAnimationBuilder(
                                     duration:
@@ -213,6 +213,38 @@ class LoginScreen extends StatelessWidget {
                                     },
                                   ),
                                 ),
+                                SizedBox(height: defaultPadding.h),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: InkWell(
+                                    onTap: () {
+                                      Get.toNamed(AppRoutes.registerScreen);
+                                    },
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: '',
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: 'Don\'t have an account?',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                          TextSpan(
+                                              text: ' Sign Up',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: defaultPadding.h),
                               ],
                             ),
                           ),

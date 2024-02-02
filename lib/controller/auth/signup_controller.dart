@@ -10,22 +10,26 @@ class SignUpController extends GetxController {
   RxBool emailValidation = false.obs;
   RxString emailError = ''.obs;
 
-  Rx<TextEditingController> cityCon = TextEditingController().obs;
-  RxBool cityValidation = false.obs;
-  RxString cityError = ''.obs;
-
-  Rx<TextEditingController> stateCon = TextEditingController().obs;
-  RxBool stateValidation = false.obs;
-  RxString stateError = ''.obs;
+  Rx<TextEditingController> lastNameCon = TextEditingController().obs;
+  RxBool lastNameValidation = false.obs;
+  RxString lastNameError = ''.obs;
 
   Rx<TextEditingController> mobileNumberCon = TextEditingController().obs;
   RxString mobileError = "".obs;
   RxBool isMobileValid = false.obs;
 
-  Rx<TextEditingController> referralCodeCon = TextEditingController().obs;
-  RxBool referralCodeValidation = false.obs;
-  RxString referralCodeError = ''.obs;
+  Rx<TextEditingController> passwordCon = TextEditingController().obs;
+  RxBool passwordValidation = false.obs;
+  RxString passwordError = ''.obs;
 
   RxBool buttonPress = false.obs;
   RxBool isLoading = false.obs;
+
+  RxBool isChecked = false.obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
 }
