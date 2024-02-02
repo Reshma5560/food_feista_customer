@@ -3,20 +3,19 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../utils/local_storage.dart';
 import 'app_colors.dart';
 import 'app_style.dart';
 
 class AppDialogs {
-  static deleteAccountDialog(BuildContext context,
-      {required VoidCallback deleteOnTap}) {
+  static deleteCartDialog(BuildContext context, {required VoidCallback deleteOnTap}) {
     return Get.dialog(
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: Dialog(
           backgroundColor: AppColors.white,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
           clipBehavior: Clip.antiAlias,
           insetPadding: EdgeInsets.all(defaultPadding.w),
           elevation: 0,
@@ -26,10 +25,9 @@ class AppDialogs {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(
-                    top: defaultPadding.w, bottom: defaultPadding / 2),
+                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
                 child: Text(
-                  'Delete Account!',
+                  'Delete Cart!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.sp,
@@ -43,45 +41,32 @@ class AppDialogs {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(defaultPadding.w)
-                        .copyWith(top: 15, bottom: 5),
+                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 5),
                     child: RichText(
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15.sp,
-                            fontFamily: AppStyle.fontFamilyName,
-                            height: 1.5),
+                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
                         children: <TextSpan>[
                           TextSpan(
                             text: 'Hey 👋 ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
-                            text:
-                                "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: 'Are you sure you want to',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: ' delete ',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 12.sp,
-                                color: AppColors.darkRed),
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, color: AppColors.darkRed),
                           ),
                           TextSpan(
-                            text: 'your account ?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            text: 'your cart ?',
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                         ],
                       ),
@@ -92,9 +77,8 @@ class AppDialogs {
                     margin: const EdgeInsets.all(defaultPadding),
                     padding: const EdgeInsets.all(defaultPadding / 1.5),
                     child: Text(
-                      "Deleting your account will remove all of your information from our system.",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400, fontSize: 11.sp),
+                      "Deleting your cart will remove all of your cart item delete.",
+                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 11.sp),
                     ),
                   ),
                   Row(
@@ -105,15 +89,12 @@ class AppDialogs {
                         child: InkWell(
                           onTap: () => Get.back(),
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: defaultPadding.w - 5),
+                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
                             color: const Color(0xffF2F2F2),
                             child: Center(
                               child: Text(
                                 'Close',
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700),
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
                               ),
                             ),
                           ),
@@ -123,16 +104,120 @@ class AppDialogs {
                         child: InkWell(
                           onTap: deleteOnTap,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: defaultPadding.w - 5),
-                            color: AppColors.darkRed,
+                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            color: AppColors.kPrimaryColor,
                             child: Center(
                               child: Text(
                                 'Delete',
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white),
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static deleteCartItemDialog(BuildContext context, {required VoidCallback deleteOnTap}) {
+    return Get.dialog(
+      BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+        child: Dialog(
+          backgroundColor: AppColors.white,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          clipBehavior: Clip.antiAlias,
+          insetPadding: EdgeInsets.all(defaultPadding.w),
+          elevation: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
+                child: Text(
+                  'Delete Cart!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkRed,
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 5),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Hey 👋 ',
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                          ),
+                          TextSpan(
+                            text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                          ),
+                          TextSpan(
+                            text: 'Are you sure you want to',
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                          ),
+                          TextSpan(
+                            text: ' delete ',
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, color: AppColors.darkRed),
+                          ),
+                          TextSpan(
+                            text: 'your item?',
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => Get.back(),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            color: const Color(0xffF2F2F2),
+                            child: Center(
+                              child: Text(
+                                'Close',
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: deleteOnTap,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            color: AppColors.kPrimaryColor,
+                            child: Center(
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
                               ),
                             ),
                           ),

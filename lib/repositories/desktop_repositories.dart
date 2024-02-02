@@ -6,8 +6,8 @@ import 'package:foodapplication/controller/account/components/edit_account_contr
 import 'package:foodapplication/controller/account/components/wish_list_controller.dart';
 import 'package:foodapplication/controller/cart_controller.dart';
 import 'package:foodapplication/controller/my_order_controller.dart';
-import 'package:foodapplication/controller/search_screen_controller.dart';
 import 'package:foodapplication/controller/order_tracker_controller.dart';
+import 'package:foodapplication/controller/search_screen_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/data/models/get_order_model.dart';
@@ -68,8 +68,7 @@ class DesktopRepository {
             con.getDataMap = data;
             con.userApiImageFile.value = con.getDataMap?.data.image ?? "";
 
-            con.userName.value =
-                "${con.getDataMap?.data.firstName} ${con.getDataMap?.data.lastName}";
+            con.userName.value = "${con.getDataMap?.data.firstName} ${con.getDataMap?.data.lastName}";
             con.phoneNoName.value = con.getDataMap?.data.phone ?? "";
             con.firstName.value = con.getDataMap?.data.firstName ?? "";
             con.lastName.value = con.getDataMap?.data.lastName ?? "";
@@ -99,13 +98,9 @@ class DesktopRepository {
         "last_name": editAccountController.lastNameCon.text.trim(),
         "email": editAccountController.emailCon.text.trim(),
         "phone": editAccountController.mobileNumberCon.text.trim(),
-        "image": await dio.MultipartFile.fromFile(
-            editAccountController.imagePath.value,
-            filename: editAccountController.imagePath.value),
+        "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.imagePath.value),
       });
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
         (response) async {
           printData(key: "update profile response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -133,10 +128,7 @@ class DesktopRepository {
     final HomeController con = Get.find<HomeController>();
 
     try {
-      await APIFunction()
-          .getApiCall(
-              apiName: "${ApiUrls.homeDataUrl}/${LocalStorage.userCity.value}")
-          .then(
+      await APIFunction().getApiCall(apiName: "${ApiUrls.homeDataUrl}/${LocalStorage.userCity.value}").then(
         (response) async {
           HomeDataModel homeDataModel = HomeDataModel.fromJson(response);
           if (homeDataModel.status == true) {
@@ -182,13 +174,9 @@ class DesktopRepository {
         }
 
         if (con.nextPageStop.isTrue) {
-          await APIFunction()
-              .getApiCall(
-                  apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}")
-              .then(
+          await APIFunction().getApiCall(apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}").then(
             (response) async {
-              GetWishListDataModel homeTipModel =
-                  GetWishListDataModel.fromJson(response);
+              GetWishListDataModel homeTipModel = GetWishListDataModel.fromJson(response);
 
               homeTipModel.data?.data?.forEach((element) {
                 log("-------------${element.restaurant}");
@@ -199,8 +187,7 @@ class DesktopRepository {
               });
 
               con.page.value++;
-              printData(
-                  key: "WISH LIST length", value: con.wishListData.length);
+              printData(key: "WISH LIST length", value: con.wishListData.length);
               if (con.wishListData.length == homeTipModel.data?.total) {
                 con.nextPageStop.value = false;
               }
@@ -218,15 +205,10 @@ class DesktopRepository {
   }
 
   ///post wish list api
-  Future<dynamic> postWishListAPI(
-      {required String id,
-      required int index,
-      required bool isWishList}) async {
+  Future<dynamic> postWishListAPI({required String id, required int index, required bool isWishList}) async {
     try {
       final HomeController homeCom = Get.find<HomeController>();
-      await APIFunction()
-          .postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id")
-          .then(
+      await APIFunction().postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id").then(
         (response) async {
           if (!isValEmpty(response["message"])) {
             if (isWishList == true) {
@@ -254,15 +236,12 @@ class DesktopRepository {
   }
 
   //order track api call
-  Future<dynamic> orderTrackApiCall(
-      {RxBool? isLoader, required String orderId}) async {
+  Future<dynamic> orderTrackApiCall({RxBool? isLoader, required String orderId}) async {
     final con = Get.find<OrderTrackController>();
 
     try {
       isLoader?.value = true;
-      await APIFunction()
-          .getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId")
-          .then(
+      await APIFunction().getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId").then(
         (response) async {
           printData(key: "order track response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -288,11 +267,10 @@ class DesktopRepository {
   }
 
   ///get order list
-  Future<dynamic> getOrderApiCall({RxBool? isLoader}) async {
-    final con = Get.find<MyOrderController>();
+  Future<dynamic> getOrderApiCall() async {
+    final MyOrderController con = Get.find<MyOrderController>();
 
     try {
-      isLoader?.value = true;
       await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
         (response) async {
           printData(key: "get order  response", value: response);
@@ -315,7 +293,7 @@ class DesktopRepository {
       }
       rethrow;
     } finally {
-      isLoader?.value = false;
+      con.isLoading.value = false;
     }
   }
 
@@ -383,6 +361,54 @@ class DesktopRepository {
 
           printData(key: "foodItemAddonData length", value: con.foodItemVariantData.length);
 
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+    }
+  }
+
+  ///DELETE CART ITEM API
+  Future<dynamic> deleteCartItemAPI({required String id, required int index}) async {
+    final CartController con = Get.find<CartController>();
+    try {
+      await APIFunction().deleteApiCall(apiName: "${ApiUrls.deleteFoodItemUrl}/$id").then(
+        (response) async {
+          printData(key: "remove cart item, response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            if (!isValEmpty(response["message"])) {
+              con.totalAmount.value - double.parse(con.cartItemData[index].totalPrice?.value.toString() ?? "0.0");
+              await getCartAPI();
+              toast(response["message"].toString());
+            }
+          }
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+    }
+  }
+
+  ///DELETE CART ITEM API
+  Future<dynamic> deleteCartAPI({required String id}) async {
+    final CartController con = Get.find<CartController>();
+    try {
+      await APIFunction().deleteApiCall(apiName: "${ApiUrls.deleteCartUrl}/$id").then(
+        (response) async {
+          printData(key: "delete cart response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            if (!isValEmpty(response["message"])) {
+              Get.back();
+              con.cartItemData.clear();
+              toast(response["message"].toString());
+            }
+          }
           return response;
         },
       );

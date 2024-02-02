@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import '../../../data/models/get_cart_data_model.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../repositories/desktop_repositories.dart';
+import '../../../res/app_dialog.dart';
 import '../../../res/app_strings.dart';
 
 class CartScreen extends StatelessWidget {
@@ -121,9 +122,14 @@ class CartScreen extends StatelessWidget {
                                                           Align(
                                                             alignment: Alignment.topRight,
                                                             child: InkWell(
-                                                              onTap: () {
-                                                                con.totalAmount.value - double.parse(item.totalPrice?.value.toString() ?? "0.0");
-                                                                con.cartItemData.removeAt(index);
+                                                              onTap: () async {
+                                                                AppDialogs.deleteCartItemDialog(
+                                                                  context,
+                                                                  deleteOnTap: () async {
+                                                                    Get.back();
+                                                                    await DesktopRepository().deleteCartItemAPI(id: item.id ?? "", index: index);
+                                                                  },
+                                                                );
                                                               },
                                                               child: Icon(
                                                                 Icons.delete_outlined,
@@ -144,8 +150,8 @@ class CartScreen extends StatelessWidget {
                                                       Obx(
                                                         () => Text(
                                                           item.totalPrice?.value == double.parse(item.price ?? "0")
-                                                              ? "${item.price?.toString()}"
-                                                              : "${item.totalPrice?.value}",
+                                                              ? "₹${item.price?.toString()}"
+                                                              : "₹${item.totalPrice?.value}",
                                                           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
                                                         ),
                                                       ),
@@ -262,7 +268,7 @@ class CartScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "${con.totalAmount.value}",
+                        "₹${con.totalAmount.value}",
                         style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
                       ),
                     ),
@@ -288,16 +294,36 @@ class CartScreen extends StatelessWidget {
       ),
       child: MyAppBar(
         bgColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_outlined,
-            color: Colors.transparent,
-          ),
-          onPressed: () {},
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(
+        //     Icons.arrow_back_outlined,
+        //     color: Colors.transparent,
+        //   ),
+        //   onPressed: () {},
+        // ),
         title: "Cart",
         centerTitle: true,
         titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+        actions: [
+          Obx(
+            () => con.cartItemData.isNotEmpty
+                ? IconButton(
+                    onPressed: () {
+                      AppDialogs.deleteCartDialog(
+                        context,
+                        deleteOnTap: () async {
+                          await DesktopRepository().deleteCartAPI(id: con.cartData.value.data?.id ?? "");
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
       ),
     );
   }
@@ -509,7 +535,7 @@ class CartScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  data.price.toString(),
+                                  "₹${data.price.toString()}",
                                   style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
                                 ),
                               ),

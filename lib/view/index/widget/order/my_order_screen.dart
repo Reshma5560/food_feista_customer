@@ -9,10 +9,15 @@ import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../repositories/desktop_repositories.dart';
+import '../../../../res/app_strings.dart';
+import '../../../../res/widgets/empty_element.dart';
+
 class MyOrderScreen extends StatelessWidget {
   MyOrderScreen({super.key});
 
   final MyOrderController con = Get.put(MyOrderController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,9 @@ class MyOrderScreen extends StatelessWidget {
                       children: [
                         _appHeader(context),
                         const SizedBox(height: 10),
-                        _bodyModule(),
+                        Expanded(
+                          child: _bodyModule(),
+                        ),
                       ],
                     ).paddingOnly(bottom: 20),
             ),
@@ -49,27 +56,43 @@ class MyOrderScreen extends StatelessWidget {
         bottomRight: Radius.circular(defaultRadius * 3),
       ),
       child: MyAppBar(
-          bgColor: Theme.of(context).colorScheme.background,
-          // leading: IconButton(
-          //   icon: Icon(
-          //     Icons.arrow_back_outlined,
-          //     color: Theme.of(context).primaryColor,
-          //   ),
-          //   onPressed: () {
-          //     Get.back();
-          //   },
-          // ),
-          title: "My Order",
-          centerTitle: true,
-          titleStyle: AppStyle.customAppBarTitleStyle()
-              .copyWith(color: AppColors.black, fontSize: 14)),
+        bgColor: Theme.of(context).colorScheme.background,
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back_outlined,
+        //     color: Theme.of(context).primaryColor,
+        //   ),
+        //   onPressed: () {
+        //     Get.back();
+        //   },
+        // ),
+        title: "My Order",
+        centerTitle: true,
+        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+      ),
     );
   }
 
   Widget _bodyModule() {
     return Container(
       child: con.orderList.isEmpty
-          ? const Text("No Order ")
+          ? RefreshIndicator(
+              onRefresh: () async {
+                await DesktopRepository().getOrderApiCall();
+              },
+              child: ListView(
+                children: [
+                  EmptyElement(
+                    height: Get.height / 1.8,
+                    imageHeight: Get.width / 2.4,
+                    imageWidth: Get.width / 2,
+                    spacing: 0,
+                    title: AppStrings.wishListNotFoundTitle,
+                    subtitle: AppStrings.wishListNotFoundSubtitle,
+                  ),
+                ],
+              ),
+            )
           : ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
               shrinkWrap: true,
@@ -79,12 +102,11 @@ class MyOrderScreen extends StatelessWidget {
 
                 return InkWell(
                   onTap: () {
-                    Get.toNamed(AppRoutes.orderTrackScreen, arguments: {'orderId':item.id});
+                    Get.toNamed(AppRoutes.orderTrackScreen, arguments: {'orderId': item.id});
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                     decoration: BoxDecoration(
                       boxShadow: AppStyle.boxShadow(),
                       color: AppColors.white,
@@ -109,49 +131,30 @@ class MyOrderScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                       child: Text(
                                     item.restaurant.restaurantName,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        color: Theme.of(context).primaryColor),
+                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor),
                                   )),
                                   Text(
                                     "\$${item.orderAmount.toString()}",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18),
+                                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                                   )
                                 ],
                               ),
-                              Text(
-                                  DateFormat('DD MMM yyyy, HH:mma')
-                                      .format(item.createdAt),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: AppColors.black)),
+                              Text(DateFormat('DD MMM yyyy, HH:mma').format(item.createdAt),
+                                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: AppColors.black)),
                               Text("${item.orderDetail[0].quantity} Item",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14,
-                                      color: AppColors.black)),
+                                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14, color: AppColors.black)),
                               Text(
                                 "Order ID - ${item.invoiceNumber}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text(
-                                  "Payment Type - ${item.paymentType.paymentTypeName}"),
-                              Text(item.orderStatus.statusName,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      color: AppColors.black))
+                              Text("Payment Type - ${item.paymentType.paymentTypeName}"),
+                              Text(item.orderStatus.statusName, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
                             ],
                           ),
                         )

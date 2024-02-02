@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/common_widgets/custom_alert_dislog.dart';
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/res/app_assets.dart';
@@ -7,6 +8,9 @@ import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
+
+import '../../packages/cached_network_image/cached_network_image.dart';
+import '../../res/widgets/app_bar.dart';
 
 class AccountScreen extends StatelessWidget {
   AccountScreen({super.key});
@@ -17,20 +21,13 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
+        padding: EdgeInsets.zero,
         children: [
+          _appHeader(context),
           const SizedBox(
             height: defaultPadding,
           ),
           _profileImageWidget(),
-          const SizedBox(
-            height: defaultPadding,
-          ),
-          Text("My Account",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Theme.of(context).primaryColor))
-              .paddingSymmetric(horizontal: defaultPadding),
           const SizedBox(
             height: defaultPadding,
           ),
@@ -41,64 +38,115 @@ class AccountScreen extends StatelessWidget {
   }
 
   Widget _profileImageWidget() {
-    return Column(children: [
-      Center(
-        child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(200),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+      child: Row(
+        children: [
+          Center(
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(
+                Radius.circular(200),
+              ),
+              child: Obx(
+                () => profileController.userApiImageFile.value.isNotEmpty
+                    ? MFNetworkImage(
+                        height: 100,
+                        width: 100,
+                        imageUrl: profileController.userApiImageFile.value,
+                        fit: BoxFit.cover,
+                        shape: BoxShape.circle,
+                      ) /*Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              profileController.userApiImageFile.value,
+                            ),
+                            onError: (exception, stackTrace) =>
+                                // Image.asset(AppImages.appLogoImage),
+                                Image.asset(
+                              AppAssets.profileIcon,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )*/
+                    : Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage(AppAssets.profileIcon),
+                            onError: (exception, stackTrace) => Image.asset(
+                              AppAssets.profileIcon,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
             ),
-            child: Obx(
-              () => profileController.userApiImageFile.value.isNotEmpty
-                  ? Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            profileController.userApiImageFile.value,
-                          ),
-                          onError: (exception, stackTrace) =>
-                              // Image.asset(AppImages.appLogoImage),
-                              Image.asset(
-                            AppAssets.profileIcon,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
-                  : Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage(AppAssets.profileIcon),
-                          //userProfileImage),
-                          fit: BoxFit.cover,
-                          onError: (exception, stackTrace) =>
-                              // Image.asset(AppImages.appLogoImage),
-                              Image.asset(
-                            AppAssets.profileIcon,
-                          ),
-                        ),
-                      ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: defaultPadding),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(
+                  () => Text(
+                    "${profileController.userName}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18.sp,
                     ),
-            )),
+                  ),
+                ),
+                Obx(
+                  () => Text(
+                    "+91 ${profileController.phoneNoName.value}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.sp,
+                      color: AppColors.greyFontColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      const SizedBox(
-        height: 10,
+    );
+  }
+
+  Widget _appHeader(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(defaultRadius * 3),
+        bottomRight: Radius.circular(defaultRadius * 3),
       ),
-      Obx(() => Text("${profileController.userName}",
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16))),
-      Obx(() => Text("+91 ${profileController.phoneNoName.value}",
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: AppColors.greyFontColor)))
-    ]);
+      child: MyAppBar(
+        bgColor: Theme.of(context).colorScheme.background,
+        // leading: IconButton(
+        //   icon: Icon(
+        //     Icons.arrow_back_outlined,
+        //     color: Theme.of(context).primaryColor,
+        //   ),
+        //   onPressed: () {
+        //     Get.back();
+        //   },
+        // ),
+        title: "My Account",
+        centerTitle: true,
+        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+      ),
+    );
   }
 
   Widget _bodyWidget() {
@@ -244,8 +292,7 @@ class CustomListTile extends StatelessWidget {
   final String title;
   final void Function()? onPressed;
 
-  const CustomListTile(
-      {super.key, required this.icon, required this.title, this.onPressed});
+  const CustomListTile({super.key, required this.icon, required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -259,10 +306,7 @@ class CustomListTile extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        Expanded(
-            child: Text(title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 14))),
+        Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
         Icon(
           Icons.arrow_forward_ios,
           size: defaultPadding,

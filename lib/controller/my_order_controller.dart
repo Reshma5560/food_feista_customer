@@ -8,10 +8,9 @@ class MyOrderController extends GetxController {
   RxList<OrderList> orderList = <OrderList>[].obs;
   RxBool isLoading = false.obs;
 
-
   @override
   Future<void> onReady() async {
-    await DesktopRepository().getOrderApiCall(isLoader: isLoading);
+    await DesktopRepository().getOrderApiCall();
     super.onReady();
   }
 }

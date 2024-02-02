@@ -43,6 +43,8 @@ class ApiUrls {
   ///cart URLs
   static String getCartUrl = "get-cart";
   static String getFoodDataUrl = "get-food-variant-detail";
+  static String deleteFoodItemUrl = "remove-cart-item";
+  static String deleteCartUrl = "remove-cart";
 
   ///search URL
   static String searchUrl = "search";

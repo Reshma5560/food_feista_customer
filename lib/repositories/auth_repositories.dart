@@ -8,7 +8,7 @@ import 'package:foodapplication/controller/account/components/manage_Address_con
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
-import '../controller/get_city_controller].dart';
+import '../controller/get_city_controller.dart';
 import '../data/api/api_function.dart';
 import '../data/handler/api_url.dart';
 import '../data/models/get_add_by_id_model.dart';
