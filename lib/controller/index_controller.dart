@@ -19,9 +19,8 @@ class IndexController extends GetxController {
 
   final pages = <Widget>[
     HomeScreen(),
-    // CategoryScreen(),
     MyOrderScreen(),
-    const SearchScreen(),
+    SearchScreen(),
     CartScreen(),
     AccountScreen()
   ];
