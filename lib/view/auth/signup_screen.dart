@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/auth/signup_controller.dart';
+import 'package:foodapplication/repositories/auth_repositories.dart';
+import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/utils/helper.dart';
 import 'package:get/get.dart';
 
 import '../../res/app_button.dart';
-import '../../res/app_colors.dart';
 import '../../res/app_style.dart';
 import '../../res/app_text_field.dart';
 import '../../res/ui_utils.dart';
+import '../../route/app_routes.dart';
 import '../gradient_container/gradient_container.dart';
 import 'components/auth_header.dart';
 
@@ -41,10 +43,12 @@ class SignUpScreen extends StatelessWidget {
                           child: Obx(
                             () => ListView(
                               padding: EdgeInsets.all(defaultPadding.w),
-                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
                               physics: const RangeMaintainingScrollPhysics(),
                               children: [
-                                SizedBox(height: double.parse(value.toString())),
+                                SizedBox(
+                                    height: double.parse(value.toString())),
                                 Text(
                                   "SignUp",
                                   style: AppStyle.authTitleStyle(),
@@ -54,50 +58,50 @@ class SignUpScreen extends StatelessWidget {
                                   "We required your basic information for your identify.",
                                   style: AppStyle.authSubtitleStyle(),
                                 ),
-                                SizedBox(height: defaultPadding.w),
-                                Center(
-                                  child: Stack(
-                                    alignment: Alignment.bottomRight,
-                                    children: [
-                                      Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Theme.of(context).colorScheme.background,
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          height: 30,
-                                          width: 30,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: AppColors.kPrimaryColor,
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: AppColors.black.withOpacity(0.2),
-                                                spreadRadius: 1,
-                                                blurRadius: 5,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Icon(
-                                            Icons.camera_alt_outlined,
-                                            color: Colors.white,
-                                            size: 15.w,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // SizedBox(height: defaultPadding.w),
+                                // Center(
+                                //   child: Stack(
+                                //     alignment: Alignment.bottomRight,
+                                //     children: [
+                                //       Container(
+                                //         height: 100,
+                                //         width: 100,
+                                //         decoration: BoxDecoration(
+                                //           shape: BoxShape.circle,
+                                //           color: Theme.of(context).colorScheme.background,
+                                //         ),
+                                //       ),
+                                //       InkWell(
+                                //         onTap: () {},
+                                //         child: Container(
+                                //           height: 30,
+                                //           width: 30,
+                                //           alignment: Alignment.center,
+                                //           decoration: BoxDecoration(
+                                //             color: AppColors.kPrimaryColor,
+                                //             shape: BoxShape.circle,
+                                //             boxShadow: [
+                                //               BoxShadow(
+                                //                 color: AppColors.black.withOpacity(0.2),
+                                //                 spreadRadius: 1,
+                                //                 blurRadius: 5,
+                                //               ),
+                                //             ],
+                                //           ),
+                                //           child: Icon(
+                                //             Icons.camera_alt_outlined,
+                                //             color: Colors.white,
+                                //             size: 15.w,
+                                //           ),
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                                 SizedBox(height: defaultPadding.w),
                                 AppTextField(
-                                  titleText: "Full Name",
-                                  hintText: "Enter Full Name",
+                                  titleText: "First Name",
+                                  hintText: "Enter First Name",
                                   controller: con.firstNameCon.value,
                                   errorMessage: con.firstNameError.value,
                                   showError: con.firstNameValidation.value,
@@ -105,6 +109,19 @@ class SignUpScreen extends StatelessWidget {
                                   textInputAction: TextInputAction.next,
                                   onChanged: (value) {
                                     con.firstNameValidation.value = false;
+                                  },
+                                ),
+                                SizedBox(height: defaultPadding.w),
+                                AppTextField(
+                                  titleText: "Last Name",
+                                  hintText: "Enter Last Name",
+                                  controller: con.lastNameCon.value,
+                                  errorMessage: con.lastNameError.value,
+                                  showError: con.lastNameValidation.value,
+                                  keyboardType: TextInputType.name,
+                                  textInputAction: TextInputAction.next,
+                                  onChanged: (value) {
+                                    con.lastNameValidation.value = false;
                                   },
                                 ),
                                 SizedBox(height: defaultPadding.w),
@@ -121,30 +138,6 @@ class SignUpScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: defaultPadding.w),
                                 AppTextField(
-                                  titleText: "City",
-                                  hintText: "Select City",
-                                  controller: con.cityCon.value,
-                                  errorMessage: con.cityError.value,
-                                  showError: con.cityValidation.value,
-                                  keyboardType: TextInputType.text,
-                                  onChanged: (value) {
-                                    con.cityValidation.value = false;
-                                  },
-                                ),
-                                SizedBox(height: defaultPadding.w),
-                                AppTextField(
-                                  titleText: "State",
-                                  hintText: "Select State",
-                                  controller: con.stateCon.value,
-                                  errorMessage: con.stateError.value,
-                                  showError: con.stateValidation.value,
-                                  keyboardType: TextInputType.text,
-                                  onChanged: (value) {
-                                    con.stateValidation.value = false;
-                                  },
-                                ),
-                                SizedBox(height: defaultPadding.w),
-                                AppTextField(
                                   controller: con.mobileNumberCon.value,
                                   errorMessage: con.mobileError.value,
                                   showError: con.isMobileValid.value,
@@ -156,7 +149,8 @@ class SignUpScreen extends StatelessWidget {
                                     LengthLimitingTextInputFormatter(10),
                                   ],
                                   onChanged: (value) {
-                                    if (con.mobileNumberCon.value.text.length == 10) {
+                                    if (con.mobileNumberCon.value.text.length ==
+                                        10) {
                                       FocusScope.of(context).unfocus();
                                     }
                                     con.isMobileValid.value = false;
@@ -164,22 +158,63 @@ class SignUpScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: defaultPadding.w),
                                 AppTextField(
-                                  titleText: "Referral Code",
-                                  hintText: "Enter Referral Code",
-                                  controller: con.referralCodeCon.value,
-                                  errorMessage: con.referralCodeError.value,
-                                  showError: con.referralCodeValidation.value,
-                                  keyboardType: TextInputType.streetAddress,
+                                  titleText: "Password",
+                                  hintText: "Enter Password",
+                                  controller: con.passwordCon.value,
+                                  errorMessage: con.passwordError.value,
+                                  showError: con.passwordValidation.value,
+                                  keyboardType: TextInputType.emailAddress,
                                   onChanged: (value) {
-                                    con.referralCodeValidation.value = false;
+                                    if (con.passwordCon.value.text.length ==
+                                        16) {
+                                      con.passwordValidation.value = false;
+                                      con.passwordError.value = "";
+                                      FocusScope.of(context).unfocus();
+                                    } else if (con
+                                            .passwordCon.value.text.length <
+                                        8) {
+                                      con.passwordValidation.value = true;
+                                      con.passwordError.value =
+                                          "Please Enter your password at least 8 digits.";
+                                    } else {
+                                      con.passwordValidation.value = false;
+                                      con.passwordError.value = "";
+                                    }
                                   },
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(16),
+                                  ],
                                 ),
-                                SizedBox(height: MediaQuery.of(context).viewInsets.bottom + defaultPadding.w),
+                                Row(
+                                  children: [
+                                    Obx(() => Checkbox(
+                                          value: con.isChecked.value,
+                                          onChanged: (value) {
+                                            con.isChecked.value = value!;
+                                          },
+                                        )),
+                                    Text(
+                                      'Subsribe to the newsletter',
+                                      style: TextStyle(
+                                          color: AppColors.blackColor,
+                                          fontWeight: FontWeight.w300),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                    height: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom +
+                                        defaultPadding.w),
                                 Obx(
                                   () => TweenAnimationBuilder(
-                                    duration: const Duration(milliseconds: 1000),
+                                    duration:
+                                        const Duration(milliseconds: 1000),
                                     curve: Curves.elasticOut,
-                                    tween: con.buttonPress.value ? Tween(begin: 0.9, end: 0.97) : Tween(begin: 1.0, end: 1.0),
+                                    tween: con.buttonPress.value
+                                        ? Tween(begin: 0.9, end: 0.97)
+                                        : Tween(begin: 1.0, end: 1.0),
                                     builder: (context, value, child) {
                                       return Transform.scale(
                                         scale: value,
@@ -193,38 +228,140 @@ class SignUpScreen extends StatelessWidget {
                                             onPressed: () {
                                               if (con.isLoading.isFalse) {
                                                 /// First name Validation
-                                                if (con.firstNameCon.value.text.trim().isEmpty) {
-                                                  con.firstNameValidation.value = true;
-                                                  con.firstNameError.value = "Please enter your first name";
+                                                if (con.firstNameCon.value.text
+                                                    .trim()
+                                                    .isEmpty) {
+                                                  con.firstNameValidation
+                                                      .value = true;
+                                                  con.firstNameError.value =
+                                                      "Please enter your first name";
                                                 } else {
-                                                  con.firstNameValidation.value = false;
+                                                  con.firstNameValidation
+                                                      .value = false;
                                                 }
 
-                                                // Last name validation
-                                                if (con.emailCon.value.text.trim().isEmpty) {
-                                                  con.emailValidation.value = true;
-                                                  con.emailError.value = "Please enter your email address";
-                                                } else if (Helper.isEmail(con.emailCon.value.text.trim()) != true) {
-                                                  con.emailValidation.value = true;
-                                                  con.emailError.value = "Please enter valid email address";
+                                                /// Last name Validation
+                                                if (con.lastNameCon.value.text
+                                                    .trim()
+                                                    .isEmpty) {
+                                                  con.lastNameValidation.value =
+                                                      true;
+                                                  con.lastNameError.value =
+                                                      "Please enter your last name";
                                                 } else {
-                                                  con.emailValidation.value = false;
+                                                  con.lastNameValidation.value =
+                                                      false;
                                                 }
 
-                                                if (con.firstNameValidation.isFalse && con.emailValidation.isFalse) {
-                                                  FocusScope.of(context).unfocus();
-                                                  // AuthRepository().signUpApi(
-                                                  //   mobileNumber: int.parse(loginCon.mobileNumberCon.value.text.trim()),
-                                                  //   isLoader: con.isLoading,
-                                                  //   params: {
-                                                  //     "mobile_no": loginCon.mobileNumberCon.value.text.trim(),
-                                                  //     "first_name": con.firstNameCon.value.text.trim(),
-                                                  //     "last_name": con.lastNameCon.value.text.trim(),
-                                                  //     "device_token": Get.find<FirebaseController>().deviceToken.value,
-                                                  //     "device_type": loginCon.deviceType.value,
-                                                  //     "device_id": "${loginCon.deviceId.value}_${loginCon.mobileNumberCon.value.text.trim()}",
-                                                  //   },
-                                                  // );
+                                                ///password validation
+                                                if (con.passwordCon.value.text
+                                                    .isEmpty) {
+                                                  con.passwordValidation.value =
+                                                      true;
+                                                  con.passwordError.value =
+                                                      "Please Enter your password.";
+                                                } else if (con.passwordCon.value
+                                                        .text.length <
+                                                    8) {
+                                                  con.passwordValidation.value =
+                                                      true;
+                                                  con.passwordError.value =
+                                                      "Please Enter your password at least 8 digits.";
+                                                } else {
+                                                  con.passwordValidation.value =
+                                                      false;
+                                                  con.passwordError.value = "";
+                                                }
+
+                                                // email validation
+                                                if (con.emailCon.value.text
+                                                    .trim()
+                                                    .isEmpty) {
+                                                  con.emailValidation.value =
+                                                      true;
+                                                  con.emailError.value =
+                                                      "Please enter your email address";
+                                                } else if (Helper.isEmail(con
+                                                        .emailCon.value.text
+                                                        .trim()) !=
+                                                    true) {
+                                                  con.emailValidation.value =
+                                                      true;
+                                                  con.emailError.value =
+                                                      "Please enter valid email address";
+                                                } else {
+                                                  con.emailValidation.value =
+                                                      false;
+                                                }
+
+//mobile no validation
+                                                if (con.mobileNumberCon.value
+                                                    .text.isEmpty) {
+                                                  con.isMobileValid.value =
+                                                      true;
+                                                  con.mobileError.value =
+                                                      "Please Enter your mobile number.";
+                                                } else if (con.mobileNumberCon
+                                                        .value.text.length <
+                                                    10) {
+                                                  con.isMobileValid.value =
+                                                      true;
+                                                  con.mobileError.value =
+                                                      "Please Enter your mobile number 10 digits.";
+                                                } else {
+                                                  con.isMobileValid.value =
+                                                      false;
+                                                  con.mobileError.value = "";
+                                                }
+
+                                                if (con.firstNameValidation
+                                                        .isFalse &&
+                                                    con.emailValidation
+                                                        .isFalse &&
+                                                    con.passwordValidation
+                                                        .isFalse &&
+                                                    con.lastNameValidation
+                                                        .isFalse &&
+                                                    con.isMobileValid.isFalse) {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+                                                  AuthRepository().signUpApi(
+                                                    // mobileNumber: int.parse(
+                                                    //     loginCon.mobileNumberCon
+                                                    //         .value.text
+                                                    //         .trim()),
+                                                    isLoader: con.isLoading,
+                                                    params: {
+                                                      "first_name": con
+                                                          .firstNameCon
+                                                          .value
+                                                          .text
+                                                          .trim(),
+                                                      "last_name": con
+                                                          .lastNameCon
+                                                          .value
+                                                          .text
+                                                          .trim(),
+                                                      "email": con
+                                                          .emailCon.value.text
+                                                          .trim(),
+                                                      "phone": con
+                                                          .mobileNumberCon
+                                                          .value
+                                                          .text
+                                                          .trim(),
+                                                      "password": con
+                                                          .passwordCon
+                                                          .value
+                                                          .text
+                                                          .trim(),
+                                                      "newsletter_subscribe":
+                                                          con.isChecked.value ==
+                                                                  true
+                                                              ? 1
+                                                              : 0,
+                                                    },
+                                                  );
                                                 }
                                               }
                                             },
@@ -234,6 +371,38 @@ class SignUpScreen extends StatelessWidget {
                                     },
                                   ),
                                 ),
+                                SizedBox(height: defaultPadding.h),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: InkWell(
+                                    onTap: () {
+                                      Get.toNamed(AppRoutes.loginScreen);
+                                    },
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: '',
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: 'Already have an account?',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                          TextSpan(
+                                              text: ' Login',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: defaultPadding.h),
                               ],
                             ),
                           ),
