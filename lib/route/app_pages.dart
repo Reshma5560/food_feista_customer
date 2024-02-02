@@ -10,7 +10,6 @@ import 'package:foodapplication/view/auth/signup_screen.dart';
 import 'package:foodapplication/view/get_city/get_city_screen.dart';
 import 'package:foodapplication/view/index/widget/home_screen.dart';
 import 'package:foodapplication/view/index/widget/order/widgets/order_track_screen.dart';
-import 'package:foodapplication/view/restaurant/restaurant_details/restaurant_details_screen.dart';
 import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
@@ -18,6 +17,7 @@ import '../view/account/widgets/contact_us_screen.dart';
 import '../view/account/widgets/terms_conditions_screen.dart';
 import '../view/account/widgets/wish_list_screen.dart';
 import '../view/index/bottom_screen.dart';
+import '../view/restaurant/restaurant_details/restaurant_details_screen.dart';
 import '../view/splash/splash_screen.dart';
 import 'app_routes.dart';
 

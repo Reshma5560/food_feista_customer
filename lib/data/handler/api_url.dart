@@ -51,6 +51,7 @@ class ApiUrls {
 
   ///restaurant
   static String restaurantDetailsUrl = "restaurant-detail";
+  static String addToCartUrl = "custom-cart";
 
   ///review
   static String restaurantReviewUrl = "get-restaurant-review";

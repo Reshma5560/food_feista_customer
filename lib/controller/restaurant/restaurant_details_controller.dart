@@ -12,6 +12,8 @@ class RestaurantDetailsScreenController extends GetxController {
   RxBool overviewListVisible = false.obs;
   RxBool photosListVisible = false.obs;
   RxBool isOpen = false.obs;
+  RxList addonsData = [].obs;
+  RxList variantData = [].obs;
 
   List<String> menuList = ["ORDER ONLINE", "OVERVIEW", "REVIEW", "PHOTOS"];
 

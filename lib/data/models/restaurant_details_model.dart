@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-RestaurantDetailModel restaurantDetailModelFromJson(String str) =>
-    RestaurantDetailModel.fromJson(json.decode(str));
+import 'package:get/get.dart';
+
+RestaurantDetailModel restaurantDetailModelFromJson(String str) => RestaurantDetailModel.fromJson(json.decode(str));
 
 class RestaurantDetailModel {
   final bool? status;
@@ -12,12 +13,9 @@ class RestaurantDetailModel {
     this.data,
   });
 
-  factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) =>
-      RestaurantDetailModel(
+  factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) => RestaurantDetailModel(
         status: json["status"],
-        data: json["data"] == null
-            ? null
-            : RestaurantDetails.fromJson(json["data"]),
+        data: json["data"] == null ? null : RestaurantDetails.fromJson(json["data"]),
       );
 }
 
@@ -180,8 +178,7 @@ class RestaurantDetails {
     this.translations,
   });
 
-  factory RestaurantDetails.fromJson(Map<String, dynamic> json) =>
-      RestaurantDetails(
+  factory RestaurantDetails.fromJson(Map<String, dynamic> json) => RestaurantDetails(
         id: json["id"],
         restaurantName: json["restaurant_name"],
         phone: json["phone"],
@@ -202,9 +199,7 @@ class RestaurantDetails {
         perKmShippingCharge: json["per_km_shipping_charge"],
         freeDelivery: json["free_delivery"],
         userId: json["user_id"],
-        rating: json["rating"] == null
-            ? []
-            : List<int>.from(json["rating"]!.map((x) => x)),
+        rating: json["rating"] == null ? [] : List<int>.from(json["rating"]!.map((x) => x)),
         homeDelivery: json["home_delivery"],
         takeAway: json["take_away"],
         cutlery: json["cutlery"],
@@ -217,9 +212,7 @@ class RestaurantDetails {
         slug: json["slug"],
         qrCode: json["qr_code"],
         offDay: json["off_day"],
-        openingTime: json["opening_time"] == null
-            ? null
-            : DateTime.parse(json["opening_time"]),
+        openingTime: json["opening_time"] == null ? null : DateTime.parse(json["opening_time"]),
         closingTime: json["closing_time"],
         zoneId: json["zone_id"],
         announcement: json["announcement"],
@@ -247,50 +240,26 @@ class RestaurantDetails {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         orderSubscriptionActive: json["order_subscription_active"],
-        coupon: json["coupon"] == null
-            ? []
-            : List<Coupon>.from(json["coupon"]!.map((x) => Coupon.fromJson(x))),
-        foodGallery: json["food_gallery"] == null
-            ? []
-            : List<Gallery>.from(
-                json["food_gallery"]!.map((x) => Gallery.fromJson(x))),
-        ambienceGallery: json["ambienceGallery"] == null
-            ? []
-            : List<Gallery>.from(
-                json["ambienceGallery"]!.map((x) => Gallery.fromJson(x))),
-        menuGallery: json["menuGallery"] == null
-            ? []
-            : List<Gallery>.from(
-                json["menuGallery"]!.map((x) => Gallery.fromJson(x))),
-        foods: json["foods"] == null
-            ? []
-            : List<Food>.from(json["foods"]!.map((x) => Food.fromJson(x))),
+        coupon: json["coupon"] == null ? [] : List<Coupon>.from(json["coupon"]!.map((x) => Coupon.fromJson(x))),
+        foodGallery: json["food_gallery"] == null ? [] : List<Gallery>.from(json["food_gallery"]!.map((x) => Gallery.fromJson(x))),
+        ambienceGallery: json["ambienceGallery"] == null ? [] : List<Gallery>.from(json["ambienceGallery"]!.map((x) => Gallery.fromJson(x))),
+        menuGallery: json["menuGallery"] == null ? [] : List<Gallery>.from(json["menuGallery"]!.map((x) => Gallery.fromJson(x))),
+        foods: json["foods"] == null ? [] : List<Food>.from(json["foods"]!.map((x) => Food.fromJson(x))),
         gstStatus: json["gst_status"],
         gstCode: json["gst_code"],
         freeDeliveryDistanceStatus: json["free_delivery_distance_status"],
         freeDeliveryDistanceValue: json["free_delivery_distance_value"],
         cuisineRestaurant: json["cuisine_restaurant"] == null
             ? []
-            : List<CuisineRestaurant>.from(json["cuisine_restaurant"]!
-                .map((x) => CuisineRestaurant.fromJson(x))),
+            : List<CuisineRestaurant>.from(json["cuisine_restaurant"]!.map((x) => CuisineRestaurant.fromJson(x))),
         restaurantAmenities: json["restaurant_amenities"] == null
             ? []
-            : List<RestaurantAmenity>.from(json["restaurant_amenities"]!
-                .map((x) => RestaurantAmenity.fromJson(x))),
-        restaurantGallery: json["restaurant_gallery"] == null
-            ? []
-            : List<Gallery>.from(
-                json["restaurant_gallery"]!.map((x) => Gallery.fromJson(x))),
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+            : List<RestaurantAmenity>.from(json["restaurant_amenities"]!.map((x) => RestaurantAmenity.fromJson(x))),
+        restaurantGallery: json["restaurant_gallery"] == null ? [] : List<Gallery>.from(json["restaurant_gallery"]!.map((x) => Gallery.fromJson(x))),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
       );
 }
 
@@ -319,12 +288,8 @@ class Gallery {
         type: json["type"],
         image: json["image"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }
 
@@ -383,12 +348,8 @@ class Coupon {
         id: json["id"],
         couponName: json["coupon_name"],
         code: json["code"],
-        startDate: json["start_date"] == null
-            ? null
-            : DateTime.parse(json["start_date"]),
-        expireDate: json["expire_date"] == null
-            ? null
-            : DateTime.parse(json["expire_date"]),
+        startDate: json["start_date"] == null ? null : DateTime.parse(json["start_date"]),
+        expireDate: json["expire_date"] == null ? null : DateTime.parse(json["expire_date"]),
         minPurchase: json["min_purchase"],
         maxDiscount: json["max_discount"],
         discount: json["discount"],
@@ -399,20 +360,14 @@ class Coupon {
         restaurantId: json["restaurant_id"],
         zoneId: json["zone_id"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         totalUses: json["total_uses"],
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         customerId: json["customer_id"],
         slug: json["slug"],
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
       );
 }
 
@@ -435,20 +390,14 @@ class CuisineRestaurant {
     this.cuisine,
   });
 
-  factory CuisineRestaurant.fromJson(Map<String, dynamic> json) =>
-      CuisineRestaurant(
+  factory CuisineRestaurant.fromJson(Map<String, dynamic> json) => CuisineRestaurant(
         id: json["id"],
         restaurantId: json["restaurant_id"],
         cuisineId: json["cuisine_id"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        cuisine:
-            json["cuisine"] == null ? null : Cuisine.fromJson(json["cuisine"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        cuisine: json["cuisine"] == null ? null : Cuisine.fromJson(json["cuisine"]),
       );
 }
 
@@ -486,12 +435,8 @@ class Cuisine {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }
 
@@ -506,7 +451,9 @@ class Food {
   final String? addOns;
   final dynamic attributes;
   final dynamic choiceOptions;
-  final int? price;
+  final RxInt? price;
+  final RxInt? itemCount;
+  final RxDouble? totalPrice;
   final int? tax;
   final String? taxType;
   final int? discount;
@@ -548,6 +495,8 @@ class Food {
     this.attributes,
     this.choiceOptions,
     this.price,
+    this.itemCount,
+    this.totalPrice,
     this.tax,
     this.taxType,
     this.discount,
@@ -585,13 +534,13 @@ class Food {
         image: json["image"],
         categoryId: json["category_id"],
         categoryIds: json["category_ids"],
-        variations: json["variations"] == null
-            ? []
-            : List<dynamic>.from(json["variations"]!.map((x) => x)),
+        variations: json["variations"] == null ? [] : List<dynamic>.from(json["variations"]!.map((x) => x)),
         addOns: json["add_ons"],
         attributes: json["attributes"],
         choiceOptions: json["choice_options"],
-        price: json["price"],
+        price: RxInt(json["price"]),
+        itemCount: RxInt(1),
+        totalPrice: RxDouble(0.0),
         tax: json["tax"],
         taxType: json["tax_type"],
         discount: json["discount"],
@@ -613,26 +562,13 @@ class Food {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        addons: json["addons"] == null
-            ? []
-            : List<Addon>.from(json["addons"]!.map((x) => Addon.fromJson(x))),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        addons: json["addons"] == null ? [] : List<Addon>.from(json["addons"]!.map((x) => Addon.fromJson(x))),
         commentsCount: json["comments_count"],
-        foodVariant: json["food_variant"] == null
-            ? []
-            : List<FoodVariant>.from(
-                json["food_variant"]!.map((x) => FoodVariant.fromJson(x))),
-        category: json["category"] == null
-            ? null
-            : Category.fromJson(json["category"]),
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        foodVariant: json["food_variant"] == null ? [] : List<FoodVariant>.from(json["food_variant"]!.map((x) => FoodVariant.fromJson(x))),
+        category: json["category"] == null ? null : Category.fromJson(json["category"]),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
       );
 }
 
@@ -642,6 +578,7 @@ class Addon {
   final int? price;
   final String? restaurantId;
   final int? isActive;
+  final RxBool? isSelected;
   final dynamic createdBy;
   final dynamic updatedBy;
   final dynamic deletedAt;
@@ -654,6 +591,7 @@ class Addon {
     this.price,
     this.restaurantId,
     this.isActive,
+    this.isSelected,
     this.createdBy,
     this.updatedBy,
     this.deletedAt,
@@ -667,15 +605,12 @@ class Addon {
         price: json["price"],
         restaurantId: json["restaurant_id"],
         isActive: json["is_active"],
+        isSelected: RxBool(false),
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }
 
@@ -727,17 +662,11 @@ class Category {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         priority: json["priority"],
         parentname: json["parentname"],
-        translations: json["translations"] == null
-            ? []
-            : List<dynamic>.from(json["translations"]!.map((x) => x)),
+        translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
         parent: json["parent"],
       );
 }
@@ -746,6 +675,7 @@ class FoodVariant {
   final String? id;
   final String? foodId;
   final String? variationName;
+  final RxInt? isSelected;
   final dynamic createdBy;
   final dynamic updatedBy;
   final dynamic deletedAt;
@@ -757,6 +687,7 @@ class FoodVariant {
     this.id,
     this.foodId,
     this.variationName,
+    this.isSelected,
     this.createdBy,
     this.updatedBy,
     this.deletedAt,
@@ -769,19 +700,15 @@ class FoodVariant {
         id: json["id"],
         foodId: json["food_id"],
         variationName: json["variation_name"],
+        isSelected: RxInt(-1),
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         foodVariantOption: json["food_variant_option"] == null
             ? []
-            : List<FoodVariantOption>.from(json["food_variant_option"]!
-                .map((x) => FoodVariantOption.fromJson(x))),
+            : List<FoodVariantOption>.from(json["food_variant_option"]!.map((x) => FoodVariantOption.fromJson(x))),
       );
 }
 
@@ -810,8 +737,7 @@ class FoodVariantOption {
     this.updatedAt,
   });
 
-  factory FoodVariantOption.fromJson(Map<String, dynamic> json) =>
-      FoodVariantOption(
+  factory FoodVariantOption.fromJson(Map<String, dynamic> json) => FoodVariantOption(
         id: json["id"],
         foodId: json["food_id"],
         foodVariationId: json["food_variation_id"],
@@ -820,12 +746,8 @@ class FoodVariantOption {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }
 
@@ -852,23 +774,16 @@ class RestaurantAmenity {
     this.amenities,
   });
 
-  factory RestaurantAmenity.fromJson(Map<String, dynamic> json) =>
-      RestaurantAmenity(
+  factory RestaurantAmenity.fromJson(Map<String, dynamic> json) => RestaurantAmenity(
         id: json["id"],
         restaurantId: json["restaurant_id"],
         amenitiesId: json["amenities_id"],
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        amenities: json["amenities"] == null
-            ? null
-            : Amenities.fromJson(json["amenities"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        amenities: json["amenities"] == null ? null : Amenities.fromJson(json["amenities"]),
       );
 }
 
@@ -897,11 +812,7 @@ class Amenities {
         icon: json["icon"],
         isActive: json["is_active"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
 }

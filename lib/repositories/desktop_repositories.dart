@@ -307,6 +307,7 @@ class DesktopRepository {
           con.cartData.value = cartDataModel;
           con.cartItemData.value = cartDataModel.data?.cartDetails ?? [];
           if (con.cartItemData.isNotEmpty) {
+            con.totalAmount.value = 0;
             for (var i = 0; i < con.cartItemData.length; i++) {
               con.cartItemData[i].totalPrice?.value = double.parse(con.cartItemData[i].price ?? "0");
               con.totalAmount.value = con.totalAmount.value + double.parse(con.cartItemData[i].price ?? "0");
