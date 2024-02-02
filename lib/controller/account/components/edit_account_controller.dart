@@ -18,7 +18,7 @@ class EditAccountController extends GetxController {
   RxString lastNameError = ''.obs;
   RxString emailError = ''.obs;
   RxBool isMobileValid = false.obs;
-
+  RxString image = "".obs;
   RxBool isLoader = false.obs;
   RxBool isLoading = false.obs;
   RxString imagePath = "".obs;
@@ -45,7 +45,8 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.camera_alt_rounded,
                 color: AppColors.grey,
@@ -59,7 +60,8 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.perm_media_rounded,
                 color: AppColors.grey,
@@ -73,7 +75,8 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.close,
                 color: AppColors.grey,
@@ -91,7 +94,9 @@ class EditAccountController extends GetxController {
   String name = '';
 
   selectImage({bool pickFromCamera = false}) async {
-    XFile? pickedImage = await ImagePicker().pickImage(source: pickFromCamera == true ? ImageSource.camera : ImageSource.gallery);
+    XFile? pickedImage = await ImagePicker().pickImage(
+        source:
+            pickFromCamera == true ? ImageSource.camera : ImageSource.gallery);
     if (pickedImage != null) {
       imagePath.value = pickedImage.path;
     }
@@ -99,7 +104,14 @@ class EditAccountController extends GetxController {
 
   @override
   void onInit() {
-    emailCon.text = "customer@gmail.com";
+    if (Get.arguments != null) {
+      image.value = Get.arguments['image'];
+      firstNameCon.text = Get.arguments['firstName'];
+      lastNameCon.text = Get.arguments['lastName'];
+      emailCon.text = Get.arguments['email'] ?? "customer@gmail.com";
+      mobileNumberCon.text = Get.arguments['mobileNo'];
+    }
+
     super.onInit();
   }
 }

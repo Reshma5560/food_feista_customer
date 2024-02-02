@@ -11,12 +11,6 @@ class SplashController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
   navigation() {
     Timer(
       const Duration(seconds: 5),

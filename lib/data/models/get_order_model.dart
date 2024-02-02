@@ -12,13 +12,14 @@ class GetOrderModel {
   List<OrderList>? data;
 
   GetOrderModel({
-     this.status,
-     this.data,
+    this.status,
+    this.data,
   });
 
   factory GetOrderModel.fromJson(Map<String, dynamic> json) => GetOrderModel(
         status: json["status"],
-        data: List<OrderList>.from(json["data"].map((x) => OrderList.fromJson(x))),
+        data: List<OrderList>.from(
+            json["data"].map((x) => OrderList.fromJson(x))),
       );
 }
 
@@ -30,17 +31,17 @@ class OrderList {
   String paymentStatusId;
   String paymentTypeId;
   int orderAmount;
-  String totalDiscount;
+  String? totalDiscount;
   int totalTaxAmount;
   int deliveryCharge;
   int restaurantDiscountAmount;
   int originalDeliveryCharge;
   dynamic transactionReference;
-  String deliveryAddressId;
+  String? deliveryAddressId;
   dynamic deliveryManId;
   dynamic deliveryManRemarks;
   dynamic couponCode;
-  String orderNote;
+  String? orderNote;
   dynamic deliveryDate;
   String orderType;
   int checked;
@@ -108,17 +109,17 @@ class OrderList {
     required this.paymentStatusId,
     required this.paymentTypeId,
     required this.orderAmount,
-    required this.totalDiscount,
+    this.totalDiscount,
     required this.totalTaxAmount,
     required this.deliveryCharge,
     required this.restaurantDiscountAmount,
     required this.originalDeliveryCharge,
     required this.transactionReference,
-    required this.deliveryAddressId,
+    this.deliveryAddressId,
     required this.deliveryManId,
     required this.deliveryManRemarks,
     required this.couponCode,
-    required this.orderNote,
+    this.orderNote,
     required this.deliveryDate,
     required this.orderType,
     required this.checked,
@@ -187,13 +188,13 @@ class OrderList {
         paymentStatusId: json["payment_status_id"],
         paymentTypeId: json["payment_type_id"],
         orderAmount: json["order_amount"],
-        totalDiscount: json["total_discount"],
+        totalDiscount: json["total_discount"] ?? "",
         totalTaxAmount: json["total_tax_amount"],
         deliveryCharge: json["delivery_charge"],
         restaurantDiscountAmount: json["restaurant_discount_amount"],
         originalDeliveryCharge: json["original_delivery_charge"],
         transactionReference: json["transaction_reference"],
-        deliveryAddressId: json["delivery_address_id"],
+        deliveryAddressId: json["delivery_address_id"] ?? "",
         deliveryManId: json["delivery_man_id"],
         deliveryManRemarks: json["delivery_man_remarks"],
         couponCode: json["coupon_code"],
@@ -264,7 +265,7 @@ class OrderDetail {
   String id;
   String orderId;
   String foodId;
-  int price;
+  String price;
   String totalAmount;
   dynamic tax;
   dynamic discount;
@@ -297,7 +298,7 @@ class OrderDetail {
         id: json["id"],
         orderId: json["order_id"],
         foodId: json["food_id"],
-        price: json["price"],
+        price: json["price"].toString(),
         totalAmount: json["total_amount"],
         tax: json["tax"],
         discount: json["discount"],

@@ -5,9 +5,11 @@ import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/controller/account/components/wish_list_controller.dart';
 import 'package:foodapplication/controller/my_order_controller.dart';
+import 'package:foodapplication/controller/order_tracker_controller.dart';
 import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/data/models/get_order_model.dart';
+import 'package:foodapplication/data/models/order_track_model.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -58,6 +60,14 @@ class DesktopRepository {
             GetProfileModel data = GetProfileModel.fromJson(response);
 
             con.getDataMap = data;
+            con.userApiImageFile.value = con.getDataMap?.data.image ?? "";
+
+            con.userName.value =
+                "${con.getDataMap?.data.firstName} ${con.getDataMap?.data.lastName}";
+            con.phoneNoName.value = con.getDataMap?.data.phone ?? "";
+            con.firstName.value = con.getDataMap?.data.firstName ?? "";
+            con.lastName.value = con.getDataMap?.data.lastName ?? "";
+            con.email.value = con.getDataMap?.data.email ?? "";
             log("${con.getDataMap}");
           }
           return response;
@@ -83,14 +93,19 @@ class DesktopRepository {
         "last_name": editAccountController.lastNameCon.text.trim(),
         "email": editAccountController.emailCon.text.trim(),
         "phone": editAccountController.mobileNumberCon.text.trim(),
-        "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.name),
+        "image": await dio.MultipartFile.fromFile(
+            editAccountController.imagePath.value,
+            filename: editAccountController.imagePath.value),
       });
-      await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
+      await APIFunction()
+          .postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData)
+          .then(
         (response) async {
           printData(key: "update profile response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
+              await getProfileApiCall();
               Get.back();
               Get.offNamed(AppRoutes.indexScreen);
             }
@@ -158,9 +173,13 @@ class DesktopRepository {
         }
 
         if (con.nextPageStop.isTrue) {
-          await APIFunction().getApiCall(apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}").then(
+          await APIFunction()
+              .getApiCall(
+                  apiName: "${ApiUrls.getWishListUrl}?page=${con.page.value}")
+              .then(
             (response) async {
-              GetWishListDataModel homeTipModel = GetWishListDataModel.fromJson(response);
+              GetWishListDataModel homeTipModel =
+                  GetWishListDataModel.fromJson(response);
 
               homeTipModel.data?.data?.forEach((element) {
                 log("-------------${element.restaurant}");
@@ -171,7 +190,8 @@ class DesktopRepository {
               });
 
               con.page.value++;
-              printData(key: "WISH LIST length", value: con.wishListData.length);
+              printData(
+                  key: "WISH LIST length", value: con.wishListData.length);
               if (con.wishListData.length == homeTipModel.data?.total) {
                 con.nextPageStop.value = false;
               }
@@ -189,10 +209,15 @@ class DesktopRepository {
   }
 
   ///post wish list api
-  Future<dynamic> postWishListAPI({required String id, required int index, required bool isWishList}) async {
+  Future<dynamic> postWishListAPI(
+      {required String id,
+      required int index,
+      required bool isWishList}) async {
     try {
       final HomeController homeCom = Get.find<HomeController>();
-      await APIFunction().postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id").then(
+      await APIFunction()
+          .postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id")
+          .then(
         (response) async {
           if (!isValEmpty(response["message"])) {
             if (isWishList == true) {
@@ -219,23 +244,25 @@ class DesktopRepository {
     }
   }
 
-  //get order details by idlist
-  Future<dynamic> getOrderDetailsByIdApiCall({RxBool? isLoader}) async {
-    final con = Get.find<MyOrderController>();
+  //order track api call
+  Future<dynamic> orderTrackApiCall(
+      {RxBool? isLoader, required String orderId}) async {
+    final con = Get.find<OrderTrackController>();
 
     try {
       isLoader?.value = true;
-      await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
+      await APIFunction()
+          .getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId")
+          .then(
         (response) async {
-          printData(key: "get order detail response", value: response);
+          printData(key: "order track response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
-            GetOrderModel data = GetOrderModel.fromJson(response);
+            OrderTrackModel data = OrderTrackModel.fromJson(response);
 
-            con.getOrderModel = data;
-            log("${con.getOrderModel}");
+            con.orderTrackModel.value = data;
+            log("${con.orderTrackModel}");
 
-            con.orderList.addAll(con.getOrderModel.data!);
-            log("ORDER LENGTH ${con.orderList.length}");
+            log("ORDER track data ${con.orderTrackModel.value.data}");
           }
           return response;
         },

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class LocationScreen extends StatelessWidget {
                           // doubleouble.parse("screenController.productDetails!.branch.latitude"),
                           ),
                   onTap: (TapPosition position, LatLng latLng) {
-                    con.handleTap(position, latLng);
+                    con.handleTap(latLng, position: position);
                   },
                   zoom: 14),
               children: [
@@ -86,7 +88,7 @@ class LocationScreen extends StatelessWidget {
                             child: Obx(
                               () => con.isLoader.value
                                   ? const Center(
-                                      child: const CircularProgressIndicator(),
+                                      child: CircularProgressIndicator(),
                                     )
                                   : con.place != null
                                       ? Text(
@@ -108,42 +110,54 @@ class LocationScreen extends StatelessWidget {
                         thickness: 1,
                         color: AppColors.greyBorderColor,
                       ),
-                      InkWell(
-                        onTap: () {
-                          var params = {
-                            "enumType": con.addressEnum,
-                            "addressId": con.addressId.value,
-                            "place": con.place,
-                            "lat": con.latValue.value,
-                            "lng": con.longValue.value,
-                          };
-                          log(params.toString());
-                          Get.toNamed(
-                            AppRoutes.addAddressScreen,
-                            arguments: {
-                              "enumType": con.addressEnum,
-                              "addressId": con.addressId.value,
-                              "place": con.place,
-                              "lat": con.latValue.value,
-                              "lng": con.longValue.value,
-                            },
-                          );
-                          // Get.toNamed(AppRoutes.addAddressScreen, arguments: [
-                          //   con.addressEnum,
-                          //   con.addressId,
-                          //   con.place,
-                          //   con.latValue.value,
-                          //   con.longValue.value
-                          // ]);
-                        },
-                        child: Text(
-                          "CONFIRM LOCATION",
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                      )
+                      Obx(() => InkWell(
+                            onTap: con.isDisable.isTrue
+                                ? null
+                                : () {
+                                    var params = {
+                                      "enumType": con.addressEnum,
+                                      "addressId": con.addressId.value,
+                                      "place": con.place,
+                                      "lat": con.latValue.value,
+                                      "lng": con.longValue.value,
+                                      "name": Get.arguments['name'],
+                                      "mobileNo": Get.arguments['mobileNo'],
+                                      "zipCode": Get.arguments['zipcode'],
+                                      "addressType":
+                                          Get.arguments['addressType']
+                                    };
+                                    log(params.toString());
+                                    Get.toNamed(
+                                      AppRoutes.addAddressScreen,
+                                      arguments: {
+                                        "enumType": con.addressEnum,
+                                        "addressId": con.addressId.value,
+                                        "place": con.place,
+                                        "lat": con.latValue.value,
+                                        "lng": con.longValue.value,
+                                        "name": Get.arguments['name'],
+                                        "mobileNo": Get.arguments['mobileNo'],
+                                        "zipCode": Get.arguments['zipcode'],
+                                        "addressType":
+                                            Get.arguments['addressType']
+                                      },
+                                    );
+                                    // Get.toNamed(AppRoutes.addAddressScreen, arguments: [
+                                    //   con.addressEnum,
+                                    //   con.addressId,
+                                    //   con.place,
+                                    //   con.latValue.value,
+                                    //   con.longValue.value
+                                    // ]);
+                                  },
+                            child: Text(
+                              "CONFIRM LOCATION",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          ))
                     ],
                   ).paddingAll(10),
                 ),

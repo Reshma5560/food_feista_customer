@@ -12,9 +12,6 @@ import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
 
-import '../../../packages/cached_network_image/cached_network_image.dart';
-import '../../../utils/local_storage.dart';
-
 class EditAccountScreen extends StatelessWidget {
   EditAccountScreen({super.key});
 
@@ -58,7 +55,8 @@ class EditAccountScreen extends StatelessWidget {
                       ),
                       controller: editAccountController.firstNameCon,
                       errorMessage: editAccountController.firstNameError.value,
-                      showError: editAccountController.firstNameValidation.value,
+                      showError:
+                          editAccountController.firstNameValidation.value,
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
@@ -116,7 +114,9 @@ class EditAccountScreen extends StatelessWidget {
                         LengthLimitingTextInputFormatter(10),
                       ],
                       onChanged: (value) {
-                        if (editAccountController.mobileNumberCon.value.text.length == 10) {
+                        if (editAccountController
+                                .mobileNumberCon.value.text.length ==
+                            10) {
                           FocusScope.of(context).unfocus();
                         }
                         editAccountController.isMobileValid.value = false;
@@ -171,11 +171,13 @@ class EditAccountScreen extends StatelessWidget {
                         io.File(editAccountController.imagePath.value),
                         fit: BoxFit.cover,
                       )
-                    : LocalStorage.userImage.value.contains("https://") || LocalStorage.userImage.value.contains("http://")
-                        ? MFNetworkImage(
-                            imageUrl: LocalStorage.userImage.value,
-                            fit: BoxFit.cover,
-                          )
+                    : editAccountController.image.value.isNotEmpty
+                        ? Image.network(editAccountController.image.value)
+                        //  LocalStorage.userImage.value.contains("https://") || LocalStorage.userImage.value.contains("http://")
+                        //     ? MFNetworkImage(
+                        //         imageUrl: LocalStorage.userImage.value,
+                        //         fit: BoxFit.cover,
+                        //       )
                         : Image.network(
                             "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                             fit: BoxFit.cover,

@@ -15,6 +15,7 @@ import '../../../data/models/get_add_by_id_model.dart';
 class AddAddressController extends GetxController {
   late AddressEnum addressEnum;
   RxString addressId = "".obs;
+  RxString enum1 = "".obs;
   var place;
   GetAddressByIdModel? getAddressData;
 
@@ -79,7 +80,19 @@ class AddAddressController extends GetxController {
       if (Get.arguments["lng"] != null) {
         logTextEditingController.text = Get.arguments["lng"];
       }
-
+      if (Get.arguments["name"] != null) {
+        receiverNameCon.text = Get.arguments["name"];
+      }
+      if (Get.arguments["mobileNo"] != null) {
+        mobilenoCon.text = Get.arguments["mobileNo"];
+      }
+      if (Get.arguments["zipcode"] != null) {
+        zipcodeCon.text = Get.arguments["zipcode"];
+      }
+      if (Get.arguments["addressType"] != null) {
+        typeValue.value = Get.arguments["addressType"];
+      }
+countryDropDownValue = Country(countryName: place.country).obs;
       floorCon.text = " ${place.subThoroughfare}";
       houseCon.text = "${place.thoroughfare}";
       addressCon.text =
@@ -91,11 +104,10 @@ class AddAddressController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    await AuthRepository().getCountryApiCall();
+    await AuthRepository().getCountryApiCall(isLoader: isLoader);
 
     if (addressId.isNotEmpty) {
-     
-      await AuthRepository().getStateListOnlyCall();
+      await AuthRepository().getStateListOnlyCall(isLoader: isLoader);
       log("*****************");
       await AuthRepository().getAddressByIdApiCall(
           isLoader: isLoader, addressId: addressId.value);

@@ -133,7 +133,7 @@ class CartScreen extends StatelessWidget {
     return SizedBox(
       // height: Get.height,
       child: ListView.builder(
-        padding: EdgeInsets.only(top: 0, bottom: 10),
+        padding: const EdgeInsets.only(top: 0, bottom: 10),
         itemCount: cartController.cartList.length,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,

@@ -30,7 +30,11 @@ class AccountScreen extends StatelessWidget {
           const SizedBox(
             height: defaultPadding,
           ),
-          Text("My Account", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor))
+          Text("My Account",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Theme.of(context).primaryColor))
               .paddingSymmetric(horizontal: defaultPadding),
           const SizedBox(
             height: defaultPadding,
@@ -92,43 +96,46 @@ class AccountScreen extends StatelessWidget {
             // bottom: 20,
             child: Center(
               child: ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(200),
-                ),
-                child: profileController.getDataMap?.data.image != null
-                    ? Container(
-                        height: 180,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              profileController.getDataMap?.data.image ?? "",
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(200),
+                  ),
+                  child: Obx(
+                    () => profileController.userApiImageFile.value.isNotEmpty
+                        ? Container(
+                            height: 180,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  profileController.userApiImageFile.value,
+                                ),
+                                onError: (exception, stackTrace) =>
+                                    // Image.asset(AppImages.appLogoImage),
+                                    Image.network(
+                                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            onError: (exception, stackTrace) =>
-                                // Image.asset(AppImages.appLogoImage),
-                                Image.network("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
-                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            height: 180,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: const NetworkImage(
+                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'), //userProfileImage),
+                                  fit: BoxFit.cover,
+                                  onError: (exception, stackTrace) =>
+                                      // Image.asset(AppImages.appLogoImage),
+                                      Image.network(
+                                          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(
-                        height: 180,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: const NetworkImage(
-                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'), //userProfileImage),
-                              fit: BoxFit.cover,
-                              onError: (exception, stackTrace) =>
-                                  // Image.asset(AppImages.appLogoImage),
-                                  Image.network("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")),
-                        ),
-                      ),
-              ),
+                  )),
             ),
           ),
           // Positioned(
@@ -162,101 +169,107 @@ class AccountScreen extends StatelessWidget {
       const SizedBox(
         height: 10,
       ),
-      Text("${profileController.getDataMap?.data.firstName} ${profileController.getDataMap?.data.lastName}",
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-      Text("+91 ${profileController.getDataMap?.data.phone}",
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.greyFontColor))
+      Obx(() => Text("${profileController.userName}",
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16))),
+      Obx(() => Text("+91 ${profileController.phoneNoName.value}",
+          style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              color: AppColors.greyFontColor)))
     ]);
   }
 
   Widget _bodyWidget() {
-    return Container(
-      // color: AppColors.greyShad1,
-      child: Column(
-        children: [
-          CustomListTile(
-            icon: Icons.account_circle,
-            title: 'Edit Account',
-            onPressed: () {
-              Get.toNamed(AppRoutes.editAccountScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          CustomListTile(
-            icon: Icons.location_on,
-            title: 'Manage Address',
-            onPressed: () {
-              Get.toNamed(AppRoutes.manageAddressScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          CustomListTile(
-            icon: Icons.favorite,
-            title: 'Favorite',
-            onPressed: () {
-              Get.toNamed(AppRoutes.wishListScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          CustomListTile(
-            icon: Icons.password,
-            title: 'Change password',
-            onPressed: () {
-              Get.toNamed(AppRoutes.updatePasswordScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          const CustomListTile(
-            icon: Icons.percent,
-            title: 'Offer',
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          CustomListTile(
-            icon: Icons.contact_support_sharp,
-            title: 'Contact Us',
-            onPressed: () {
-              Get.toNamed(AppRoutes.contactUsScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          CustomListTile(
-            icon: Icons.info,
-            title: 'About Us',
-            onPressed: () {
-              Get.toNamed(AppRoutes.aboutUsScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          CustomListTile(
-            icon: Icons.help_outline_sharp,
-            title: 'Faqs',
-            onPressed: () {
-              Get.toNamed(AppRoutes.termsConditionsScreen);
-            },
-          ),
-          Divider(
-            color: AppColors.grey,
-          ),
-          const CustomListTile(
-            icon: Icons.settings,
-            title: 'Setting',
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        CustomListTile(
+          icon: Icons.account_circle,
+          title: 'Edit Account',
+          onPressed: () {
+            Get.toNamed(AppRoutes.editAccountScreen, arguments: {
+              'image': profileController.userApiImageFile.value,
+              'firstName': profileController.firstName.value,
+              'lastName': profileController.lastName.value,
+              'email':profileController.email.value,
+              'mobileNo': profileController.phoneNoName.value
+            });
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.location_on,
+          title: 'Manage Address',
+          onPressed: () {
+            Get.toNamed(AppRoutes.manageAddressScreen);
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.favorite,
+          title: 'Favorite',
+          onPressed: () {
+            Get.toNamed(AppRoutes.wishListScreen);
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.password,
+          title: 'Change password',
+          onPressed: () {
+            Get.toNamed(AppRoutes.updatePasswordScreen);
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        const CustomListTile(
+          icon: Icons.percent,
+          title: 'Offer',
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.contact_support_sharp,
+          title: 'Contact Us',
+          onPressed: () {
+            Get.toNamed(AppRoutes.contactUsScreen);
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.info,
+          title: 'About Us',
+          onPressed: () {
+            Get.toNamed(AppRoutes.aboutUsScreen);
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        CustomListTile(
+          icon: Icons.help_outline_sharp,
+          title: 'Faqs',
+          onPressed: () {
+            Get.toNamed(AppRoutes.termsConditionsScreen);
+          },
+        ),
+        Divider(
+          color: AppColors.grey,
+        ),
+        const CustomListTile(
+          icon: Icons.settings,
+          title: 'Setting',
+        ),
+      ],
     );
   }
 }
@@ -266,7 +279,8 @@ class CustomListTile extends StatelessWidget {
   final String title;
   final void Function()? onPressed;
 
-  const CustomListTile({super.key, required this.icon, required this.title, this.onPressed});
+  const CustomListTile(
+      {super.key, required this.icon, required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +294,10 @@ class CustomListTile extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
+        Expanded(
+            child: Text(title,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: 14))),
         Icon(
           Icons.arrow_forward_ios,
           size: defaultPadding,

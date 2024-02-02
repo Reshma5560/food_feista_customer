@@ -21,7 +21,7 @@ class ApiUrls {
   static String getAllStateUrl = "get-state-all";
   static String getCityUrl = "get-city";
   static String removeAddressUrl = "remove-address/";
-  static String updateAddressUrl = "update-address/";
+  static String updateAddressUrl = "update-address";
   static String getAddressByIdUrl = "address-detail/";
   static String getAllCityUrl = "get-city";
   static String searchCityUrl = "search-city";
@@ -34,6 +34,7 @@ class ApiUrls {
 
 //order api
   static String getOrderListUrl = 'get-order';
+  static String orderTrackUrl="order-detail";
 
   ///wish list
   static String getWishListUrl = "get-wishlist";

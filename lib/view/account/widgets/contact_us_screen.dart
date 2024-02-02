@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:foodapplication/controller/account/components/contact_us_controller.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_text_field.dart';
-import 'package:foodapplication/utils/helper.dart';
 import 'package:get/get.dart';
 
 import '../../../res/app_appbar.dart';
@@ -124,7 +123,7 @@ class ContactUsScreen extends StatelessWidget {
               //   con.passwordError.value = "";
               // }
             },
-            inputFormatters: [
+            inputFormatters: const [
               // FilteringTextInputFormatter.digitsOnly,
               // LengthLimitingTextInputFormatter(8),
             ],
@@ -238,7 +237,7 @@ class ContactUsScreen extends StatelessWidget {
               //   con.passwordError.value = "";
               // }
             },
-            inputFormatters: [
+            inputFormatters: const [
               // FilteringTextInputFormatter.digitsOnly,
               // LengthLimitingTextInputFormatter(8),
             ],

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
+import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
@@ -36,7 +39,9 @@ class AddAddressScreen extends StatelessWidget {
             child: Column(
               children: [
                 CommonAppBar(
-                  title: "Add Address",
+                  title: con.addressEnum.name == "edit"
+                      ? "Edit Address"
+                      : "Add Address",
                   onPressed: () {
                     Get.back();
                     Get.back();
@@ -44,58 +49,63 @@ class AddAddressScreen extends StatelessWidget {
                   },
                 ),
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    children: [
-                      _floorHouseModule(),
-                      SizedBox(height: 10.w),
-                      _addressModule(),
-                      SizedBox(height: 10.w),
-                      Text(
-                        "Address Type",
-                        style: AppStyle.textFieldTitleStyle(),
-                      ).paddingOnly(bottom: 10),
-                      _addressType(),
-                      SizedBox(height: 10.w),
-                      _receiverNameModule(),
-                      SizedBox(height: 10.w),
-                      _mobileNoModule(),
-                      SizedBox(height: 10.w),
-                      Text(
-                        "Country",
-                        style: AppStyle.textFieldTitleStyle(),
-                      ).paddingOnly(bottom: 10),
-                      _countryDropDownModule(),
-                      SizedBox(height: 10.w),
-                      Text(
-                        "State",
-                        style: AppStyle.textFieldTitleStyle(),
-                      ).paddingOnly(bottom: 10),
-                      _stateDropDownModule(),
-                      SizedBox(height: 10.w),
-                      Text(
-                        "City",
-                        style: AppStyle.textFieldTitleStyle(),
-                      ).paddingOnly(bottom: 10),
-                      _cityDropDownModule(),
-                      SizedBox(height: 10.w),
-                      _zipcodeModule(),
-                      SizedBox(height: 10.w),
-                      _latLongModule(),
-                      SizedBox(height: 10.w),
-                      AppButton(
-                        onPressed: addAddressFunction,
-                        child: Text(
-                          "Add Address",
-                          style: AppStyle.mediumWhite(),
+                    child: Obx(
+                  () => con.isLoader.value
+                      ? const AppLoader()
+                      : ListView(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: [
+                            _floorHouseModule(),
+                            SizedBox(height: 10.w),
+                            _addressModule(),
+                            SizedBox(height: 10.w),
+                            Text(
+                              "Address Type",
+                              style: AppStyle.textFieldTitleStyle(),
+                            ).paddingOnly(bottom: 10),
+                            _addressType(),
+                            SizedBox(height: 10.w),
+                            _receiverNameModule(),
+                            SizedBox(height: 10.w),
+                            _mobileNoModule(),
+                            SizedBox(height: 10.w),
+                            Text(
+                              "Country",
+                              style: AppStyle.textFieldTitleStyle(),
+                            ).paddingOnly(bottom: 10),
+                            _countryDropDownModule(),
+                            SizedBox(height: 10.w),
+                            Text(
+                              "State",
+                              style: AppStyle.textFieldTitleStyle(),
+                            ).paddingOnly(bottom: 10),
+                            _stateDropDownModule(),
+                            SizedBox(height: 10.w),
+                            Text(
+                              "City",
+                              style: AppStyle.textFieldTitleStyle(),
+                            ).paddingOnly(bottom: 10),
+                            _cityDropDownModule(),
+                            SizedBox(height: 10.w),
+                            _zipcodeModule(),
+                            SizedBox(height: 10.w),
+                            _latLongModule(),
+                            SizedBox(height: 10.w),
+                            AppButton(
+                              onPressed: addAddressFunction,
+                              child: Text(
+                                con.addressEnum.name == 'edit'
+                                    ? "Edit Address"
+                                    : "Add Address",
+                                style: AppStyle.mediumWhite(),
+                              ),
+                            ),
+                            SizedBox(height: 10.w)
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 10.w)
-                    ],
-                  ),
-                ),
+                )),
               ],
             ),
           );
@@ -178,9 +188,13 @@ class AddAddressScreen extends StatelessWidget {
       };
 
       print(params);
-
-      AuthRepository()
-          .addAddressApiCall(params: params, isLoader: con.isLoader);
+      if (con.addressEnum.name == "add") {
+        AuthRepository()
+            .addAddressApiCall(params: params, isLoader: con.isLoader);
+      } else {
+        AuthRepository()
+            .updateAddressApiCall(params: params, isLoader: con.isLoader,id:con.addressId.value );
+      }
     }
   }
 
@@ -229,9 +243,8 @@ class AddAddressScreen extends StatelessWidget {
             titleText: "Floor",
             hintStyle:
                 TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
-            hintText: "Enter fllor",
+            hintText: "Enter floor",
             keyboardType: TextInputType.text,
-            readOnly: false,
             onChanged: (value) {
               con.floorValidation.value = false;
             },

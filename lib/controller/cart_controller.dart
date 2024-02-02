@@ -94,7 +94,6 @@ class CartController extends GetxController {
     for (var i = 0; i < cartList.length; i++) {
       totalAmount.value = totalAmount.value + cartList[i].price!.toDouble();
     }
-    // TODO: implement onInit
     super.onInit();
   }
 }

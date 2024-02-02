@@ -22,6 +22,9 @@ class AppAssets {
   static String emptyData = '${imagesPath}empty_data.png';
   static String notificationNotFond = '${imagesPath}notification_not_fond.png';
   static String searchDataEmpty = '${imagesPath}search_empty.png';
+  static String vegImg = '${imagesPath}veg.png';
+  static String nonVegImg = '${imagesPath}non_veg.png';
+
 
   /// SVG ///
 
