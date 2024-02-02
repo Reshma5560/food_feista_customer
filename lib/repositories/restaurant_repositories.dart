@@ -25,8 +25,10 @@ class RestaurantRepository {
             con.restaurantDetails = data.data;
             con.cuisineRestaurantList.value = data.data!.cuisineRestaurant!;
             con.restaurantAmenityList.value = data.data!.restaurantAmenities!;
+            con.restaurantAmenityList.value = data.data!.restaurantAmenities!;
             con.foodList.value = data.data!.foods!;
             con.restaurantGalleryList.value = data.data!.restaurantGallery!;
+
           }
           return response;
         },

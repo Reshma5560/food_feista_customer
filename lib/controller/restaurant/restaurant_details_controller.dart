@@ -11,6 +11,7 @@ class RestaurantDetailsScreenController extends GetxController {
   RxInt selectMenu = 0.obs;
   RxBool overviewListVisible = false.obs;
   RxBool photosListVisible = false.obs;
+  RxBool isOpen = false.obs;
 
   List<String> menuList = ["ORDER ONLINE", "OVERVIEW", "REVIEW", "PHOTOS"];
 

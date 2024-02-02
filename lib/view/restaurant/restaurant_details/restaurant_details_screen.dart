@@ -11,7 +11,10 @@ import '../../../data/models/restaurant_details_model.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../res/app_appbar.dart';
 import '../../../res/app_assets.dart';
+import '../../../res/app_button.dart';
 import '../../../res/app_colors.dart';
+import '../../../res/app_style.dart';
+import '../../../res/color_print.dart';
 
 class RestaurantDetailsScreen extends StatelessWidget {
   RestaurantDetailsScreen({Key? key}) : super(key: key);
@@ -45,7 +48,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 MFNetworkImage(
-                                  imageUrl: con.restaurantDetails?.logo ?? "",
+                                  imageUrl: con.restaurantDetails?.coverPhoto ?? "",
                                   fit: BoxFit.fill,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -197,23 +200,28 @@ class RestaurantDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: item.veg == 0
-                                ? AppColors.green
-                                : AppColors.nonVegRed,
-                            width: 2,
+                      InkWell(
+                        onTap: () {
+                          _addItem(context, item: item);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: item.veg == 0
+                                  ? AppColors.green
+                                  : AppColors.nonVegRed,
+                              width: 2,
+                            ),
                           ),
+                          child: Text(
+                            "ADD".toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ).paddingSymmetric(horizontal: 10),
                         ),
-                        child: Text(
-                          "ADD".toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).paddingSymmetric(horizontal: 10),
                       ),
                     ],
                   ),
@@ -418,14 +426,13 @@ class RestaurantDetailsScreen extends StatelessWidget {
             ReviewComment item = con.restaurantReviewList[i];
             String dateString = item.createdAt.toString();
             DateTime dateTime = DateTime.parse(dateString);
-            String formattedDate =
-                DateFormat('yyyy-MM-dd').format(dateTime);
+            String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
 
             return Row(
               children: [
                 MFNetworkImage(
-                  height: 100,
-                  width: 100,
+                  height: 80,
+                  width: 80,
                   imageUrl: item.user?.image ?? "",
                   fit: BoxFit.fill,
                   borderRadius: BorderRadius.circular(10),
@@ -474,6 +481,256 @@ class RestaurantDetailsScreen extends StatelessWidget {
           itemCount: con.restaurantReviewList.length,
         ),
       ],
+    );
+  }
+
+  _addItem(BuildContext context, {required Food item}) {
+    return Get.bottomSheet(
+      isDismissible: false,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(defaultRadius * 3),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(defaultRadius * 3),
+            topRight: Radius.circular(defaultRadius * 3),
+          ),
+        ),
+        width: Get.width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: defaultPadding)
+              .copyWith(bottom: 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item.foodName ?? "",
+                      style: AppStyle.authTitleStyle()
+                          .copyWith(fontSize: 24, color: AppColors.black),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        con.isOpen.value = false;
+                        Get.back();
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: AppColors.black,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: defaultPadding - 6,
+              ),
+              Container(
+                height: 1,
+                width: Get.width,
+                color: AppColors.black,
+              ),
+              const SizedBox(
+                height: defaultPadding - 6,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      item.foodVariant!.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPadding),
+                              child: Column(
+                                children: List.generate(
+                                  item.foodVariant!.length,
+                                  (index) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.foodVariant![index]
+                                                  .variationName ??
+                                              "",
+                                          style: AppStyle.authTitleStyle()
+                                              .copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: defaultPadding - 6,
+                                        ),
+                                        Column(
+                                          children: List.generate(
+                                            item
+                                                    .foodVariant![index]
+                                                    .foodVariantOption
+                                                    ?.length ??
+                                                0,
+                                            (index1) {
+                                              var data = item
+                                                  .foodVariant![index]
+                                                  .foodVariantOption?[index1];
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: defaultPadding - 6),
+                                                child: InkWell(
+                                                  onTap: () {},
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom:
+                                                                defaultPadding),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          data?.variationOptionName ??
+                                                              "",
+                                                          style: AppStyle
+                                                                  .authTitleStyle()
+                                                              .copyWith(
+                                                            fontSize: 15,
+                                                            color:
+                                                                AppColors.black,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: defaultPadding - 6,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      (item.addons != null && item.addons!.isNotEmpty)
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: defaultPadding),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "AddOns",
+                                    style: AppStyle.authTitleStyle().copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Column(
+                                    children: List.generate(
+                                      item.addons!.length,
+                                      (index) {
+                                        var data = item.addons![index];
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              data.addonName ?? "",
+                                              style: AppStyle.authTitleStyle()
+                                                  .copyWith(
+                                                fontSize: 15,
+                                                color: AppColors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            /*Obx(
+                                              () => Transform.scale(
+                                                scale: 0.7,
+                                                child: Checkbox(
+                                                  value:
+                                                      data.isActive?.value == 1
+                                                          ? true
+                                                          : false,
+                                                  onChanged: (value) {
+                                                    if (data.isActive?.value ==
+                                                        1) {
+                                                      data.isActive?.value = 0;
+                                                      printWhite(
+                                                          data.isActive?.value);
+                                                    } else {
+                                                      data.isActive?.value = 1;
+                                                      printWhite(
+                                                          data.isActive?.value);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),*/
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          boxShadow: AppStyle.boxShadow(
+                            offset: const Offset(0, -4),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: defaultPadding),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  item.price.toString(),
+                                  style: AppStyle.authTitleStyle().copyWith(
+                                      fontSize: 24, color: AppColors.black),
+                                ),
+                              ),
+                              AppButton(
+                                width: 100,
+                                height: 30,
+                                onPressed: () {},
+                                title: "Add to cart",
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
