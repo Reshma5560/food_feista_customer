@@ -16,6 +16,7 @@ class OrderTrackScreen extends StatelessWidget {
   OrderTrackScreen({super.key});
 
   final OrderTrackController con = Get.put(OrderTrackController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +65,7 @@ class OrderTrackScreen extends StatelessWidget {
           ),
           title: "Track Order",
           centerTitle: true,
-          titleStyle: AppStyle.customAppBarTitleStyle()
-              .copyWith(color: AppColors.black, fontSize: 14)),
+          titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 14)),
     );
   }
 
@@ -78,24 +78,15 @@ class OrderTrackScreen extends StatelessWidget {
       children: [
         Text(
           "Order Summery",
-          style: TextStyle(
-              fontSize: 18,
-              color: AppColors.black,
-              fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 18, color: AppColors.black, fontWeight: FontWeight.w600),
         ),
         Text(
           "${item?.restaurant?.restaurantName}",
-          style: TextStyle(
-              fontSize: 14,
-              color: AppColors.black,
-              fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 14, color: AppColors.black, fontWeight: FontWeight.w500),
         ),
         Text(
           "${item?.restaurant?.address}",
-          style: TextStyle(
-              fontSize: 12,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Divider(
           color: AppColors.grey,
@@ -105,10 +96,7 @@ class OrderTrackScreen extends StatelessWidget {
         ),
         Text(
           "Your Order",
-          style: TextStyle(
-              fontSize: 12,
-              color: AppColors.black,
-              fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
         ),
         Divider(
           color: AppColors.grey,
@@ -118,17 +106,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Item total",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
             ),
             Text(
               "₹${item?.orderAmount}",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -144,17 +126,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Taxes",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
             Text(
               "₹0.0",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -166,17 +142,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Delivery Charge",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
             Text(
               "₹0.0",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -188,17 +158,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Restaurant Packibg Charges",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
             Text(
               "₹0.0",
-              style: TextStyle(
-                  fontSize: 12,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -210,17 +174,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Grand total",
-              style: TextStyle(
-                  fontSize: 15,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 15, color: AppColors.black, fontWeight: FontWeight.w500),
             ),
             Text(
               "₹${item?.orderAmount}",
-              style: TextStyle(
-                  fontSize: 15,
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 15, color: AppColors.black, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -232,100 +190,67 @@ class OrderTrackScreen extends StatelessWidget {
         ),
         Text(
           "Order Details",
-          style: TextStyle(
-              fontSize: 12,
-              color: AppColors.black,
-              fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
         ),
         Divider(
           color: AppColors.grey,
         ),
         Text(
           "Order Number",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
           "${item?.invoiceNumber}",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Text(
           "Payment",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
           "${item?.paymentStatus?.statusName}",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Text(
           "Date",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
-          "${DateFormat("MMMM DD,yyy").format(item!.createdAt!)} at ${DateFormat("HH:mm a").format(item.createdAt!)}",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          "${DateFormat("MMMM DD,yyy").format(item?.createdAt ?? DateTime.now())} at ${DateFormat("HH:mm a").format(item?.createdAt ?? DateTime.now())}",
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Text(
           "Phone number",
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
-          item.user!.phone!.replaceRange(6, 10, "XXXX"),
-          style: TextStyle(
-              fontSize: 10,
-              color: AppColors.black,
-              fontWeight: FontWeight.w400),
+          item?.user?.phone?.replaceRange(6, 10, "XXXX") ?? "",
+          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Visibility(
-          visible: item.deliveryAddress != null ? true : false,
+          visible: item?.deliveryAddress != null ? true : false,
           child: Text(
             "Deliver to",
-            style: TextStyle(
-                fontSize: 10,
-                color: AppColors.black,
-                fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
           ),
         ),
         Visibility(
-          visible: item.deliveryAddress != null ? true : false,
+          visible: item?.deliveryAddress != null ? true : false,
           child: Text(
-            "${item.deliveryAddress?.house ?? ""} ${item.deliveryAddress?.road ?? ""} ${item.deliveryAddress?.address}, ${item.deliveryAddress?.city?.cityName}, ${item.deliveryAddress?.state?.stateName}.",
-            style: TextStyle(
-                fontSize: 10,
-                color: AppColors.black,
-                fontWeight: FontWeight.w400),
+            "${item?.deliveryAddress?.house ?? ""} ${item?.deliveryAddress?.road ?? ""} ${item?.deliveryAddress?.address}, ${item?.deliveryAddress?.city?.cityName}, ${item?.deliveryAddress?.state?.stateName}.",
+            style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
           ),
         ),
         SizedBox(
@@ -337,19 +262,15 @@ class OrderTrackScreen extends StatelessWidget {
         Center(
           child: InkWell(
             onTap: () async {
-              Uri phoneno = Uri.parse('tel:+91${item.restaurant?.phone}');
+              Uri phoneno = Uri.parse('tel:+91${item?.restaurant?.phone}');
               if (await launchUrl(phoneno)) {
                 //dialer opened
               } else {
                 //dailer is not opened
               }
             },
-            child: Text(
-                "Call ${item.restaurant?.restaurantName} (${item.restaurant?.phone})",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(Get.context!).primaryColor,
-                    fontWeight: FontWeight.w600)),
+            child: Text("Call ${item?.restaurant?.restaurantName} (${item?.restaurant?.phone})",
+                style: TextStyle(fontSize: 14, color: Theme.of(Get.context!).primaryColor, fontWeight: FontWeight.w600)),
           ),
         ),
         Divider(
@@ -373,7 +294,7 @@ class OrderTrackScreen extends StatelessWidget {
         return Row(
           children: [
             Image.network(
-              item!.food?.image ?? "",
+              item?.food?.image ?? "",
               height: 60.h,
               width: 60.w,
               fit: BoxFit.cover,
@@ -386,16 +307,11 @@ class OrderTrackScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        item.food!.foodName ?? "",
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w400),
+                        item?.food?.foodName ?? "",
+                        style: TextStyle(fontSize: 13, color: AppColors.black, fontWeight: FontWeight.w400),
                       ),
                       Image.asset(
-                        item.food?.veg == 0
-                            ? AppAssets.nonVegImg
-                            : AppAssets.vegImg,
+                        item?.food?.veg == 0 ? AppAssets.nonVegImg : AppAssets.vegImg,
                         height: 20,
                         width: 20,
                       )
@@ -430,11 +346,8 @@ class OrderTrackScreen extends StatelessWidget {
                   //   ),
                   // ),
                   Text(
-                    "${item.quantity} X ₹${item.food?.price}",
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.black,
-                        fontWeight: FontWeight.w400),
+                    "${item?.quantity} X ₹${item?.food?.price}",
+                    style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
                   )
                 ],
               ),

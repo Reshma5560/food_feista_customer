@@ -13,7 +13,7 @@ class RestaurantDetailsScreenController extends GetxController {
   RxBool photosListVisible = false.obs;
   RxBool isOpen = false.obs;
   RxList addonsData = [].obs;
-  RxList variantData = [].obs;
+  List variantData = [];
 
   List<String> menuList = ["ORDER ONLINE", "OVERVIEW", "REVIEW", "PHOTOS"];
 
@@ -22,7 +22,7 @@ class RestaurantDetailsScreenController extends GetxController {
   RxList<CuisineRestaurant> cuisineRestaurantList = <CuisineRestaurant>[].obs;
   RxList<RestaurantAmenity> restaurantAmenityList = <RestaurantAmenity>[].obs;
   RxList<Gallery> restaurantGalleryList = <Gallery>[].obs;
-  RxList<Food> foodList = <Food>[].obs;
+  RxList<CategoryFood> categoryList = <CategoryFood>[].obs;
 
   ///review
   ReviewData? reviewData;

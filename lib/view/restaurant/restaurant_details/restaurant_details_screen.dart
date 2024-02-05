@@ -114,7 +114,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
   Widget _currentSelectedModule() {
     switch (con.menuList[con.selectMenu.value]) {
       case "ORDER ONLINE":
-        return con.foodList.isEmpty ? const Text("No food available") : _foodListModule();
+        return con.categoryList.isEmpty ? const Text("No food available") : _foodListModule();
       case "OVERVIEW":
         return _overViewListModule();
       case "REVIEW":
@@ -126,105 +126,137 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
   _foodListModule() {
     return ListView.separated(
+      padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, i) {
-        Food item = con.foodList[i];
-        return Row(
+        printWhite(con.categoryList[i].food?.length);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MFNetworkImage(
-              height: 100,
-              width: 100,
-              imageUrl: item.image ?? "",
-              fit: BoxFit.fill,
-              borderRadius: BorderRadius.circular(10),
+            Text(
+              con.categoryList[i].categoryName ?? "",
+              style: AppStyle.authTitleStyle().copyWith(fontSize: 20),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      item.veg == 0
-                          ? Image.asset(
-                              AppAssets.vegImg,
-                              height: 25,
-                            )
-                          : Image.asset(
-                              AppAssets.nonVegImg,
-                              height: 25,
-                            ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    item.foodName ?? "",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+            ListView.separated(
+                padding: EdgeInsets.zero,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  Food? item = con.categoryList[i].food?[index];
+
+                  return Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      color: AppColors.white,
+                      boxShadow: AppStyle.boxShadow(),
                     ),
-                  ),
-                  Text(
-                    item.description ?? "",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColors.searchFiledHintText,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "₹ ${item.price}",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                    child: Row(
+                      children: [
+                        MFNetworkImage(
+                          height: 100,
+                          width: 100,
+                          imageUrl: item?.image ?? "",
+                          fit: BoxFit.fill,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  item?.veg == 0
+                                      ? Image.asset(
+                                          AppAssets.vegImg,
+                                          height: 25,
+                                        )
+                                      : Image.asset(
+                                          AppAssets.nonVegImg,
+                                          height: 25,
+                                        ),
+                                ],
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                item?.foodName ?? "",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                item?.description ?? "",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: AppColors.searchFiledHintText,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "₹ ${item?.price}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      if (item!.addons!.isNotEmpty || item.addons!.isNotEmpty) {
+                                        _addItem(context, item: item);
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: item?.veg == 0 ? AppColors.green : AppColors.nonVegRed,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "ADD".toUpperCase(),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ).paddingSymmetric(horizontal: 10),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (item.addons!.isNotEmpty || item.addons!.isNotEmpty) {
-                            _addItem(context, item: item);
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: item.veg == 0 ? AppColors.green : AppColors.nonVegRed,
-                              width: 2,
-                            ),
-                          ),
-                          child: Text(
-                            "ADD".toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ).paddingSymmetric(horizontal: 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+                      ],
+                    ),
+                  );
+                },
+                separatorBuilder: (context, ind1) {
+                  return Divider(color: AppColors.allGroupsText);
+                },
+                itemCount: con.categoryList[i].food!.length),
           ],
         );
       },
-      separatorBuilder: (context, index) => Divider(color: AppColors.allGroupsText),
-      itemCount: con.foodList.length,
+      separatorBuilder: (context, ind) => const SizedBox(
+        height: defaultPadding,
+      ),
+      itemCount: con.categoryList.length,
     );
   }
 
@@ -556,10 +588,33 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                               () => InkWell(
                                                 onTap: () {
                                                   item.foodVariant?[index].isSelected?.value = index1;
-                                                  if (index1 == item.foodVariant?[index].isSelected?.value) {
-                                                    con.variantData.add(data?.id);
 
-                                                    printWhite(con.variantData);
+                                                  data?.isSelected?.value = true;
+                                                  // printWhite(index1);
+                                                  // printWhite(con.variantData);
+
+                                                  if (index1 == item.foodVariant?[index].isSelected?.value) {
+                                                    if (con.variantData.isNotEmpty) {
+                                                      for (var element in con.variantData) {
+                                                        if (element["id"] != data?.foodVariationId) {
+                                                          con.variantData.add(
+                                                            {"id": item.foodVariant?[index].id, "food_variation_id": data?.id},
+                                                          );
+                                                          printWhite("--------111----------   ${con.variantData}");
+                                                        } else {
+                                                          con.variantData.remove(element);
+                                                          printWhite("-----123-------------   ${con.variantData}");
+                                                        }
+                                                      }
+                                                    } else {
+                                                      con.variantData.add(
+                                                        {"id": item.foodVariant?[index].id, "food_variation_id": data?.id},
+                                                      );
+                                                      con.variantData.take(2);
+                                                      printWhite("------------------   ${con.variantData}");
+                                                    }
+                                                  } else {
+                                                    printWhite("------------------");
                                                   }
                                                 },
                                                 child: Padding(

@@ -116,7 +116,7 @@ class MyOrderScreen extends StatelessWidget {
                         Expanded(
                             flex: 1,
                             child: Image.network(
-                              item.restaurant.logo,
+                              item.restaurant?.logo ?? "",
                               height: 70,
                               width: 70,
                               fit: BoxFit.cover,
@@ -135,7 +135,7 @@ class MyOrderScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                       child: Text(
-                                    item.restaurant.restaurantName,
+                                    item.restaurant?.restaurantName ?? "",
                                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor),
                                   )),
                                   Text(
@@ -144,17 +144,18 @@ class MyOrderScreen extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              Text(DateFormat('DD MMM yyyy, HH:mma').format(item.createdAt),
+                              Text(DateFormat('DD MMM yyyy, HH:mma').format(item.createdAt ?? DateTime.now()),
                                   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: AppColors.black)),
-                              Text("${item.orderDetail[0].quantity} Item",
+                              Text("${item.orderDetail?[0].quantity} Item",
                                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14, color: AppColors.black)),
                               Text(
                                 "Order ID - ${item.invoiceNumber}",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text("Payment Type - ${item.paymentType.paymentTypeName}"),
-                              Text(item.orderStatus.statusName, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
+                              Text("Payment Type - ${item.paymentType?.paymentTypeName ?? ""}"),
+                              Text(item.orderStatus?.statusName ?? "",
+                                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
                             ],
                           ),
                         )

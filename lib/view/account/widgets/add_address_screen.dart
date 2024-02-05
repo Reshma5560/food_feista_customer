@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
+
 import '../../../data/models/get_city_model.dart';
 import '../../../data/models/get_country_model.dart';
 import '../../../data/models/get_state_model.dart';
@@ -37,9 +39,7 @@ class AddAddressScreen extends StatelessWidget {
             child: Column(
               children: [
                 CommonAppBar(
-                  title: con.addressEnum.name == "edit"
-                      ? "Edit Address"
-                      : "Add Address",
+                  title: con.addressEnum.name == "edit" ? "Edit Address" : "Add Address",
                   onPressed: () {
                     Get.back();
                     Get.back();
@@ -51,8 +51,7 @@ class AddAddressScreen extends StatelessWidget {
                   () => con.isLoader.value
                       ? const AppLoader()
                       : ListView(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                           physics: const AlwaysScrollableScrollPhysics(),
                           children: [
                             _floorHouseModule(),
@@ -94,9 +93,7 @@ class AddAddressScreen extends StatelessWidget {
                             AppButton(
                               onPressed: addAddressFunction,
                               child: Text(
-                                con.addressEnum.name == 'edit'
-                                    ? "Edit Address"
-                                    : "Add Address",
+                                con.addressEnum.name == 'edit' ? "Edit Address" : "Add Address",
                                 style: AppStyle.mediumWhite(),
                               ),
                             ),
@@ -164,10 +161,7 @@ class AddAddressScreen extends StatelessWidget {
       con.zipcodeError.value = "";
     }
 
-    if (con.mobileNoValidation.isFalse &&
-        con.receiveerNameValidation.isFalse &&
-        con.addressValidation.isFalse &&
-        con.zipcodeValidation.isFalse) {
+    if (con.mobileNoValidation.isFalse && con.receiveerNameValidation.isFalse && con.addressValidation.isFalse && con.zipcodeValidation.isFalse) {
       FocusScope.of(Get.context!).unfocus();
       var params = {
         "address": con.addressCon.text,
@@ -187,11 +181,9 @@ class AddAddressScreen extends StatelessWidget {
 
       print(params);
       if (con.addressEnum.name == "add") {
-        AuthRepository()
-            .addAddressApiCall(params: params, isLoader: con.isLoader);
+        AuthRepository().addAddressApiCall(params: params, isLoader: con.isLoader);
       } else {
-        AuthRepository()
-            .updateAddressApiCall(params: params, isLoader: con.isLoader,id:con.addressId.value );
+        AuthRepository().updateAddressApiCall(params: params, isLoader: con.isLoader, id: con.addressId.value);
       }
     }
   }
@@ -239,8 +231,7 @@ class AddAddressScreen extends StatelessWidget {
             errorMessage: con.floorError.value,
             showError: con.floorValidation.value,
             titleText: "Floor",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter floor",
             keyboardType: TextInputType.text,
             onChanged: (value) {
@@ -256,8 +247,7 @@ class AddAddressScreen extends StatelessWidget {
             showError: con.houseValidation.value,
             readOnly: false,
             titleText: "House",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter house",
             keyboardType: TextInputType.text,
             onChanged: (value) {
@@ -446,9 +436,7 @@ class AddAddressScreen extends StatelessWidget {
             Icons.keyboard_arrow_down_rounded,
             color: AppColors.grey,
           ),
-          items:
-              con.stateList.map<DropdownMenuItem<StateList>>((StateList value) {
-            log("value.name ${value.stateName}");
+          items: con.stateList.map<DropdownMenuItem<StateList>>((StateList value) {
             return DropdownMenuItem<StateList>(
               value: value,
               child: Text(
@@ -543,8 +531,7 @@ class AddAddressScreen extends StatelessWidget {
             errorMessage: con.latError.value,
             showError: con.latValidation.value,
             titleText: "Latitude",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter Latitude",
             keyboardType: TextInputType.number,
             readOnly: true,
@@ -568,8 +555,7 @@ class AddAddressScreen extends StatelessWidget {
             showError: con.longValidation.value,
             readOnly: true,
             titleText: "Longitude",
-            hintStyle:
-                TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
+            hintStyle: TextStyle(fontSize: 11.sp, color: AppColors.greyFontColor),
             hintText: "Enter Longitude",
             keyboardType: TextInputType.number,
             inputFormatters: [

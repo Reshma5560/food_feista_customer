@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:foodapplication/data/models/get_city_model.dart';
 import 'package:foodapplication/data/models/get_country_model.dart';
@@ -92,11 +90,10 @@ class AddAddressController extends GetxController {
       if (Get.arguments["addressType"] != null) {
         typeValue.value = Get.arguments["addressType"];
       }
-countryDropDownValue = Country(countryName: place.country).obs;
+      countryDropDownValue = Country(countryName: place.country).obs;
       floorCon.text = " ${place.subThoroughfare}";
       houseCon.text = "${place.thoroughfare}";
-      addressCon.text =
-          "${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+      addressCon.text = "${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
     }
 
     super.onInit();
@@ -108,9 +105,7 @@ countryDropDownValue = Country(countryName: place.country).obs;
 
     if (addressId.isNotEmpty) {
       await AuthRepository().getStateListOnlyCall(isLoader: isLoader);
-      log("*****************");
-      await AuthRepository().getAddressByIdApiCall(
-          isLoader: isLoader, addressId: addressId.value);
+      await AuthRepository().getAddressByIdApiCall(isLoader: isLoader, addressId: addressId.value);
     }
 
     super.onReady();

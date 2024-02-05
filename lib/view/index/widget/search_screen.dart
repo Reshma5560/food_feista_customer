@@ -11,6 +11,7 @@ import '../../../res/app_style.dart';
 import '../../../res/app_text_field.dart';
 import '../../../res/widgets/app_bar.dart';
 import '../../../res/widgets/empty_element.dart';
+import '../../../route/app_routes.dart';
 import '../../account/components/wish_list_simmer_tile.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -65,74 +66,80 @@ class SearchScreen extends StatelessWidget {
                             );
                           },
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(defaultRadius),
-                                boxShadow: AppStyle.boxShadow(),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: MFNetworkImage(
-                                      imageUrl: con.searchItemData[index].logo ?? "",
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: defaultPadding - 10).copyWith(left: defaultPadding - 6),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  con.searchItemData[index].restaurantName ?? "",
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: AppStyle.regularBlack().copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            con.searchItemData[index].phone ?? "",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppStyle.regularBlack().copyWith(
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          Text(
-                                            con.searchItemData[index].email ?? "",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppStyle.regularBlack().copyWith(
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                          Text(
-                                            con.searchItemData[index].address ?? "",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: AppStyle.regularBlack().copyWith(
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
+                            return InkWell(
+                              onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+                                con.searchItemData[index].id.toString(),
+                                con.searchItemData[index].restaurantName,
+                              ]),
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  boxShadow: AppStyle.boxShadow(),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: MFNetworkImage(
+                                        imageUrl: con.searchItemData[index].logo ?? "",
+                                        fit: BoxFit.fill,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Expanded(
+                                      flex: 2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: defaultPadding - 10).copyWith(left: defaultPadding - 6),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    con.searchItemData[index].restaurantName ?? "",
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: AppStyle.regularBlack().copyWith(
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Text(
+                                              con.searchItemData[index].phone ?? "",
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppStyle.regularBlack().copyWith(
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            Text(
+                                              con.searchItemData[index].email ?? "",
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppStyle.regularBlack().copyWith(
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            Text(
+                                              con.searchItemData[index].address ?? "",
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: AppStyle.regularBlack().copyWith(
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

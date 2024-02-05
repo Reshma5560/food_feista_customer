@@ -183,10 +183,10 @@ class CartFood {
   final String? addOns;
   final dynamic attributes;
   final dynamic choiceOptions;
-  final int? price;
+  final double? price;
   final int? tax;
   final String? taxType;
-  final int? discount;
+  final double? discount;
   final String? discountType;
   final String? availableTimeStarts;
   final String? availableTimeEnds;
@@ -260,10 +260,10 @@ class CartFood {
         addOns: json["add_ons"],
         attributes: json["attributes"],
         choiceOptions: json["choice_options"],
-        price: json["price"],
+        price: double.parse(json["price"].toString()),
         tax: json["tax"],
         taxType: json["tax_type"],
-        discount: json["discount"],
+        discount: double.parse(json["discount"].toString()),
         discountType: json["discount_type"],
         availableTimeStarts: json["available_time_starts"],
         availableTimeEnds: json["available_time_ends"],

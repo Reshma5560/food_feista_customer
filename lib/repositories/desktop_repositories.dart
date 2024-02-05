@@ -66,13 +66,13 @@ class DesktopRepository {
             GetProfileModel data = GetProfileModel.fromJson(response);
 
             con.getDataMap = data;
-            con.userApiImageFile.value = con.getDataMap?.data.image ?? "";
+            con.userApiImageFile.value = con.getDataMap?.data?.image ?? "";
 
-            con.userName.value = "${con.getDataMap?.data.firstName} ${con.getDataMap?.data.lastName}";
-            con.phoneNoName.value = con.getDataMap?.data.phone ?? "";
-            con.firstName.value = con.getDataMap?.data.firstName ?? "";
-            con.lastName.value = con.getDataMap?.data.lastName ?? "";
-            con.email.value = con.getDataMap?.data.email ?? "";
+            con.userName.value = "${con.getDataMap?.data?.firstName} ${con.getDataMap?.data?.lastName}";
+            con.phoneNoName.value = con.getDataMap?.data?.phone ?? "";
+            con.firstName.value = con.getDataMap?.data?.firstName ?? "";
+            con.lastName.value = con.getDataMap?.data?.lastName ?? "";
+            con.email.value = con.getDataMap?.data?.email ?? "";
             log("${con.getDataMap}");
           }
           return response;
@@ -81,7 +81,7 @@ class DesktopRepository {
     } on dio.DioException catch (e) {
       if (e.response?.statusCode == 404) {
         printWarning(e.response?.statusCode);
-        printError(type: this, errText: "$e");
+        printError(type: "getProfileApiCall", errText: "$e");
       }
       rethrow;
     } finally {
@@ -117,7 +117,7 @@ class DesktopRepository {
     } on dio.DioException catch (e) {
       if (e.response?.statusCode == 404) {
         printWarning(e.response?.statusCode);
-        printError(type: this, errText: "$e");
+        printError(type: "editProfileApiCall", errText: "$e");
       }
     } finally {
       isLoader?.value = false;
@@ -155,7 +155,7 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "getHomeData", errText: "$e");
     } finally {
       con.isLoading.value = false;
     }
@@ -197,7 +197,7 @@ class DesktopRepository {
         }
       }
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "getWishListAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
       con.paginationLoading.value = false;
@@ -229,18 +229,17 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "postWishListAPI", errText: "$e");
     } finally {
       printWhite("WISH LIST SUCCESS");
     }
   }
 
   //order track api call
-  Future<dynamic> orderTrackApiCall({RxBool? isLoader, required String orderId}) async {
+  Future<dynamic> orderTrackApiCall({required String orderId}) async {
     final con = Get.find<OrderTrackController>();
 
     try {
-      isLoader?.value = true;
       await APIFunction().getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId").then(
         (response) async {
           printData(key: "order track response", value: response);
@@ -255,14 +254,11 @@ class DesktopRepository {
           return response;
         },
       );
-    } on dio.DioException catch (e) {
-      if (e.response?.statusCode == 404) {
-        printWarning(e.response?.statusCode);
-        printError(type: this, errText: "$e");
-      }
-      rethrow;
+    } catch (e) {
+      printError(type: "orderTrackApiCall", errText: "$e");
     } finally {
-      isLoader?.value = false;
+      con.isLoading.value = false;
+      // con.paginationLoading.value = false;
     }
   }
 
@@ -286,14 +282,11 @@ class DesktopRepository {
           return response;
         },
       );
-    } on dio.DioException catch (e) {
-      if (e.response?.statusCode == 404) {
-        printWarning(e.response?.statusCode);
-        printError(type: this, errText: "$e");
-      }
-      rethrow;
+    } catch (e) {
+      printError(type: "getOrderApiCall", errText: "$e");
     } finally {
       con.isLoading.value = false;
+      // con.paginationLoading.value = false;
     }
   }
 
@@ -321,7 +314,7 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "getCartAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
       // con.paginationLoading.value = false;
@@ -343,7 +336,7 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "getSearchItemAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
     }
@@ -366,7 +359,7 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "getFoodItemDataAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
     }
@@ -390,7 +383,7 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "deleteCartItemAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
     }
@@ -414,7 +407,7 @@ class DesktopRepository {
         },
       );
     } catch (e) {
-      printError(type: this, errText: "$e");
+      printError(type: "deleteCartAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
     }

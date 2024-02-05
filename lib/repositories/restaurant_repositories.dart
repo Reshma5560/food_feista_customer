@@ -26,7 +26,7 @@ class RestaurantRepository {
             con.cuisineRestaurantList.value = data.data!.cuisineRestaurant!;
             con.restaurantAmenityList.value = data.data!.restaurantAmenities!;
             con.restaurantAmenityList.value = data.data!.restaurantAmenities!;
-            con.foodList.value = data.data!.foods!;
+            con.categoryList.value = data.data?.category ?? [];
             con.restaurantGalleryList.value = data.data!.restaurantGallery!;
           }
           return response;
