@@ -81,7 +81,10 @@ class RestaurantRepository {
               toast(response["message"].toString());
               await DesktopRepository().getCartAPI();
               indexCon.selectedIndex.value = 3;
-              Get.toNamed(AppRoutes.indexScreen);
+              Get.back();
+              Get.back();
+              // Get.offNamedUntil(AppRoutes.indexScreen, (route) => route.isFirst);
+              Get.offAndToNamed(AppRoutes.indexScreen);
             }
           }
           return response;

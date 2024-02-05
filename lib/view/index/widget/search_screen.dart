@@ -67,10 +67,13 @@ class SearchScreen extends StatelessWidget {
                           },
                           itemBuilder: (context, index) {
                             return InkWell(
-                              onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
-                                con.searchItemData[index].id.toString(),
-                                con.searchItemData[index].restaurantName,
-                              ]),
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                                Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+                                  con.searchItemData[index].id.toString(),
+                                  con.searchItemData[index].restaurantName,
+                                ]);
+                              },
                               child: Container(
                                 margin: const EdgeInsets.symmetric(horizontal: defaultPadding),
                                 decoration: BoxDecoration(

@@ -73,7 +73,7 @@ class OrderTrackData {
   final bool? cutlery;
   final int? distance;
   final bool? isGuest;
-  final dynamic deliveryAddress;
+  final DeliveryAddress? deliveryAddress;
   final dynamic zoneId;
   final int? dmTips;
   final dynamic taxStatus;
@@ -234,7 +234,7 @@ class OrderTrackData {
         cutlery: json["cutlery"],
         distance: json["distance"],
         isGuest: json["is_guest"],
-        deliveryAddress: json["delivery_address"],
+        deliveryAddress: json["delivery_address"] == null ? null : DeliveryAddress.fromJson(json["delivery_address"]),
         zoneId: json["zone_id"],
         dmTips: json["dm_tips"],
         taxStatus: json["tax_status"],
@@ -315,7 +315,7 @@ class OrderTrackData {
         "cutlery": cutlery,
         "distance": distance,
         "is_guest": isGuest,
-        "delivery_address": deliveryAddress,
+        "delivery_address": deliveryAddress?.toJson(),
         "zone_id": zoneId,
         "dm_tips": dmTips,
         "tax_status": taxStatus,
@@ -345,6 +345,278 @@ class OrderTrackData {
         "restaurant": restaurant?.toJson(),
         "delivery_man": deliveryMan,
         "order_detail": orderDetail == null ? [] : List<dynamic>.from(orderDetail!.map((x) => x.toJson())),
+      };
+}
+
+class DeliveryAddress {
+  final String? id;
+  final String? addressType;
+  final String? contactPersonNumber;
+  final String? address;
+  final String? latitude;
+  final String? longitude;
+  final String? userId;
+  final dynamic zoneId;
+  final String? contactPersonName;
+  final dynamic floor;
+  final dynamic road;
+  final dynamic house;
+  final int? isActive;
+  final int? isDefault;
+  final dynamic createdBy;
+  final dynamic updatedBy;
+  final dynamic deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? countryId;
+  final int? stateId;
+  final int? cityId;
+  final String? zipCode;
+  final Country? country;
+  final State? state;
+  final City? city;
+
+  DeliveryAddress({
+    this.id,
+    this.addressType,
+    this.contactPersonNumber,
+    this.address,
+    this.latitude,
+    this.longitude,
+    this.userId,
+    this.zoneId,
+    this.contactPersonName,
+    this.floor,
+    this.road,
+    this.house,
+    this.isActive,
+    this.isDefault,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.countryId,
+    this.stateId,
+    this.cityId,
+    this.zipCode,
+    this.country,
+    this.state,
+    this.city,
+  });
+
+  factory DeliveryAddress.fromJson(Map<String, dynamic> json) => DeliveryAddress(
+        id: json["id"],
+        addressType: json["address_type"],
+        contactPersonNumber: json["contact_person_number"],
+        address: json["address"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        userId: json["user_id"],
+        zoneId: json["zone_id"],
+        contactPersonName: json["contact_person_name"],
+        floor: json["floor"],
+        road: json["road"],
+        house: json["house"],
+        isActive: json["is_active"],
+        isDefault: json["is_default"],
+        createdBy: json["created_by"],
+        updatedBy: json["updated_by"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        countryId: json["country_id"],
+        stateId: json["state_id"],
+        cityId: json["city_id"],
+        zipCode: json["zip_code"],
+        country: json["country"] == null ? null : Country.fromJson(json["country"]),
+        state: json["state"] == null ? null : State.fromJson(json["state"]),
+        city: json["city"] == null ? null : City.fromJson(json["city"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "address_type": addressType,
+        "contact_person_number": contactPersonNumber,
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "user_id": userId,
+        "zone_id": zoneId,
+        "contact_person_name": contactPersonName,
+        "floor": floor,
+        "road": road,
+        "house": house,
+        "is_active": isActive,
+        "is_default": isDefault,
+        "created_by": createdBy,
+        "updated_by": updatedBy,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "country_id": countryId,
+        "state_id": stateId,
+        "city_id": cityId,
+        "zip_code": zipCode,
+        "country": country?.toJson(),
+        "state": state?.toJson(),
+        "city": city?.toJson(),
+      };
+}
+
+class City {
+  final int? id;
+  final int? stateId;
+  final String? cityName;
+  final String? latitude;
+  final String? longitude;
+  final int? isActive;
+  final dynamic createdBy;
+  final dynamic updatedBy;
+  final dynamic deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  City({
+    this.id,
+    this.stateId,
+    this.cityName,
+    this.latitude,
+    this.longitude,
+    this.isActive,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory City.fromJson(Map<String, dynamic> json) => City(
+        id: json["id"],
+        stateId: json["state_id"],
+        cityName: json["city_name"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        isActive: json["is_active"],
+        createdBy: json["created_by"],
+        updatedBy: json["updated_by"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "state_id": stateId,
+        "city_name": cityName,
+        "latitude": latitude,
+        "longitude": longitude,
+        "is_active": isActive,
+        "created_by": createdBy,
+        "updated_by": updatedBy,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class Country {
+  final int? id;
+  final String? countryName;
+  final String? shortName;
+  final String? countryCode;
+  final int? isActive;
+  final dynamic createdBy;
+  final dynamic updatedBy;
+  final dynamic deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  Country({
+    this.id,
+    this.countryName,
+    this.shortName,
+    this.countryCode,
+    this.isActive,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory Country.fromJson(Map<String, dynamic> json) => Country(
+        id: json["id"],
+        countryName: json["country_name"],
+        shortName: json["short_name"],
+        countryCode: json["country_code"],
+        isActive: json["is_active"],
+        createdBy: json["created_by"],
+        updatedBy: json["updated_by"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "country_name": countryName,
+        "short_name": shortName,
+        "country_code": countryCode,
+        "is_active": isActive,
+        "created_by": createdBy,
+        "updated_by": updatedBy,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class State {
+  final int? id;
+  final int? countryId;
+  final String? stateName;
+  final int? isActive;
+  final dynamic createdBy;
+  final dynamic updatedBy;
+  final dynamic deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  State({
+    this.id,
+    this.countryId,
+    this.stateName,
+    this.isActive,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory State.fromJson(Map<String, dynamic> json) => State(
+        id: json["id"],
+        countryId: json["country_id"],
+        stateName: json["state_name"],
+        isActive: json["is_active"],
+        createdBy: json["created_by"],
+        updatedBy: json["updated_by"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "country_id": countryId,
+        "state_name": stateName,
+        "is_active": isActive,
+        "created_by": createdBy,
+        "updated_by": updatedBy,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }
 

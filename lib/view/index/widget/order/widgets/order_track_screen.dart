@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/order_tracker_controller.dart';
+import 'package:foodapplication/packages/cached_network_image/cached_network_image.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_loader.dart';
@@ -293,8 +294,8 @@ class OrderTrackScreen extends StatelessWidget {
         var item = con.orderTrackModel.value.data?.orderDetail?[index];
         return Row(
           children: [
-            Image.network(
-              item?.food?.image ?? "",
+            MFNetworkImage(
+              imageUrl: item?.food?.image ?? "",
               height: 60.h,
               width: 60.w,
               fit: BoxFit.cover,

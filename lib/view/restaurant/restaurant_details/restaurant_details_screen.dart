@@ -589,32 +589,47 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                                 onTap: () {
                                                   item.foodVariant?[index].isSelected?.value = index1;
 
-                                                  data?.isSelected?.value = true;
-                                                  // printWhite(index1);
-                                                  // printWhite(con.variantData);
-
                                                   if (index1 == item.foodVariant?[index].isSelected?.value) {
                                                     if (con.variantData.isNotEmpty) {
-                                                      for (var element in con.variantData) {
-                                                        if (element["id"] != data?.foodVariationId) {
-                                                          con.variantData.add(
-                                                            {"id": item.foodVariant?[index].id, "food_variation_id": data?.id},
-                                                          );
-                                                          printWhite("--------111----------   ${con.variantData}");
-                                                        } else {
-                                                          con.variantData.remove(element);
-                                                          printWhite("-----123-------------   ${con.variantData}");
-                                                        }
+                                                      bool idExists = con.variantData.any((element) => element['id'] == data?.foodVariationId);
+                                                      int selIndex = con.variantData.indexWhere((element) => element["id"] == data?.foodVariationId);
+
+                                                      printWhite("--------0----------   $idExists");
+                                                      printWhite("--------1----------   $selIndex");
+
+                                                      if (idExists == false) {
+                                                        con.variantData.add(
+                                                          {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
+                                                        );
+                                                        item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
+                                                        con.variantDataForAPI.add(data?.id);
+                                                        printWhite("------------------   ${con.variantData}");
+                                                        printWhite("--------2----------   ${con.variantDataForAPI}");
+                                                      } else {
+                                                        item.totalPrice?.value =
+                                                            (item.totalPrice!.value - double.parse(con.variantData[selIndex]["price"] ?? "0"));
+                                                        con.variantData.removeAt(selIndex);
+
+                                                        con.variantDataForAPI.removeAt(selIndex);
+                                                        item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
+                                                        con.variantData.insert(
+                                                          selIndex,
+                                                          {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
+                                                        );
+                                                        con.variantDataForAPI.add(data?.id);
+                                                        printWhite("------------------   ${con.variantData}");
+                                                        printWhite("--------3----------   ${con.variantDataForAPI}");
                                                       }
                                                     } else {
                                                       con.variantData.add(
-                                                        {"id": item.foodVariant?[index].id, "food_variation_id": data?.id},
+                                                        {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
                                                       );
+                                                      item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
+                                                      con.variantDataForAPI.add(data?.id);
                                                       con.variantData.take(2);
                                                       printWhite("------------------   ${con.variantData}");
+                                                      printWhite("------------------   ${con.variantDataForAPI}");
                                                     }
-                                                  } else {
-                                                    printWhite("------------------");
                                                   }
                                                 },
                                                 child: Padding(
@@ -623,7 +638,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Text(
-                                                        data?.variationOptionName ?? "",
+                                                        "${data?.variationOptionName ?? " "} (${data?.price ?? "0"})",
                                                         style: AppStyle.authTitleStyle().copyWith(
                                                           fontSize: 15,
                                                           color: AppColors.black,
@@ -697,7 +712,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data.addonName ?? "",
+                                              "${data.addonName ?? " "}(${data.price ?? "0"})",
                                               style: AppStyle.authTitleStyle().copyWith(
                                                 fontSize: 15,
                                                 color: AppColors.black,
@@ -714,10 +729,13 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                                                     if (data.isSelected?.value == true) {
                                                       con.addonsData.add(data.id);
+                                                      item.totalPrice?.value = (item.totalPrice!.value + double.parse(data.price.toString() ?? "0"));
                                                       printWhite(con.addonsData);
                                                     } else {
                                                       if (con.addonsData.contains(data.id)) {
                                                         con.addonsData.remove(data.id);
+                                                        item.totalPrice?.value =
+                                                            (item.totalPrice!.value - double.parse(data.price.toString() ?? "0"));
                                                         printWhite(con.addonsData);
                                                       }
                                                     }
@@ -835,7 +853,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                               "food_id": item.id ?? "",
                               "total_price": item.totalPrice?.value.toString() ?? "",
                               "total_qty": item.itemCount?.value.toString() ?? "",
-                              "variant_options": [],
+                              "variant_options": con.variantDataForAPI,
                               "addons": con.addonsData,
                             },
                           );

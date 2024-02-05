@@ -20,7 +20,9 @@ import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../controller/home_controller.dart';
+import '../controller/restaurant/apply_coupon_controller.dart';
 import '../data/models/get_cart_data_model.dart';
+import '../data/models/get_cupon_model.dart';
 import '../data/models/get_food_item_data_model.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';
@@ -408,6 +410,27 @@ class DesktopRepository {
       );
     } catch (e) {
       printError(type: "deleteCartAPI", errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+    }
+  }
+
+  ///get wish list api
+  Future<dynamic> getCouponItemAPI({required String id}) async {
+    final ApplyCouponController con = Get.find<ApplyCouponController>();
+    try {
+      await APIFunction().getApiCall(apiName: "${ApiUrls.applyCouponUrl}/$id").then(
+        (response) async {
+          GetCouponModel data = GetCouponModel.fromJson(response);
+          // con.searchItemData.value = searchModel.data ?? [];
+          //
+          // printData(key: "SEARCH LIST length", value: con.searchItemData.length);
+
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: "getCouponItemAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
     }
