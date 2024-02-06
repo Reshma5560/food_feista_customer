@@ -41,10 +41,10 @@ class FoodItemData {
   final String? addOns;
   final dynamic attributes;
   final dynamic choiceOptions;
-  final int? price;
+  final double? price;
   final int? tax;
   final String? taxType;
-  final int? discount;
+  final double? discount;
   final String? discountType;
   final String? availableTimeStarts;
   final String? availableTimeEnds;
@@ -122,10 +122,10 @@ class FoodItemData {
         addOns: json["add_ons"],
         attributes: json["attributes"],
         choiceOptions: json["choice_options"],
-        price: json["price"],
+        price: double.parse(json["price"].toString()),
         tax: json["tax"],
         taxType: json["tax_type"],
-        discount: json["discount"],
+        discount: double.parse(json["discount"].toString()),
         discountType: json["discount_type"],
         availableTimeStarts: json["available_time_starts"],
         availableTimeEnds: json["available_time_ends"],
@@ -200,6 +200,7 @@ class ItemAddon {
   final int? price;
   final String? restaurantId;
   final RxInt? isActive;
+  final RxBool? isSelected;
   final dynamic createdBy;
   final dynamic updatedBy;
   final dynamic deletedAt;
@@ -212,6 +213,7 @@ class ItemAddon {
     this.price,
     this.restaurantId,
     this.isActive,
+    this.isSelected,
     this.createdBy,
     this.updatedBy,
     this.deletedAt,
@@ -225,6 +227,7 @@ class ItemAddon {
         price: json["price"],
         restaurantId: json["restaurant_id"],
         isActive: RxInt(json["is_active"]),
+        isSelected: RxBool(false),
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],

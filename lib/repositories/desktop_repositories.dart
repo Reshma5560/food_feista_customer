@@ -20,7 +20,6 @@ import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
 import '../controller/home_controller.dart';
-import '../controller/restaurant/apply_coupon_controller.dart';
 import '../data/models/get_cart_data_model.dart';
 import '../data/models/get_cupon_model.dart';
 import '../data/models/get_food_item_data_model.dart';
@@ -301,6 +300,7 @@ class DesktopRepository {
           GetCartDataModel cartDataModel = GetCartDataModel.fromJson(response);
           con.cartData.value = cartDataModel;
           con.cartItemData.value = cartDataModel.data?.cartDetails ?? [];
+          await DesktopRepository().getCouponItemAPI(id: con.cartData.value.data?.restaurantId ?? "");
           if (con.cartItemData.isNotEmpty) {
             con.totalAmount.value = 0;
             for (var i = 0; i < con.cartItemData.length; i++) {
@@ -417,14 +417,14 @@ class DesktopRepository {
 
   ///get wish list api
   Future<dynamic> getCouponItemAPI({required String id}) async {
-    final ApplyCouponController con = Get.find<ApplyCouponController>();
+    final CartController con = Get.find<CartController>();
     try {
       await APIFunction().getApiCall(apiName: "${ApiUrls.applyCouponUrl}/$id").then(
         (response) async {
           GetCouponModel data = GetCouponModel.fromJson(response);
-          // con.searchItemData.value = searchModel.data ?? [];
-          //
-          // printData(key: "SEARCH LIST length", value: con.searchItemData.length);
+          con.couponItemData.value = data.data ?? [];
+
+          printData(key: "COUPON LIST length", value: con.couponItemData.length);
 
           return response;
         },

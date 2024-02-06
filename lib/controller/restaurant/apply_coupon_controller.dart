@@ -1,4 +1,3 @@
-import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:get/get.dart';
 
 class ApplyCouponController extends GetxController {
@@ -6,7 +5,6 @@ class ApplyCouponController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    await DesktopRepository().getCouponItemAPI(id: "");
     super.onReady();
   }
 }

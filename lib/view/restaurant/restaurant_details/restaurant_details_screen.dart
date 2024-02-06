@@ -218,6 +218,17 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                     onTap: () {
                                       if (item!.addons!.isNotEmpty || item.addons!.isNotEmpty) {
                                         _addItem(context, item: item);
+                                      } else {
+                                        RestaurantRepository().addToCartItemAPI(
+                                          params: {
+                                            "restaurant_id": con.restaurantDetails?.id ?? "",
+                                            "food_id": item.id ?? "",
+                                            "total_price": item.totalPrice?.value.toString() ?? "",
+                                            "total_qty": item.itemCount?.value.toString() ?? "",
+                                            "variant_options": con.variantDataForAPI,
+                                            "addons": con.addonsData,
+                                          },
+                                        );
                                       }
                                     },
                                     child: Container(
@@ -846,8 +857,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
                       AppButton(
                         width: 100,
                         height: 30,
-                        onPressed: () {
-                          RestaurantRepository().addToCartItemAPI(
+                        onPressed: () async {
+                          await RestaurantRepository().addToCartItemAPI(
                             params: {
                               "restaurant_id": con.restaurantDetails?.id ?? "",
                               "food_id": item.id ?? "",
@@ -857,6 +868,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                               "addons": con.addonsData,
                             },
                           );
+                          Get.back();
                         },
                         title: "Add to cart",
                       )

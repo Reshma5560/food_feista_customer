@@ -144,7 +144,7 @@ class AppDialogs {
               Padding(
                 padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
                 child: Text(
-                  'Delete Cart!',
+                  'Delete Cart Item!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.sp,

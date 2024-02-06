@@ -2,7 +2,6 @@ import 'package:dio/dio.dart' as dio;
 import 'package:foodapplication/controller/index_controller.dart';
 import 'package:foodapplication/controller/restaurant/restaurant_details_controller.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
-import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../data/api/api_function.dart';
@@ -80,11 +79,10 @@ class RestaurantRepository {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
               await DesktopRepository().getCartAPI();
-              indexCon.selectedIndex.value = 3;
-              Get.back();
-              Get.back();
+              // indexCon.selectedIndex.value = 3;
+              //
               // Get.offNamedUntil(AppRoutes.indexScreen, (route) => route.isFirst);
-              Get.offAndToNamed(AppRoutes.indexScreen);
+              // Get.back();
             }
           }
           return response;

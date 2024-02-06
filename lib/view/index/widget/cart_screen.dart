@@ -5,7 +5,6 @@ import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
-import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/widgets/app_bar.dart';
 import 'package:foodapplication/res/widgets/empty_element.dart';
 import 'package:get/get.dart';
@@ -39,249 +38,406 @@ class CartScreen extends StatelessWidget {
               children: [
                 _appHeader(context),
                 Expanded(
-                  child: Obx(
-                    () => con.isLoading.isFalse
-                        ? con.cartItemData.isNotEmpty
-                            ? RefreshIndicator(
-                                onRefresh: () async {
-                                  con.totalAmount.value = 0.0;
-                                  await DesktopRepository().getCartAPI();
-                                },
-                                child: ListView.separated(
-                                  separatorBuilder: (context, index) {
-                                    return const SizedBox(
-                                      height: defaultPadding - 6,
-                                    );
-                                  },
-                                  padding: const EdgeInsets.only(top: 10, bottom: 0),
-                                  itemCount: con.cartItemData.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    var item = con.cartItemData[index];
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      con.totalAmount.value = 0.0;
+                      await DesktopRepository().getCartAPI();
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Obx(
+                            () => con.isLoading.isFalse
+                                ? con.cartItemData.isNotEmpty
+                                    ? ListView.separated(
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        separatorBuilder: (context, index) {
+                                          return const SizedBox(
+                                            height: defaultPadding - 6,
+                                          );
+                                        },
+                                        padding: const EdgeInsets.only(top: 10, bottom: 0),
+                                        itemCount: con.cartItemData.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          var item = con.cartItemData[index];
 
-                                    return Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: defaultPadding - 6),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.white,
-                                        boxShadow: AppStyle.boxShadow(),
-                                        borderRadius: BorderRadius.circular(defaultRadius),
-                                      ),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: MFNetworkImage(
-                                              height: 100,
-                                              // backgroundColor: Colors.grey,
-                                              imageUrl: item.food?.image ?? "",
-                                              fit: BoxFit.cover,
-                                              shape: BoxShape.rectangle,
+                                          return Container(
+                                            margin: const EdgeInsets.symmetric(horizontal: defaultPadding - 6),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.white,
+                                              boxShadow: AppStyle.boxShadow(),
                                               borderRadius: BorderRadius.circular(defaultRadius),
                                             ),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(defaultPadding - 6),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        item.food?.foodName ?? "",
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.w600, fontSize: 20, color: Theme.of(context).primaryColor),
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment.topRight,
-                                                            child: InkWell(
-                                                              onTap: () async {
-                                                                if (con.isOpen.isFalse) {
-                                                                  con.isOpen.value = true;
-
-                                                                  await DesktopRepository().getFoodItemDataAPI(id: item.foodId ?? "").then((value) {
-                                                                    _editItem(context, data: item);
-                                                                  });
-                                                                }
-                                                              },
-                                                              child: Icon(
-                                                                Icons.edit,
-                                                                color: Theme.of(context).primaryColor,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 10.w,
-                                                          ),
-                                                          Align(
-                                                            alignment: Alignment.topRight,
-                                                            child: InkWell(
-                                                              onTap: () async {
-                                                                AppDialogs.deleteCartItemDialog(
-                                                                  context,
-                                                                  deleteOnTap: () async {
-                                                                    Get.back();
-                                                                    await DesktopRepository().deleteCartItemAPI(id: item.id ?? "", index: index);
-                                                                  },
-                                                                );
-                                                              },
-                                                              child: Icon(
-                                                                Icons.delete_outlined,
-                                                                color: Theme.of(context).primaryColor,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                            child: Row(
+                                              // mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: MFNetworkImage(
+                                                    height: 100,
+                                                    // backgroundColor: Colors.grey,
+                                                    imageUrl: item.food?.image ?? "",
+                                                    fit: BoxFit.cover,
+                                                    shape: BoxShape.rectangle,
+                                                    borderRadius: BorderRadius.circular(defaultRadius),
                                                   ),
-                                                  const SizedBox(
-                                                    height: defaultPadding - 6,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Obx(
-                                                        () => Text(
-                                                          item.totalPrice?.value == double.parse(item.price ?? "0")
-                                                              ? "₹${item.price?.toString()}"
-                                                              : "₹${item.totalPrice?.value}",
-                                                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(defaultPadding - 6),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              item.food?.foodName ?? "",
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.w600, fontSize: 20, color: Theme.of(context).primaryColor),
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                // Align(
+                                                                //   alignment: Alignment.topRight,
+                                                                //   child: InkWell(
+                                                                //     onTap: () async {
+                                                                //       if (con.isOpen.isFalse) {
+                                                                //         con.isOpen.value = true;
+                                                                //
+                                                                //         await DesktopRepository().getFoodItemDataAPI(id: item.foodId ?? "").then(
+                                                                //           (value) {
+                                                                //             _editItem(context, data: item);
+                                                                //           },
+                                                                //         );
+                                                                //       }
+                                                                //     },
+                                                                //     child: Icon(
+                                                                //       Icons.edit,
+                                                                //       color: Theme.of(context).primaryColor,
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
+                                                                // SizedBox(
+                                                                //   width: 10.w,
+                                                                // ),
+                                                                Align(
+                                                                  alignment: Alignment.topRight,
+                                                                  child: InkWell(
+                                                                    onTap: () async {
+                                                                      if (con.cartItemData.length == 1) {
+                                                                        AppDialogs.deleteCartDialog(
+                                                                          context,
+                                                                          deleteOnTap: () async {
+                                                                            await DesktopRepository()
+                                                                                .deleteCartAPI(id: con.cartData.value.data?.id ?? "");
+                                                                          },
+                                                                        );
+                                                                      } else {
+                                                                        AppDialogs.deleteCartItemDialog(
+                                                                          context,
+                                                                          deleteOnTap: () async {
+                                                                            Get.back();
+                                                                            await DesktopRepository()
+                                                                                .deleteCartItemAPI(id: item.id ?? "", index: index);
+                                                                          },
+                                                                        );
+                                                                      }
+                                                                    },
+                                                                    child: Icon(
+                                                                      Icons.delete_outlined,
+                                                                      color: Theme.of(context).primaryColor,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              if (item.itemCount!.value < item.quantity!.toInt()) {
-                                                              } else {
-                                                                item.itemCount?.value--;
-                                                                item.totalPrice?.value = (item.totalPrice!.value - double.parse(item.price ?? "0"));
-
-                                                                con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
-                                                              }
-                                                            },
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(8),
-                                                              decoration: BoxDecoration(
-                                                                  color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
-                                                              child: Icon(
-                                                                Icons.remove,
-                                                                size: 15,
-                                                                color: AppColors.white,
+                                                        const SizedBox(
+                                                          height: defaultPadding - 6,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Obx(
+                                                              () => Text(
+                                                                item.totalPrice?.value == double.parse(item.price ?? "0")
+                                                                    ? "₹${item.price?.toString()}"
+                                                                    : "₹${item.totalPrice?.value}",
+                                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
                                                               ),
                                                             ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Obx(
-                                                            () => Text(
-                                                              item.itemCount?.value.toString() ?? "",
-                                                              style: const TextStyle(fontWeight: FontWeight.w700),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              if (item.itemCount!.value >= item.food!.maximumCartQuantity!.toInt()) {
-                                                              } else {
-                                                                // itemCount++;
-                                                                item.itemCount?.value++;
-                                                                item.totalPrice?.value = (item.totalPrice!.value + double.parse(item.price ?? "0"));
+                                                            Row(
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    if (item.itemCount!.value == 1) {
+                                                                    } else {
+                                                                      item.itemCount?.value--;
+                                                                      item.totalPrice?.value =
+                                                                          (item.totalPrice!.value - double.parse(item.price ?? "0"));
 
-                                                                con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
-                                                              }
-                                                            },
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(8),
-                                                              decoration: BoxDecoration(
-                                                                  color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
-                                                              child: Icon(
-                                                                Icons.add,
-                                                                size: 15,
-                                                                color: AppColors.white,
-                                                              ),
+                                                                      con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
+                                                                    }
+                                                                  },
+                                                                  child: Container(
+                                                                    padding: const EdgeInsets.all(8),
+                                                                    decoration: BoxDecoration(
+                                                                        color: Theme.of(context).primaryColor,
+                                                                        borderRadius: BorderRadius.circular(25)),
+                                                                    child: Icon(
+                                                                      Icons.remove,
+                                                                      size: 15,
+                                                                      color: AppColors.white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Obx(
+                                                                  () => Text(
+                                                                    item.itemCount?.value.toString() ?? "",
+                                                                    style: const TextStyle(fontWeight: FontWeight.w700),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    if (item.itemCount!.value >= item.food!.maximumCartQuantity!.toInt()) {
+                                                                    } else {
+                                                                      // itemCount++;
+                                                                      item.itemCount?.value++;
+                                                                      item.totalPrice?.value =
+                                                                          (item.totalPrice!.value + double.parse(item.price ?? "0"));
+
+                                                                      con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
+                                                                    }
+                                                                  },
+                                                                  child: Container(
+                                                                    padding: const EdgeInsets.all(8),
+                                                                    decoration: BoxDecoration(
+                                                                        color: Theme.of(context).primaryColor,
+                                                                        borderRadius: BorderRadius.circular(25)),
+                                                                    child: Icon(
+                                                                      Icons.add,
+                                                                      size: 15,
+                                                                      color: AppColors.white,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            : RefreshIndicator(
-                                onRefresh: () async {
-                                  con.totalAmount.value = 0.0;
-                                  await DesktopRepository().getCartAPI();
-                                },
-                                child: ListView(
+                                          );
+                                        },
+                                      )
+                                    : EmptyElement(
+                                        height: Get.height / 2,
+                                        spacing: 0,
+                                        title: AppStrings.cartNotFoundTitle,
+                                        subtitle: AppStrings.cartListNotFoundSubtitle,
+                                      )
+                                : const AppLoader(),
+                          ),
+                          Obx(
+                            () => SizedBox(
+                              height: con.cartItemData.length <= 2 ? Get.height / 5 : 0,
+                            ),
+                          ),
+                          // Obx(
+                          //   () => con.cartItemData.isNotEmpty
+                          //       ? Padding(
+                          //           padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 6).copyWith(top: defaultPadding),
+                          //           child: AppTextField(
+                          //             hintText: "Enter Coupon Code",
+                          //             hintStyle: TextStyle(
+                          //               color: Theme.of(context).primaryColor.withOpacity(0.5),
+                          //             ),
+                          //             readOnly: true,
+                          //             enabled: false,
+                          //             controller: con.couponController.value,
+                          //             fillColor: Theme.of(context).colorScheme.background,
+                          //             suffixIcon: Padding(
+                          //               padding: const EdgeInsets.all(8),
+                          //               child: AppButton(
+                          //                 width: 100,
+                          //                 height: 40,
+                          //                 title: "APPLY",
+                          //                 onPressed: () {},
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         )
+                          //       : const SizedBox.shrink(),
+                          // ),
+
+                          Obx(
+                            () => con.couponItemData.isNotEmpty
+                                ? ListView.separated(
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        height: 20,
+                                        padding: const EdgeInsets.all(10),
+                                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.background,
+                                          borderRadius: BorderRadius.circular(defaultRadius),
+                                        ),
+                                        child: Column(
+                                          children: [],
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return const SizedBox(
+                                        height: defaultPadding - 6,
+                                      );
+                                    },
+                                    itemCount: con.couponItemData.length,
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: defaultPadding - 6,
+                              vertical: defaultPadding - 6,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: defaultPadding,
+                              vertical: defaultPadding,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: BorderRadius.circular(defaultRadius),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    EmptyElement(
-                                      height: Get.height / 1.8,
-                                      imageHeight: Get.width / 2.4,
-                                      imageWidth: Get.width / 2,
-                                      spacing: 0,
-                                      title: AppStrings.wishListNotFoundTitle,
-                                      subtitle: AppStrings.wishListNotFoundSubtitle,
+                                    Text(
+                                      "Order Total".toUpperCase(),
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                                    ),
+                                    Obx(
+                                      () => Text(
+                                        "₹${con.totalAmount.value}",
+                                        style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              )
-                        : const AppLoader(),
+                                const SizedBox(
+                                  height: defaultPadding - 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Delivery Fee".toUpperCase(),
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "₹ 00",
+                                      style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: defaultPadding - 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Coupon Discount".toUpperCase(),
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "₹ 00",
+                                      style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: defaultPadding - 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Tax & charges".toUpperCase(),
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                      "₹ 00",
+                                      style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: defaultPadding - 10,
+                                ),
+                                Divider(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                const SizedBox(
+                                  height: defaultPadding - 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Tax & charges".toUpperCase(),
+                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                                    ),
+                                    Text(
+                                      "₹ 00",
+                                      style: AppStyle.authTitleStyle().copyWith(fontSize: 15.sp),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Obx(
+                            () => con.cartItemData.isNotEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.all(defaultPadding - 6).copyWith(bottom: 20),
+                                    child: AppButton(
+                                      onPressed: () {},
+                                      title: "Process To Checkout".toUpperCase(),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           );
         },
-      ),
-      bottomNavigationBar: Obx(
-        () => con.cartItemData.isNotEmpty
-            ? Container(
-                height: 60,
-                width: Get.width,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  boxShadow: AppStyle.boxShadow(
-                    offset: const Offset(0, -2),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "₹${con.totalAmount.value}",
-                        style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
-                      ),
-                    ),
-                    AppButton(
-                      width: 100,
-                      height: 30,
-                      onPressed: () {},
-                      title: "Continue",
-                    )
-                  ],
-                ),
-              )
-            : const SizedBox.shrink(),
       ),
     );
   }
@@ -412,7 +568,7 @@ class CartScreen extends StatelessWidget {
                                           children: List.generate(
                                             con.foodItemVariantData[index].foodVariantOption?.length ?? 0,
                                             (index1) {
-                                              var data = con.foodItemVariantData[index].foodVariantOption?[index1];
+                                              var variantData = con.foodItemVariantData[index].foodVariantOption?[index1];
                                               return Padding(
                                                 padding: const EdgeInsets.only(right: defaultPadding - 6),
                                                 child: InkWell(
@@ -423,7 +579,7 @@ class CartScreen extends StatelessWidget {
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Text(
-                                                          data?.variationOptionName ?? "",
+                                                          variantData?.variationOptionName ?? "",
                                                           style: AppStyle.authTitleStyle().copyWith(
                                                             fontSize: 15,
                                                             color: AppColors.black,
@@ -483,12 +639,12 @@ class CartScreen extends StatelessWidget {
                                     children: List.generate(
                                       con.foodItemAddonData.length,
                                       (index) {
-                                        var data = con.foodItemAddonData[index];
+                                        var addonsData = con.foodItemAddonData[index];
                                         return Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              data.addonName ?? "",
+                                              "${addonsData.addonName ?? " "}(${addonsData.price ?? "0"})",
                                               style: AppStyle.authTitleStyle().copyWith(
                                                 fontSize: 15,
                                                 color: AppColors.black,
@@ -499,15 +655,25 @@ class CartScreen extends StatelessWidget {
                                               () => Transform.scale(
                                                 scale: 0.7,
                                                 child: Checkbox(
-                                                  value: data.isActive?.value == 1 ? true : false,
+                                                  value: addonsData.isSelected?.value,
                                                   onChanged: (value) {
-                                                    if (data.isActive?.value == 1) {
-                                                      data.isActive?.value = 0;
-                                                      printWhite(data.isActive?.value);
+                                                    addonsData.isSelected?.value = !addonsData.isSelected!.value;
+                                                    if (addonsData.isSelected?.value == true) {
+                                                      // data.totalPrice?.value = (data.totalPrice!.value + double.parse(data.price ?? "0"));
+
+                                                      con.totalAmount.value = con.totalAmount.value + double.parse(addonsData.price.toString());
+                                                      data.totalPrice?.value = (data.totalPrice!.value + double.parse(addonsData.price.toString()));
+                                                      // printWhite(con.addonsData);
                                                     } else {
-                                                      data.isActive?.value = 1;
-                                                      printWhite(data.isActive?.value);
+                                                      data.totalPrice?.value = (data.totalPrice!.value - double.parse(addonsData.price.toString()));
                                                     }
+                                                    // if (data.isActive?.value == 1) {
+                                                    //   data.isActive?.value = 0;
+                                                    //   printWhite(data.isActive?.value);
+                                                    // } else {
+                                                    //   data.isActive?.value = 1;
+                                                    //   printWhite(data.isActive?.value);
+                                                    // }
                                                   },
                                                 ),
                                               ),
@@ -521,34 +687,34 @@ class CartScreen extends StatelessWidget {
                               ),
                             )
                           : const SizedBox.shrink(),
-                      Container(
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          boxShadow: AppStyle.boxShadow(
-                            offset: const Offset(0, -4),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  "₹${data.price.toString()}",
-                                  style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
-                                ),
-                              ),
-                              AppButton(
-                                width: 100,
-                                height: 30,
-                                onPressed: () {},
-                                title: "Continue",
-                              )
-                            ],
-                          ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  boxShadow: AppStyle.boxShadow(
+                    offset: const Offset(0, -4),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "₹${data.price.toString()}",
+                          style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
                         ),
                       ),
+                      AppButton(
+                        width: 100,
+                        height: 30,
+                        onPressed: () {},
+                        title: "Continue",
+                      )
                     ],
                   ),
                 ),
