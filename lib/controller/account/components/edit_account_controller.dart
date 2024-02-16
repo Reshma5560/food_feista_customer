@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:foodapplication/res/app_colors.dart';
+import 'package:foodapplication/res/color_print.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,6 +25,7 @@ class EditAccountController extends GetxController {
   RxBool isLoader = false.obs;
   RxBool isLoading = false.obs;
   RxString imagePath = "".obs;
+  File? apiImage;
 
   showImagePickerBottomSheet() {
     showModalBottomSheet<dynamic>(
@@ -45,8 +49,7 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.camera_alt_rounded,
                 color: AppColors.grey,
@@ -60,8 +63,7 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.perm_media_rounded,
                 color: AppColors.grey,
@@ -75,8 +77,7 @@ class EditAccountController extends GetxController {
             ),
             ListTile(
               dense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 3),
               leading: Icon(
                 Icons.close,
                 color: AppColors.grey,
@@ -95,9 +96,14 @@ class EditAccountController extends GetxController {
 
   selectImage({bool pickFromCamera = false}) async {
     XFile? pickedImage = await ImagePicker().pickImage(
-        source:
-            pickFromCamera == true ? ImageSource.camera : ImageSource.gallery);
+      source: pickFromCamera == true ? ImageSource.camera : ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+
     if (pickedImage != null) {
+      apiImage = File(pickedImage.path);
+      printYellow("---------------------  ${apiImage}");
       imagePath.value = pickedImage.path;
     }
   }

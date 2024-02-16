@@ -53,7 +53,7 @@ class AppStrings {
   static String notificationNotFoundSubtitle = "We'll notify you when something arrives.";
   static String wishListNotFoundTitle = "No Favorite";
   static String wishListNotFoundSubtitle = "We'll notify you when something arrives.";
-  static String cartNotFoundTitle = "No Item";
+  static String cartNotFoundTitle = "Cart is Empty";
   static String cartListNotFoundSubtitle = "We'll notify you when something arrives.";
   static String searchNotFoundTitle = "No Search Item";
   static String searchListNotFoundSubtitle = "Please search your favourite restaurant or food.";

@@ -11,7 +11,6 @@ import 'package:foodapplication/view/auth/components/auth_header.dart';
 import 'package:foodapplication/view/gradient_container/gradient_container.dart';
 import 'package:get/get.dart';
 
-
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});
 
@@ -25,7 +24,7 @@ class ForgotPasswordScreen extends StatelessWidget {
         body: GradientContainer(
           child: Column(
             children: [
-              const AuthHeader(),
+              AuthHeader(),
               Expanded(
                 child: Stack(
                   children: [
@@ -40,20 +39,18 @@ class ForgotPasswordScreen extends StatelessWidget {
                           child: Obx(
                             () => ListView(
                               padding: EdgeInsets.all(defaultPadding.w),
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                               physics: const RangeMaintainingScrollPhysics(),
                               children: [
-                                SizedBox(
-                                    height: double.parse(value.toString())),
+                                SizedBox(height: double.parse(value.toString())),
                                 Text(
                                   "Forgot Password",
                                   style: AppStyle.authTitleStyle(),
                                 ),
                                 SizedBox(height: defaultPadding.w),
                                 Text(
-                                 "Enter your email and we will send you instruction to reset your password.",
-                                   style: AppStyle.authSubtitleStyle(),
+                                  "Enter your email and we will send you instruction to reset your password.",
+                                  style: AppStyle.authSubtitleStyle(),
                                 ),
                                 SizedBox(height: defaultPadding.w),
                                 AppTextField(
@@ -67,19 +64,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                                     con.emailValidation.value = false;
                                   },
                                 ),
-                                SizedBox(
-                                    height: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom +
-                                        defaultPadding.w * 3),
+                                SizedBox(height: MediaQuery.of(context).viewInsets.bottom + defaultPadding.w * 3),
                                 Obx(
                                   () => TweenAnimationBuilder(
-                                    duration:
-                                        const Duration(milliseconds: 1000),
+                                    duration: const Duration(milliseconds: 1000),
                                     curve: Curves.elasticOut,
-                                    tween: con.buttonPress.value
-                                        ? Tween(begin: 0.9, end: 0.97)
-                                        : Tween(begin: 1.0, end: 1.0),
+                                    tween: con.buttonPress.value ? Tween(begin: 0.9, end: 0.97) : Tween(begin: 1.0, end: 1.0),
                                     builder: (context, value, child) {
                                       return Transform.scale(
                                         scale: value,
@@ -93,39 +83,22 @@ class ForgotPasswordScreen extends StatelessWidget {
                                             onPressed: () {
                                               if (con.isLoading.isFalse) {
                                                 /// Email validation
-                                                if (con.emailCon.value.text
-                                                    .trim()
-                                                    .isEmpty) {
-                                                  con.emailValidation.value =
-                                                      true;
-                                                  con.emailError.value =
-                                                      "Please enter your email address.";
-                                                } else if (Helper.isEmail(con
-                                                        .emailCon.value.text
-                                                        .trim()) !=
-                                                    true) {
-                                                  con.emailValidation.value =
-                                                      true;
-                                                  con.emailError.value =
-                                                      "Please enter valid email address.";
+                                                if (con.emailCon.value.text.trim().isEmpty) {
+                                                  con.emailValidation.value = true;
+                                                  con.emailError.value = "Please enter your email address.";
+                                                } else if (Helper.isEmail(con.emailCon.value.text.trim()) != true) {
+                                                  con.emailValidation.value = true;
+                                                  con.emailError.value = "Please enter valid email address.";
                                                 } else {
-                                                  con.emailValidation.value =
-                                                      false;
+                                                  con.emailValidation.value = false;
                                                 }
 
-                                             
-
-                                                if (con
-                                                    .emailValidation.isFalse) {
-                                                  FocusScope.of(context)
-                                                      .unfocus();
+                                                if (con.emailValidation.isFalse) {
+                                                  FocusScope.of(context).unfocus();
                                                   AuthRepository().forgotPasswordApiCall(
                                                     isLoader: con.isLoading,
                                                     params: {
-                                                      "email": con
-                                                          .emailCon.value.text
-                                                          .trim(),
-                                                     
+                                                      "email": con.emailCon.value.text.trim(),
                                                     },
                                                   );
                                                 }

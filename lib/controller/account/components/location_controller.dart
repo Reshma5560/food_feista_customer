@@ -28,8 +28,7 @@ class LocationController extends GetxController {
 
     // Reverse geocoding to get address from tapped location
     try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
       place = placemarks.first;
       latValue.value = latLng.latitude.toString();
       longValue.value = latLng.longitude.toString();
@@ -59,8 +58,10 @@ class LocationController extends GetxController {
 
       if (Get.arguments["lat"] != null && Get.arguments["long"] != null) {
         double lat, long;
-        lat = double.parse(Get.arguments["lat"]);
-        long = double.parse(Get.arguments["long"]);
+
+        printWhite(Get.arguments["lat"]);
+        lat = double.parse(Get.arguments["lat"].toString());
+        long = double.parse(Get.arguments["long"].toString());
         log("$lat $long");
         handleTap(LatLng(lat, long));
       }

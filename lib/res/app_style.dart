@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import 'app_colors.dart';
 
-const double defaultPadding = 20.0;
-const double defaultRadius = 6.0;
+const double defaultPadding = 16.0;
+const double defaultRadius = 8.0;
 
 class AppStyle {
   //* Regular ///
@@ -85,6 +86,7 @@ class AppStyle {
           offset: offset ?? const Offset(0, 3),
         ),
       ];
+
   static Widget simmerContainer({double? height, double? width, double? borderRadius, Widget? child, Decoration? decoration}) => Container(
         height: height,
         width: width,

@@ -2,6 +2,8 @@ import 'package:foodapplication/data/models/get_order_model.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:get/get.dart';
 
+import '../utils/local_storage.dart';
+
 class MyOrderController extends GetxController {
   GetOrderModel getOrderModel = GetOrderModel();
 
@@ -10,7 +12,9 @@ class MyOrderController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    await DesktopRepository().getOrderApiCall();
+    if (LocalStorage.token.value.isNotEmpty) {
+      await DesktopRepository().getOrderApiCall();
+    }
     super.onReady();
   }
 }

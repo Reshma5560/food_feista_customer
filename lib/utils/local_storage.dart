@@ -17,26 +17,22 @@ class Prefs {
   static const String isUserVerify = "USER_VERIFY";
   static const String isUserCity = "USER_CITY";
 
+  static const String userEmail = "USER_EMAIL";
+  static const String userPassword = "USER_PASSWORD";
+  static const String rememberMe = "REMEMBER_ME";
+
   static const String deviceId = "DEVICE_ID";
   static const String deviceType = "DEVICE_TYPE";
   static const String deviceFCMToken = "DEVICE_FCM_TOKEN";
-
-// static const String isGuestUser = "GUEST_USER";
-// static const String showPreview = "SHOW_PREVIEW";
-// static const String likeConcept = "LIKE_CONCEPT";
-//
-// static const String privacyPolicyLink = "PRIVACY_POLICY_LINK";
-// static const String termsAndConditionsLink = "TERMS_AND_CONDITIONS_LINK";
-// static const String faqLink = "FAQ_LINK";
-// static const String aboutUsLink = "ABOUT_US_LINK";
-// static const String playStoreLink = "PLAY_STORE_LINK";
-// static const String appStoreLink = "APP_STORE_LINK";
 }
 
 class LocalStorage {
   static GetStorage prefs = GetStorage();
 
   static RxString token = "".obs;
+  static RxString email = "".obs;
+  static RxString password = "".obs;
+  static RxBool isRemember = false.obs;
   static RxString userId = "".obs;
   static RxString roleSlags = "".obs;
   static RxString firstName = "".obs;
@@ -53,7 +49,6 @@ class LocalStorage {
 
   static Future storeDataInfo({required Map<String, dynamic> data}) async {
     prefs.write(Prefs.userId, data['id'] ?? "");
-    // prefs.write(Prefs.roleSlags, data['role']["role_slug"] ?? "");
     prefs.write(Prefs.firstName, data['first_name'] ?? "");
     prefs.write(Prefs.lastName, data['last_name'] ?? "");
     prefs.write(Prefs.userImage, data['image'] ?? "");
@@ -89,30 +84,17 @@ class LocalStorage {
   //   appStoreLink.value = prefs.read(Prefs.appStoreLink) ?? "";
   // }
 
-  Future updateUserInfo({String? fistNaMEe, String? lastNaME, String? userImaGE}) async {
-    if (!isValEmpty(fistNaMEe)) {
-      await prefs.write(Prefs.firstName, fistNaMEe);
-      firstName.value = prefs.read(Prefs.firstName) ?? "";
-    }
-    if (!isValEmpty(lastNaME)) {
-      await prefs.write(Prefs.lastName, lastNaME);
-      lastName.value = prefs.read(Prefs.lastName) ?? "";
-    }
-    if (!isValEmpty(userImaGE)) {
-      await prefs.write(Prefs.userImage, userImaGE);
-      userImage.value = prefs.read(Prefs.userImage) ?? "";
-    }
-  }
+  static Future<void> setLoginInfo({required String userEmail, required String userPassword, required bool remember}) async {
+    await prefs.write(Prefs.userEmail, userEmail.isNotEmpty ? userEmail : email);
+    await prefs.write(Prefs.userPassword, userPassword.isNotEmpty ? userPassword : password);
+    await prefs.write(Prefs.rememberMe, remember);
+    email.value = prefs.read(Prefs.userEmail) ?? "";
+    password.value = prefs.read(Prefs.userPassword) ?? "";
+    isRemember.value = prefs.read(Prefs.rememberMe) ?? false;
 
-  // static Future<void> updateTipLikeStatus({required bool? likeConcePT}) async {
-  //   await prefs.write(Prefs.likeConcept, likeConcePT ?? true);
-  //   likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
-  // }
-  //
-  // static Future<void> updatePreviewStatus({required bool? showPreviEW}) async {
-  //   await prefs.write(Prefs.showPreview, showPreviEW ?? true);
-  //   showPreview.value = prefs.read(Prefs.showPreview) ?? true;
-  // }
+    printData(key: "User EMAIL", value: LocalStorage.email.value);
+    printData(key: "User PASSWORD", value: LocalStorage.password.value);
+  }
 
   static Future<void> setLoginToken({required String userToken}) async {
     await prefs.write(Prefs.token, userToken.isNotEmpty ? userToken : token);
@@ -122,8 +104,6 @@ class LocalStorage {
   static Future<void> setCity({required String city}) async {
     await prefs.write(Prefs.isUserCity, city.isNotEmpty ? city : userCity);
     userCity.value = prefs.read(Prefs.isUserCity) ?? "";
-
-    printAction("------${userCity.value}");
   }
 
   /// Store device info
@@ -161,6 +141,12 @@ class LocalStorage {
     isUserActive = false.obs;
     isUserVerify = false.obs;
 
+    if (isRemember.isFalse) {
+      email.value = "";
+      password.value = "";
+      isRemember.value = false;
+    }
+
     // isGuestUser = true.obs;
     // showPreview = true.obs;
     // likeConcept = true.obs;
@@ -183,6 +169,9 @@ class LocalStorage {
     isUserActive.value = prefs.read(Prefs.isUserActive) ?? false;
     isUserVerify.value = prefs.read(Prefs.isUserVerify) ?? false;
     userCity.value = prefs.read(Prefs.isUserCity) ?? "";
+    email.value = prefs.read(Prefs.userEmail) ?? "";
+    password.value = prefs.read(Prefs.userPassword) ?? "";
+    isRemember.value = prefs.read(Prefs.rememberMe) ?? false;
     // isGuestUser.value = prefs.read(Prefs.isGuestUser) ?? true;
     // showPreview.value = prefs.read(Prefs.showPreview) ?? true;
     // likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
@@ -213,5 +202,7 @@ class LocalStorage {
     printData(key: "User isUserActive", value: LocalStorage.isUserActive.value);
     printData(key: "User isUserVerify", value: LocalStorage.isUserVerify.value);
     printData(key: "User CITY", value: LocalStorage.userCity.value);
+    printData(key: "User EMAIL", value: LocalStorage.email.value);
+    printData(key: "User PASSWORD", value: LocalStorage.password.value);
   }
 }

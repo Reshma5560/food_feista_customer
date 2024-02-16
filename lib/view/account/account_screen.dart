@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/common_widgets/custom_alert_dislog.dart';
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/res/app_assets.dart';
+import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -11,11 +12,12 @@ import 'package:get/get.dart';
 
 import '../../packages/cached_network_image/cached_network_image.dart';
 import '../../res/widgets/app_bar.dart';
+import '../../res/widgets/empty_element.dart';
 
 class AccountScreen extends StatelessWidget {
   AccountScreen({super.key});
 
-  final profileController = Get.put(ProfileController());
+  final ProfileController con = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +29,34 @@ class AccountScreen extends StatelessWidget {
           const SizedBox(
             height: defaultPadding,
           ),
-          _profileImageWidget(),
+          if (LocalStorage.token.value.isNotEmpty) _profileImageWidget(),
           const SizedBox(
             height: defaultPadding,
           ),
-          _bodyWidget(),
+          LocalStorage.token.value.isNotEmpty
+              ? _bodyWidget()
+              : Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    EmptyElement(
+                      height: Get.height / 1.8,
+                      imageHeight: Get.width / 2.4,
+                      imageWidth: Get.width / 2,
+                      spacing: 5,
+                      title: "Please Login !!",
+                    ),
+                    const SizedBox(height: 50),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                      child: AppButton(
+                        onPressed: () {
+                          Get.offAllNamed(AppRoutes.loginScreen);
+                        },
+                        title: "Login",
+                      ),
+                    ),
+                  ],
+                ),
         ],
       ),
     );
@@ -43,53 +68,30 @@ class AccountScreen extends StatelessWidget {
       child: Row(
         children: [
           Center(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(200),
-              ),
-              child: Obx(
-                () => profileController.userApiImageFile.value.isNotEmpty
-                    ? MFNetworkImage(
-                        height: 100,
-                        width: 100,
-                        imageUrl: profileController.userApiImageFile.value,
-                        fit: BoxFit.cover,
+            child: Obx(
+              () => con.userApiImageFile.value.isNotEmpty
+                  ? MFNetworkImage(
+                      height: 100,
+                      width: 100,
+                      imageUrl: con.userApiImageFile.value,
+                      fit: BoxFit.cover,
+                      shape: BoxShape.circle,
+                    )
+                  : Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
                         shape: BoxShape.circle,
-                      ) /*Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              profileController.userApiImageFile.value,
-                            ),
-                            onError: (exception, stackTrace) =>
-                                // Image.asset(AppImages.appLogoImage),
-                                Image.asset(
-                              AppAssets.profileIcon,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      )*/
-                    : Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: AssetImage(AppAssets.profileIcon),
-                            onError: (exception, stackTrace) => Image.asset(
-                              AppAssets.profileIcon,
-                              fit: BoxFit.fill,
-                            ),
+                        image: DecorationImage(
+                          image: AssetImage(AppAssets.profileIcon),
+                          onError: (exception, stackTrace) => Image.asset(
+                            AppAssets.profileIcon,
+                            fit: BoxFit.fill,
                           ),
                         ),
                       ),
-              ),
+                    ),
             ),
           ),
           Padding(
@@ -100,7 +102,7 @@ class AccountScreen extends StatelessWidget {
               children: [
                 Obx(
                   () => Text(
-                    "${profileController.userName}",
+                    "${con.userName}",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18.sp,
@@ -109,7 +111,7 @@ class AccountScreen extends StatelessWidget {
                 ),
                 Obx(
                   () => Text(
-                    "+91 ${profileController.phoneNoName.value}",
+                    "+91 ${con.phoneNoName.value}",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
@@ -159,11 +161,11 @@ class AccountScreen extends StatelessWidget {
             Get.toNamed(
               AppRoutes.editAccountScreen,
               arguments: {
-                'image': profileController.userApiImageFile.value,
-                'firstName': profileController.firstName.value,
-                'lastName': profileController.lastName.value,
-                'email': profileController.email.value,
-                'mobileNo': profileController.phoneNoName.value
+                'image': con.userApiImageFile.value,
+                'firstName': con.firstName.value,
+                'lastName': con.lastName.value,
+                'email': con.email.value,
+                'mobileNo': con.phoneNoName.value
               },
             );
           },
@@ -222,6 +224,8 @@ class AccountScreen extends StatelessWidget {
           icon: Icons.info,
           title: 'About Us',
           onPressed: () {
+            // print("---------------");
+            // const MyWebView(webURL: "https://www.youtube.com/", title: "Terms and Conditions");
             Get.toNamed(AppRoutes.aboutUsScreen);
           },
         ),
@@ -265,10 +269,10 @@ class AccountScreen extends StatelessWidget {
                 content: "Are you sure you want logout ?",
                 yesButtonText: "Yes",
                 onYesPressed: () {
-                  profileController.isLoader.value = true;
+                  con.isLoader.value = true;
                   LocalStorage.clearLocalStorage().then(
                     (value) {
-                      profileController.isLoader.value = false;
+                      con.isLoader.value = false;
                       Get.offAllNamed(AppRoutes.loginScreen);
                     },
                   );

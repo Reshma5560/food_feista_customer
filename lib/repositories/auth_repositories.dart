@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -39,18 +37,13 @@ class AuthRepository {
             /// Set User Data
             await LocalStorage.storeDataInfo(data: response['user']).then(
               (value) {
-                // Get.delete<RegisterController>(force: true);
-                Get.offAllNamed(AppRoutes.getCityScreen);
+                if (LocalStorage.userCity.value.isEmpty) {
+                  Get.offAllNamed(AppRoutes.locationEnableScreen);
+                } else {
+                  Get.offAllNamed(AppRoutes.indexScreen);
+                }
               },
             );
-
-            // /// Set links
-            // if (!isValEmpty(response["links"])) {
-            //   await LocalStorage.updateOrStoreLikes(linkObject: response["links"]);
-            // }
-
-            // /// Like concept status
-            // await LocalStorage.updateTipLikeStatus(likeConcePT: response["data"]['like_concept']);
           }
           return response;
         },
@@ -100,8 +93,9 @@ class AuthRepository {
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
-              // Get.back();
-              Get.offAllNamed(AppRoutes.manageAddressScreen);
+              Get.back();
+              Get.back();
+              // Get.offAllNamed(AppRoutes.manageAddressScreen);
             }
           }
           return response;
@@ -274,8 +268,10 @@ class AuthRepository {
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
+              Get.back();
+              Get.back();
               // Get.back();
-              Get.offAllNamed(AppRoutes.indexScreen);
+              // Get.offAllNamed(AppRoutes.indexScreen);
             }
           }
           return response;

@@ -28,7 +28,7 @@ class SignUpScreen extends StatelessWidget {
         body: GradientContainer(
           child: Column(
             children: [
-              const AuthHeader(),
+              AuthHeader(),
               Expanded(
                 child: Stack(
                   children: [

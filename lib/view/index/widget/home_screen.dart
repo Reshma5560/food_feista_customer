@@ -9,14 +9,16 @@ import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
-import 'package:foodapplication/res/app_text_field.dart';
 import 'package:foodapplication/route/app_routes.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/home_data_model.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../res/app_loader.dart';
 import '../../../res/box_shadow.dart';
+import '../../../res/widgets/app_bar.dart';
+import '../../../res/widgets/empty_element.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -42,7 +44,20 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         _appHeader(context),
                         const SizedBox(height: 10),
-                        _bodyModule(),
+                        (con.bannerList.isEmpty &&
+                                con.categoryList.isEmpty &&
+                                con.restaurantList.isEmpty &&
+                                con.blogList.isEmpty &&
+                                con.trendingFoodList.isEmpty)
+                            ? EmptyElement(
+                                height: Get.height / 1.8,
+                                imageHeight: Get.width / 2.4,
+                                imageWidth: Get.width / 2,
+                                spacing: 0,
+                                title: "Data Not Found",
+                                // subtitle: AppStrings.cartListNotFoundSubtitle,
+                              )
+                            : _bodyModule(),
                       ],
                     ).paddingOnly(bottom: 20),
             ),
@@ -54,62 +69,65 @@ class HomeScreen extends StatelessWidget {
 
   Widget _appHeader(BuildContext context) {
     return ClipRRect(
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(defaultRadius * 3),
-          bottomRight: Radius.circular(defaultRadius * 3),
-        ),
-        child: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: () {},
-            child: Image.asset(
-              AppAssets.menuIcon,
-              height: 10.h,
-              width: 10.w,
-            ).paddingOnly(left: 15),
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(20)),
-                child: Image.asset(
-                  AppAssets.profileIcon,
-                  height: 16.h,
-                  width: 16.w,
-                  color: AppColors.white,
+      borderRadius: const BorderRadius.only(
+        bottomLeft: Radius.circular(defaultRadius * 3),
+        bottomRight: Radius.circular(defaultRadius * 3),
+      ),
+      child: MyAppBar(
+        bgColor: Theme.of(context).colorScheme.background,
+        child: Row(
+          children: [
+            Center(
+              child: Obx(
+                () => LocalStorage.userImage.isNotEmpty
+                    ? MFNetworkImage(
+                        height: 40,
+                        width: 40,
+                        imageUrl: LocalStorage.userImage.value,
+                        fit: BoxFit.cover,
+                        shape: BoxShape.circle,
+                      )
+                    : Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,
+
+                          // image: DecorationImage(
+                          //   image: AssetImage(AppAssets.profileIcon),
+                          //   onError: (exception, stackTrace) => Image.asset(
+                          //     AppAssets.profileIcon,
+                          //     fit: BoxFit.fill,
+                          //   ),
+                          // ),
+                        ),
+                        child: Icon(Icons.person_2_outlined, color: AppColors.white),
+                      ),
+              ),
+            ),
+            const SizedBox(
+              width: defaultPadding - 6,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Welcome",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black.withOpacity(0.5), fontSize: 13.sp),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  "abc",
-                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 18),
+                Text(
+                  (LocalStorage.firstName.isNotEmpty && LocalStorage.lastName.isNotEmpty)
+                      ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
+                      : "Please Login !!",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  "abc",
-                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              const Icon(Icons.keyboard_arrow_down)
-            ],
-          ),
-          actions: [
-            Image.asset(
-              AppAssets.scanningIcon,
-              height: 20.h,
-              width: 20.w,
-            ).paddingOnly(right: 15)
+              ],
+            ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _bodyModule() {
@@ -117,53 +135,49 @@ class HomeScreen extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          AppTextField(
-            controller: con.searchCon,
-            fillColor: AppColors.greyShad1,
-            hintText: "search",
-            hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
-            prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
-          ),
+          // AppTextField(
+          //   controller: con.searchCon,
+          //   fillColor: AppColors.greyShad1,
+          //   hintText: "search",
+          //   hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
+          //   prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
+          // ),
+          // const SizedBox(height: 10),
+          if (con.bannerList.isNotEmpty) _sliderModule(),
           const SizedBox(height: 10),
-          con.bannerList.isEmpty ? Container() : _sliderModule(),
+          if (con.categoryList.isNotEmpty)
+            TitleButtonRowWidget(
+              title: "BROWSE FOOD CATEGORY",
+              buttonText: /*con.categoryList.length > 4 ? "View All" :*/ "",
+              onPressed: () {},
+            ).paddingSymmetric(horizontal: 5),
+          // if (con.categoryList.isNotEmpty) const SizedBox(height: 10),
+          if (con.categoryList.isNotEmpty) _categoryModule(),
           const SizedBox(height: 10),
-          con.categoryList.isEmpty
-              ? Container()
-              : TitleButtonRowWidget(
-                  title: "BROWSE FOOD CATEGORY",
-                  buttonText: "View All",
-                  onPressed: () {},
-                ).paddingSymmetric(horizontal: 5),
-          con.categoryList.isEmpty ? Container() : const SizedBox(height: 10),
-          con.categoryList.isEmpty ? Container() : _categoryModule(),
-          const SizedBox(height: 20),
-          con.restaurantList.isEmpty
-              ? Container()
-              : TitleButtonRowWidget(
-                  title: "OUR SPECIAL RESTAURANT",
-                  buttonText: "View All",
-                  onPressed: () {},
-                ).paddingSymmetric(horizontal: 5),
-          con.restaurantList.isEmpty ? Container() : _restaurantModule(),
-          const SizedBox(height: 20),
-          con.blogList.isEmpty
-              ? Container()
-              : TitleButtonRowWidget(
-                  title: "LATEST NEWS",
-                  buttonText: "View All",
-                  onPressed: () {},
-                ).paddingSymmetric(horizontal: 5),
-          con.blogList.isEmpty ? Container() : const SizedBox(height: 20),
-          con.blogList.isEmpty ? Container() : _blogModule(),
-          con.trendingFoodList.isEmpty
-              ? Container()
-              : TitleButtonRowWidget(
-                  title: "trending Foods".toUpperCase(),
-                  buttonText: "View All",
-                  onPressed: () {},
-                ).paddingSymmetric(horizontal: 5),
+          if (con.restaurantList.isNotEmpty)
+            TitleButtonRowWidget(
+              title: "OUR SPECIAL RESTAURANT",
+              buttonText: "",
+              onPressed: () {},
+            ).paddingSymmetric(horizontal: 5),
+          if (con.restaurantList.isNotEmpty) _restaurantModule(),
           const SizedBox(height: 10),
-          con.trendingFoodList.isEmpty ? Container() : _trendingFoodsModule()
+          if (con.blogList.isNotEmpty)
+            TitleButtonRowWidget(
+              title: "BLOGS",
+              buttonText: "",
+              onPressed: () {},
+            ).paddingSymmetric(horizontal: 5),
+          // if (con.blogList.isNotEmpty) const SizedBox(height: 10),
+          if (con.blogList.isNotEmpty) _blogModule(),
+          if (con.trendingFoodList.isNotEmpty)
+            TitleButtonRowWidget(
+              title: "trending Foods".toUpperCase(),
+              buttonText: "View All",
+              onPressed: () {},
+            ).paddingSymmetric(horizontal: 5),
+          const SizedBox(height: 10),
+          if (con.trendingFoodList.isNotEmpty) _trendingFoodsModule()
         ],
       ).paddingSymmetric(horizontal: 10),
     );
@@ -178,37 +192,36 @@ class HomeScreen extends StatelessWidget {
           itemBuilder: (context, i, realIndex) {
             return Stack(
               children: [
-                Container(
+                MFNetworkImage(
+                  height: Get.height * 0.25,
                   width: Get.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: con.bannerList[i].image ?? "",
+                  imageUrl: con.bannerList[i].image ?? "",
+                  fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(defaultRadius),
+                  // filterQuality: FilterQuality.high,
+                  // shape: BoxShape.circle,
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(defaultRadius),
+                  child: Image(
+                    image: AssetImage(
+                      AppAssets.bgBanner,
+                    ),
                     width: Get.width,
                     fit: BoxFit.cover,
-                    height: Get.height * 0.25,
-                    errorWidget: (context, str, obj) {
-                      return Image.asset(
-                        AppAssets.appLogo,
-                        height: Get.height * 0.25,
-                        fit: BoxFit.cover,
-                      );
-                    },
                   ),
                 ),
               ],
             );
           },
           options: CarouselOptions(
-              autoPlay: true,
-              viewportFraction: 1.0,
-              height: Get.height * 0.25,
-              onPageChanged: (index, reason) {
-                con.activeSliderIndex.value = index;
-              }
-              // aspectRatio: 2.5,
-              ),
+            autoPlay: true,
+            viewportFraction: 1.0,
+            height: Get.height * 0.25,
+            onPageChanged: (index, reason) {
+              con.activeSliderIndex.value = index;
+            },
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -244,7 +257,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _categoryModule() {
     return SizedBox(
-      height: Get.height / 6,
+      height: Get.height * 0.2,
       child: ListView.builder(
         padding: EdgeInsets.zero,
         shrinkWrap: true,
@@ -254,23 +267,41 @@ class HomeScreen extends StatelessWidget {
           var item = con.categoryList[index];
           return Container(
             width: 100,
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            height: Get.height * 0.2,
+            margin: const EdgeInsets.only(right: defaultPadding - 6),
+            // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
               color: AppColors.greyShad1,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(defaultRadius),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.network(
-                  item.image ?? "",
-                  height: 90,
+                Expanded(
+                  flex: 1,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(defaultRadius),
+                      topRight: Radius.circular(defaultRadius),
+                    ),
+                    child: Image.network(
+                      item.image ?? "",
+                      fit: BoxFit.cover,
+                      // height: ,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: defaultPadding - 10,
                 ),
                 Text(
                   item.categoryName ?? "",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                ),
+                const SizedBox(
+                  height: defaultPadding - 10,
                 ),
               ],
             ),
@@ -297,10 +328,10 @@ class HomeScreen extends StatelessWidget {
               ]),
               child: Container(
                 width: 150,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.only(right: defaultPadding - 6),
                 decoration: BoxDecoration(
                   color: AppColors.greyShad1,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(defaultRadius),
                 ),
                 child: Column(
                   children: [
@@ -479,31 +510,44 @@ class HomeScreen extends StatelessWidget {
 
   Widget _blogModule() {
     return SizedBox(
-      height: 140,
+      height: Get.height * 0.2,
       width: 250,
       child: ListView.builder(
+        padding: EdgeInsets.zero,
         itemCount: con.blogList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, i) {
           Blog item = con.blogList[i];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MFNetworkImage(
-                height: 100,
-                width: 250,
-                backgroundColor: Colors.grey,
-                imageUrl: item.image ?? "",
-                fit: BoxFit.cover,
-                shape: BoxShape.rectangle,
-              ).paddingOnly(bottom: 5),
-              Text(
-                item.blogName ?? "",
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+          return Padding(
+            padding: const EdgeInsets.only(right: defaultPadding - 6),
+            child: SizedBox(
+              width: 250,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: MFNetworkImage(
+                      height: 100,
+                      width: 250,
+                      backgroundColor: Colors.grey,
+                      imageUrl: item.image ?? "",
+                      fit: BoxFit.cover,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                    ),
+                  ),
+                  Text(
+                    item.blogName ?? "",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                  ),
+                ],
               ),
-            ],
-          ).paddingOnly(left: 15);
+            ),
+          );
         },
       ),
     );
@@ -527,7 +571,7 @@ class HomeScreen extends StatelessWidget {
           width: 200,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            boxShadow: BoxShadows().shadow(),
+            boxShadow: AppStyle.boxShadow(),
           ),
           child: Stack(
             alignment: Alignment.centerRight,
@@ -538,17 +582,15 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     flex: 70,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: item.image ?? "",
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      child: MFNetworkImage(
+                        height: 100,
                         width: Get.width,
+                        backgroundColor: Colors.grey,
+                        imageUrl: item.image ?? "",
                         fit: BoxFit.cover,
-                        errorWidget: (context, str, obj) {
-                          return Image.asset(
-                            AppAssets.appLogo,
-                            fit: BoxFit.cover,
-                          );
-                        },
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                     ),
                   ),

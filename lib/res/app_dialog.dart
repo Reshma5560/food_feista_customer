@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../utils/local_storage.dart';
 import 'app_colors.dart';
+import 'app_strings.dart';
 import 'app_style.dart';
 
 class AppDialogs {
@@ -217,6 +218,115 @@ class AppDialogs {
                             child: Center(
                               child: Text(
                                 'Delete',
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static enableLocationDialog(BuildContext context, {required VoidCallback deleteOnTap}) {
+    return Get.dialog(
+      BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+        child: Dialog(
+          backgroundColor: AppColors.white,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          clipBehavior: Clip.antiAlias,
+          insetPadding: EdgeInsets.all(defaultPadding.w),
+          elevation: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
+                child: Text(
+                  'Enable Location !',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkRed,
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 15),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Hey 👋 Please turned off permissions required for this feature. It can be enable under',
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                          ),
+                          // TextSpan(
+                          //   text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
+                          //   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                          // ),
+                          // TextSpan(
+                          //   text: 'Are you sure you want to',
+                          //   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                          // ),
+                          TextSpan(
+                            text: ' Phone Setting > Apps > ${AppStrings.appName} > Permission',
+                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, color: AppColors.darkRed),
+                          ),
+                          // TextSpan(
+                          //   text: 'your item?',
+                          //   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      // Expanded(
+                      //   child: InkWell(
+                      //     onTap: () => Get.back(),
+                      //     child: Container(
+                      //       padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                      //       color: const Color(0xffF2F2F2),
+                      //       child: Center(
+                      //         child: Text(
+                      //           'Close',
+                      //           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: deleteOnTap,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            color: AppColors.kPrimaryColor,
+                            child: Center(
+                              child: Text(
+                                'GO TO SETTING',
                                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
                               ),
                             ),

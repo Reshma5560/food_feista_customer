@@ -1,8 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/color_print.dart';
+import 'package:foodapplication/res/ui_utils.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +23,8 @@ import '../../../res/app_style.dart';
 class RestaurantDetailsScreen extends StatelessWidget {
   RestaurantDetailsScreen({Key? key}) : super(key: key);
   final RestaurantDetailsScreenController con = Get.put(RestaurantDetailsScreenController());
+
+  // final CartDataController cartDataController = Get.find<CartDataController>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +54,12 @@ class RestaurantDetailsScreen extends StatelessWidget {
                               children: [
                                 MFNetworkImage(
                                   imageUrl: con.restaurantDetails?.coverPhoto ?? "",
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
+                                  height: 200,
+                                  width: Get.width,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
+                                const SizedBox(height: 20),
                                 _menuTypeListModule().paddingSymmetric(horizontal: 10),
                                 const SizedBox(height: 20),
                                 _currentSelectedModule().paddingSymmetric(horizontal: 10),
@@ -77,30 +85,34 @@ class RestaurantDetailsScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: con.menuList.length,
         itemBuilder: (BuildContext context, int index) {
-          return Obx(() => InkWell(
-                onTap: () {
-                  con.selectMenu.value = index;
-                  _handleMenuItemClick(context, con.menuList[index]);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: con.selectMenu.value == index ? Theme.of(context).primaryColor : AppColors.white,
-                    border: Border.all(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
+          return Obx(
+            () => InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () {
+                con.selectMenu.value = index;
+                _handleMenuItemClick(context, con.menuList[index]);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: con.selectMenu.value == index ? Theme.of(context).primaryColor : AppColors.white,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
                   ),
-                  child: Center(
-                    child: Text(
-                      con.menuList[index],
-                      style: TextStyle(
-                          fontSize: 11,
-                          color: con.selectMenu.value == index ? AppColors.white : Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w600),
-                    ).paddingSymmetric(horizontal: 10),
-                  ),
-                ).paddingOnly(right: 10),
-              ));
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    con.menuList[index],
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: con.selectMenu.value == index ? AppColors.white : Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600),
+                  ).paddingSymmetric(horizontal: 10),
+                ),
+              ).paddingOnly(right: 10),
+            ),
+          );
         },
       ),
     );
@@ -114,13 +126,46 @@ class RestaurantDetailsScreen extends StatelessWidget {
   Widget _currentSelectedModule() {
     switch (con.menuList[con.selectMenu.value]) {
       case "ORDER ONLINE":
-        return con.categoryList.isEmpty ? const Text("No food available") : _foodListModule();
+        return con.categoryList.isEmpty
+            ? Padding(
+                padding: EdgeInsets.only(top: Get.height / 4),
+                child: Text(
+                  "No food available",
+                  style: AppStyle.errorTextStyle().copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              )
+            : _foodListModule();
       case "OVERVIEW":
         return _overViewListModule();
       case "REVIEW":
-        return _reviewListModule();
+        return con.restaurantReviewList.isEmpty
+            ? Padding(
+                padding: EdgeInsets.only(top: Get.height / 4),
+                child: Text(
+                  "No review available",
+                  style: AppStyle.errorTextStyle().copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              )
+            : _reviewListModule();
       default:
-        return _photosListModule();
+        return con.restaurantGalleryList.isEmpty
+            ? Padding(
+                padding: EdgeInsets.only(top: Get.height / 4),
+                child: Text(
+                  "No photo available",
+                  style: AppStyle.errorTextStyle().copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              )
+            : _photosListModule();
     }
   }
 
@@ -137,6 +182,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
             Text(
               con.categoryList[i].categoryName ?? "",
               style: AppStyle.authTitleStyle().copyWith(fontSize: 20),
+            ),
+            const SizedBox(
+              height: defaultPadding - 6,
             ),
             ListView.separated(
                 padding: EdgeInsets.zero,
@@ -216,19 +264,26 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      if (item!.addons!.isNotEmpty || item.addons!.isNotEmpty) {
-                                        _addItem(context, item: item);
+                                      if (LocalStorage.token.isNotEmpty) {
+                                        if (item!.foodVariant!.isNotEmpty || item.addons!.isNotEmpty) {
+                                          // cartDataController.foodVariant.value = item.foodVariant ?? [];
+                                          // cartDataController.addons.value = item.addons ?? [];
+
+                                          _addItem(context, item: item);
+                                        } else {
+                                          RestaurantRepository().addToCartItemAPI(
+                                            params: {
+                                              "restaurant_id": con.restaurantDetails?.id ?? "",
+                                              "food_id": item.id ?? "",
+                                              "total_price": item.totalPrice?.value.toString() ?? "",
+                                              "total_qty": item.itemCount?.value.toString() ?? "",
+                                              "variant_options": con.variantDataForAPI,
+                                              "addons": con.addonsData,
+                                            },
+                                          );
+                                        }
                                       } else {
-                                        RestaurantRepository().addToCartItemAPI(
-                                          params: {
-                                            "restaurant_id": con.restaurantDetails?.id ?? "",
-                                            "food_id": item.id ?? "",
-                                            "total_price": item.totalPrice?.value.toString() ?? "",
-                                            "total_qty": item.itemCount?.value.toString() ?? "",
-                                            "variant_options": con.variantDataForAPI,
-                                            "addons": con.addonsData,
-                                          },
-                                        );
+                                        toast("Please login for adding item into cart!!");
                                       }
                                     },
                                     child: Container(
@@ -273,6 +328,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
   _overViewListModule() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Row(
           children: [
@@ -308,100 +364,102 @@ class RestaurantDetailsScreen extends StatelessWidget {
           ).paddingSymmetric(horizontal: 10, vertical: 10),
         ),
         const SizedBox(height: 20),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.kPrimaryColor.withOpacity(0.4),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Cuisines",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.kPrimaryColor),
-              ),
-              Divider(
-                color: AppColors.kPrimaryColor.withOpacity(0.4),
-              ),
-              GridView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: con.cuisineRestaurantList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 20,
-                  childAspectRatio: 3,
-                ),
-                itemBuilder: (BuildContext context, int i) {
-                  CuisineRestaurant item = con.cuisineRestaurantList[i];
-
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.hintText.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Text(item.cuisine!.cuisineName!).paddingSymmetric(horizontal: 10, vertical: 5),
-                    ),
-                  );
-                },
-              )
-            ],
-          ).paddingSymmetric(horizontal: 10, vertical: 10),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          decoration: BoxDecoration(
+        if (con.cuisineRestaurantList.isNotEmpty)
+          Container(
+            decoration: BoxDecoration(
               border: Border.all(
-            color: AppColors.kPrimaryColor.withOpacity(0.4),
-          )),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "More Info",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.kPrimaryColor),
-              ),
-              Divider(
                 color: AppColors.kPrimaryColor.withOpacity(0.4),
               ),
-              GridView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: con.restaurantAmenityList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 20,
-                  childAspectRatio: 3,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Cuisines",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.kPrimaryColor),
                 ),
-                itemBuilder: (BuildContext context, int i) {
-                  RestaurantAmenity item = con.restaurantAmenityList[i];
+                Divider(
+                  color: AppColors.kPrimaryColor.withOpacity(0.4),
+                ),
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: con.cuisineRestaurantList.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 20,
+                    childAspectRatio: 3,
+                  ),
+                  itemBuilder: (BuildContext context, int i) {
+                    CuisineRestaurant item = con.cuisineRestaurantList[i];
 
-                  return Container(
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.hintText.withOpacity(0.1)),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_circle_outline),
-                        Expanded(
-                          child: Text(
-                            item.amenities!.name!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ).paddingSymmetric(horizontal: 10, vertical: 5),
-                        ),
-                      ],
-                    ).paddingSymmetric(horizontal: 10),
-                  );
-                },
-              )
-            ],
-          ).paddingSymmetric(horizontal: 10, vertical: 10),
-        ),
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColors.hintText.withOpacity(0.1),
+                      ),
+                      child: Center(
+                        child: Text(item.cuisine!.cuisineName!).paddingSymmetric(horizontal: 10, vertical: 5),
+                      ),
+                    );
+                  },
+                )
+              ],
+            ).paddingSymmetric(horizontal: 10, vertical: 10),
+          ),
+        const SizedBox(height: 20),
+        if (con.restaurantAmenityList.isNotEmpty)
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(
+              color: AppColors.kPrimaryColor.withOpacity(0.4),
+            )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "More Info",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.kPrimaryColor),
+                ),
+                Divider(
+                  color: AppColors.kPrimaryColor.withOpacity(0.4),
+                ),
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: con.restaurantAmenityList.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 20,
+                    childAspectRatio: 3,
+                  ),
+                  itemBuilder: (BuildContext context, int i) {
+                    RestaurantAmenity item = con.restaurantAmenityList[i];
+
+                    return Container(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.hintText.withOpacity(0.1)),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.check_circle_outline),
+                          Expanded(
+                            child: Text(
+                              item.amenities!.name!,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ).paddingSymmetric(horizontal: 10, vertical: 5),
+                          ),
+                        ],
+                      ).paddingSymmetric(horizontal: 10),
+                    );
+                  },
+                )
+              ],
+            ).paddingSymmetric(horizontal: 10, vertical: 10),
+          ),
       ],
     ).paddingOnly(top: 20, right: 20, left: 20);
   }
@@ -593,6 +651,17 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                         item.foodVariant![index].foodVariantOption?.length ?? 0,
                                         (index1) {
                                           var data = item.foodVariant![index].foodVariantOption?[index1];
+                                          if (index1 == item.foodVariant?[index].isSelected?.value) {
+                                            con.variantData.add(
+                                              {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
+                                            );
+                                            item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
+                                            con.variantDataForAPI.add(data?.id);
+                                            con.variantData.take(2);
+                                            printWhite("------------------   ${con.variantData}");
+                                            printWhite("------------------   ${con.variantDataForAPI}");
+                                          }
+
                                           return Padding(
                                             padding: const EdgeInsets.only(right: defaultPadding - 6),
                                             child: Obx(
@@ -631,7 +700,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                                         printWhite("------------------   ${con.variantData}");
                                                         printWhite("--------3----------   ${con.variantDataForAPI}");
                                                       }
-                                                    } else {
+                                                    } /*else {
                                                       con.variantData.add(
                                                         {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
                                                       );
@@ -640,7 +709,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                                       con.variantData.take(2);
                                                       printWhite("------------------   ${con.variantData}");
                                                       printWhite("------------------   ${con.variantDataForAPI}");
-                                                    }
+                                                    }*/
                                                   }
                                                 },
                                                 child: Padding(
@@ -740,13 +809,12 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                                                     if (data.isSelected?.value == true) {
                                                       con.addonsData.add(data.id);
-                                                      item.totalPrice?.value = (item.totalPrice!.value + double.parse(data.price.toString() ?? "0"));
+                                                      item.totalPrice?.value = (item.totalPrice!.value + double.parse(data.price.toString()));
                                                       printWhite(con.addonsData);
                                                     } else {
                                                       if (con.addonsData.contains(data.id)) {
                                                         con.addonsData.remove(data.id);
-                                                        item.totalPrice?.value =
-                                                            (item.totalPrice!.value - double.parse(data.price.toString() ?? "0"));
+                                                        item.totalPrice?.value = (item.totalPrice!.value - double.parse(data.price.toString()));
                                                         printWhite(con.addonsData);
                                                       }
                                                     }
@@ -814,7 +882,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                 Obx(
                                   () => Text(
                                     item.itemCount?.value.toString() ?? "",
-                                    style: const TextStyle(fontWeight: FontWeight.w700),
+                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp),
                                   ),
                                 ),
                                 const SizedBox(
@@ -880,6 +948,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ).whenComplete(() {
+      con.variantData.clear();
+      con.variantDataForAPI.clear();
+    });
   }
 }

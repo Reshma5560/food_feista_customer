@@ -9,8 +9,7 @@ import 'package:foodapplication/data/models/get_country_model.dart';
 
 import 'get_state_model.dart';
 
-GetAddressModel getAddressModelFromJson(String str) =>
-    GetAddressModel.fromJson(json.decode(str));
+GetAddressModel getAddressModelFromJson(String str) => GetAddressModel.fromJson(json.decode(str));
 
 class GetAddressModel {
   bool status;
@@ -21,16 +20,15 @@ class GetAddressModel {
     required this.data,
   });
 
-  factory GetAddressModel.fromJson(Map<String, dynamic> json) =>
-      GetAddressModel(
+  factory GetAddressModel.fromJson(Map<String, dynamic> json) => GetAddressModel(
         status: json["status"],
         data: List<AddressList>.from(json["data"]!.map((x) => AddressList.fromJson(x))),
       );
 
-  // Map<String, dynamic> toJson() => {
-  //       "status": status,
-  //       "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  //     };
+// Map<String, dynamic> toJson() => {
+//       "status": status,
+//       "data": List<dynamic>.from(data.map((x) => x.toJson())),
+//     };
 }
 
 class AddressList {
@@ -51,6 +49,7 @@ class AddressList {
   dynamic createdBy;
   dynamic updatedBy;
   dynamic deletedAt;
+
   // DateTime createdAt;
   // DateTime updatedAt;
   int countryId;
@@ -113,7 +112,7 @@ class AddressList {
         countryId: json["country_id"] ?? 0,
         stateId: json["state_id"] ?? 0,
         cityId: json["city_id"] ?? 0,
-        zipCode: json["zip_code"],
+        zipCode: json["zip_code"] ?? "",
         country: Country.fromJson(json["country"] ?? {}),
         state: StateList.fromJson(json["state"] ?? {}),
         city: City.fromJson(json["city"] ?? {}),

@@ -17,12 +17,5 @@ class IndexController extends GetxController {
     } else if (index == 2) {}
   }
 
-  final pages = <Widget>[
-    HomeScreen(),
-    MyOrderScreen(),
-    SearchScreen(),
-    CartScreen(),
-    AccountScreen()
-  ];
-
+  final pages = <Widget>[HomeScreen(), MyOrderScreen(), SearchScreen(), CartScreen(), AccountScreen()];
 }

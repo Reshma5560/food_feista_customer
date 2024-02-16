@@ -62,19 +62,20 @@ class DesktopRepository {
       isLoader?.value = true;
       await APIFunction().getApiCall(apiName: ApiUrls.getProfileUrl).then(
         (response) async {
-          printData(key: "get profile  response", value: response);
+          // printData(key: "get profile  response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
             GetProfileModel data = GetProfileModel.fromJson(response);
 
             con.getDataMap = data;
             con.userApiImageFile.value = con.getDataMap?.data?.image ?? "";
 
+            printYellow("-------------  ${con.getDataMap?.data?.image}");
+
             con.userName.value = "${con.getDataMap?.data?.firstName} ${con.getDataMap?.data?.lastName}";
             con.phoneNoName.value = con.getDataMap?.data?.phone ?? "";
             con.firstName.value = con.getDataMap?.data?.firstName ?? "";
             con.lastName.value = con.getDataMap?.data?.lastName ?? "";
             con.email.value = con.getDataMap?.data?.email ?? "";
-            log("${con.getDataMap}");
           }
           return response;
         },
@@ -90,17 +91,12 @@ class DesktopRepository {
     }
   }
 
-  Future<dynamic> editProfileApiCall({RxBool? isLoader}) async {
-    final editAccountController = Get.find<EditAccountController>();
+  Future<dynamic> editProfileApiCall({RxBool? isLoader, dynamic data}) async {
+    final EditAccountController con = Get.find<EditAccountController>();
     try {
       isLoader?.value = true;
-      dio.FormData formData = dio.FormData.fromMap({
-        "first_name": editAccountController.firstNameCon.text.trim(),
-        "last_name": editAccountController.lastNameCon.text.trim(),
-        "email": editAccountController.emailCon.text.trim(),
-        "phone": editAccountController.mobileNumberCon.text.trim(),
-        "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.imagePath.value),
-      });
+      printYellow(data);
+      dio.FormData formData = dio.FormData.fromMap(data);
       await APIFunction().postApiCall(apiName: ApiUrls.updateUserProfileUrl, params: formData).then(
         (response) async {
           printData(key: "update profile response", value: response);
@@ -248,9 +244,6 @@ class DesktopRepository {
             OrderTrackModel data = OrderTrackModel.fromJson(response);
 
             con.orderTrackModel.value = data;
-            log("${con.orderTrackModel}");
-
-            log("ORDER track data ${con.orderTrackModel.value.data}");
           }
           return response;
         },
@@ -266,7 +259,7 @@ class DesktopRepository {
   ///get order list
   Future<dynamic> getOrderApiCall() async {
     final MyOrderController con = Get.find<MyOrderController>();
-
+    con.isLoading.value = true;
     try {
       await APIFunction().getApiCall(apiName: ApiUrls.getOrderListUrl).then(
         (response) async {
@@ -275,10 +268,8 @@ class DesktopRepository {
             GetOrderModel data = GetOrderModel.fromJson(response);
 
             con.getOrderModel = data;
-            log("${con.getOrderModel}");
 
             con.orderList.addAll(con.getOrderModel.data!);
-            log("ORDER LENGTH ${con.orderList.length}");
           }
           return response;
         },
@@ -295,12 +286,18 @@ class DesktopRepository {
   Future<dynamic> getCartAPI() async {
     final CartController con = Get.find<CartController>();
     try {
+      con.isLoading.value = true;
       await APIFunction().getApiCall(apiName: ApiUrls.getCartUrl).then(
         (response) async {
+          printData(key: "RESPONSE ", value: response);
           GetCartDataModel cartDataModel = GetCartDataModel.fromJson(response);
           con.cartData.value = cartDataModel;
           con.cartItemData.value = cartDataModel.data?.cartDetails ?? [];
-          await DesktopRepository().getCouponItemAPI(id: con.cartData.value.data?.restaurantId ?? "");
+
+          if (con.cartData.value.data?.restaurantId != null) {
+            await DesktopRepository().getCouponItemAPI(id: con.cartData.value.data?.restaurantId ?? "");
+          }
+
           if (con.cartItemData.isNotEmpty) {
             con.totalAmount.value = 0;
             for (var i = 0; i < con.cartItemData.length; i++) {
@@ -402,6 +399,7 @@ class DesktopRepository {
             if (!isValEmpty(response["message"])) {
               Get.back();
               con.cartItemData.clear();
+              con.couponItemData.clear();
               toast(response["message"].toString());
             }
           }
@@ -433,6 +431,47 @@ class DesktopRepository {
       printError(type: "getCouponItemAPI", errText: "$e");
     } finally {
       con.isLoading.value = false;
+    }
+  }
+
+  ///create order
+  Future<dynamic> createOrderApiCall({RxBool? isLoader, required dynamic params}) async {
+    try {
+      isLoader?.value = true;
+      // dio.FormData formData = dio.FormData.fromMap({
+      //   "first_name": editAccountController.firstNameCon.text.trim(),
+      //   "last_name": editAccountController.lastNameCon.text.trim(),
+      //   "email": editAccountController.emailCon.text.trim(),
+      //   "phone": editAccountController.mobileNumberCon.text.trim(),
+      //   "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.imagePath.value),
+      // });
+      await APIFunction().postApiCall(apiName: ApiUrls.placeOrderUrl, params: params).then(
+        (response) async {
+          printData(key: "place order response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            if (!isValEmpty(response["message"])) {
+              toast(response["message"].toString());
+              // await getProfileApiCall();
+              // Get.back();
+              Get.offAllNamed(AppRoutes.indexScreen);
+            }
+          } else {
+            if (!isValEmpty(response) && response["status"] == false) {
+              if (!isValEmpty(response["error"])) {
+                toast(response["error"].toString());
+              }
+            }
+          }
+          return response;
+        },
+      );
+    } on dio.DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        printWarning(e.response?.statusCode);
+        printError(type: "createOrderApiCall", errText: "$e");
+      }
+    } finally {
+      isLoader?.value = false;
     }
   }
 }

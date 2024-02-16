@@ -1,6 +1,8 @@
 import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:get/get.dart';
+
 import '../../data/models/get_profile_model.dart';
+import '../../utils/local_storage.dart';
 
 class ProfileController extends GetxController {
   RxBool isLoader = false.obs;
@@ -16,7 +18,9 @@ class ProfileController extends GetxController {
 
   @override
   void onReady() {
-    DesktopRepository().getProfileApiCall(isLoader: isLoader);
+    if (LocalStorage.token.value.isNotEmpty) {
+      DesktopRepository().getProfileApiCall(isLoader: isLoader);
+    }
     super.onReady();
   }
 }

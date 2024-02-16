@@ -5,11 +5,13 @@ import 'package:foodapplication/view/account/widgets/location_screen.dart';
 import 'package:foodapplication/view/account/widgets/manage_address_screen.dart';
 import 'package:foodapplication/view/account/widgets/update_password.dart';
 import 'package:foodapplication/view/auth/forgot_password_screen.dart';
+import 'package:foodapplication/view/auth/location_enable_screen.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
 import 'package:foodapplication/view/get_city/get_city_screen.dart';
 import 'package:foodapplication/view/index/widget/home_screen.dart';
 import 'package:foodapplication/view/index/widget/order/widgets/order_track_screen.dart';
+import 'package:foodapplication/view/index/widget/plac_order_screen.dart';
 import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
@@ -98,6 +100,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.orderTrackScreen,
       page: () => OrderTrackScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.placeOrderScreen,
+      page: () => PlaceOrderScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.locationEnableScreen,
+      page: () => LocationEnableScreen(),
     ),
   ];
 }

@@ -37,8 +37,7 @@ class ContactUsScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: defaultPadding, vertical: defaultPadding),
+                    padding: const EdgeInsets.symmetric(horizontal: defaultPadding, vertical: defaultPadding),
                     physics: const RangeMaintainingScrollPhysics(),
                     children: [
                       Center(

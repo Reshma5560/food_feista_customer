@@ -1875,7 +1875,6 @@ class FoodVariant {
   final String? foodId;
   final String? variationName;
   final RxInt? isSelected;
-  final RxString? foodVariantId;
   final dynamic createdBy;
   final dynamic updatedBy;
   final dynamic deletedAt;
@@ -1888,7 +1887,6 @@ class FoodVariant {
     this.foodId,
     this.variationName,
     this.isSelected,
-    this.foodVariantId,
     this.createdBy,
     this.updatedBy,
     this.deletedAt,
@@ -1901,8 +1899,7 @@ class FoodVariant {
         id: json["id"],
         foodId: json["food_id"],
         variationName: json["variation_name"],
-        isSelected: RxInt(-1),
-        foodVariantId: "".obs,
+        isSelected: RxInt(0),
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],

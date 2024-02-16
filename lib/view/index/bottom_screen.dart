@@ -8,14 +8,14 @@ import 'package:get/get.dart';
 class IndexScreen extends StatelessWidget {
   IndexScreen({super.key});
 
-  final indexScreenController = Get.put(IndexController());
+  final IndexController con = Get.put(IndexController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() => IndexedStack(
-            index: indexScreenController.selectedIndex.value,
-            children: indexScreenController.pages,
+            index: con.selectedIndex.value,
+            children: con.pages,
           )),
       bottomNavigationBar: Theme(
         data: ThemeData(
@@ -23,7 +23,7 @@ class IndexScreen extends StatelessWidget {
           highlightColor: Colors.transparent,
         ),
         child: Obx(
-          () => indexScreenController.isLoading.value
+          () => con.isLoading.value
               ? Container()
               : Container(
                   decoration: BoxDecoration(
@@ -58,10 +58,7 @@ class IndexScreen extends StatelessWidget {
                           icon: Image.asset(
                             AppAssets.homeIcon,
                             height: 18.w,
-                            color:
-                                indexScreenController.selectedIndex.value == 0
-                                    ? Theme.of(context).primaryColor
-                                    : AppColors.black.withOpacity(0.4),
+                            color: con.selectedIndex.value == 0 ? Theme.of(context).primaryColor : AppColors.black.withOpacity(0.4),
                           ),
                           label: "Home",
                         ),
@@ -69,20 +66,14 @@ class IndexScreen extends StatelessWidget {
                           icon: Image.asset(
                             AppAssets.categoryIcon,
                             height: 18.w,
-                            color:
-                                indexScreenController.selectedIndex.value == 1
-                                    ? Theme.of(context).primaryColor
-                                    : AppColors.black.withOpacity(0.4),
+                            color: con.selectedIndex.value == 1 ? Theme.of(context).primaryColor : AppColors.black.withOpacity(0.4),
                           ),
                           label: "Category",
                         ),
                         BottomNavigationBarItem(
                           icon: Image.asset(
                             AppAssets.searchIcon,
-                            color:
-                                indexScreenController.selectedIndex.value == 2
-                                    ? Theme.of(context).primaryColor
-                                    : AppColors.black.withOpacity(0.4),
+                            color: con.selectedIndex.value == 2 ? Theme.of(context).primaryColor : AppColors.black.withOpacity(0.4),
                             height: 18.w,
                           ),
                           label: "search",
@@ -90,10 +81,7 @@ class IndexScreen extends StatelessWidget {
                         BottomNavigationBarItem(
                           icon: Image.asset(
                             AppAssets.shoppingBasketIcon,
-                            color:
-                                indexScreenController.selectedIndex.value == 3
-                                    ? Theme.of(context).primaryColor
-                                    : AppColors.black.withOpacity(0.4),
+                            color: con.selectedIndex.value == 3 ? Theme.of(context).primaryColor : AppColors.black.withOpacity(0.4),
                             height: 18.w,
                           ),
                           label: "shopping basket",
@@ -101,18 +89,15 @@ class IndexScreen extends StatelessWidget {
                         BottomNavigationBarItem(
                           icon: Image.asset(
                             AppAssets.profileIcon,
-                            color:
-                                indexScreenController.selectedIndex.value == 4
-                                    ? Theme.of(context).primaryColor
-                                    : AppColors.black.withOpacity(0.4),
+                            color: con.selectedIndex.value == 4 ? Theme.of(context).primaryColor : AppColors.black.withOpacity(0.4),
                             height: 18.w,
                           ),
                           label: "Profile",
                         ),
                       ],
-                      currentIndex: indexScreenController.selectedIndex.value,
+                      currentIndex: con.selectedIndex.value,
                       onTap: (value) {
-                        indexScreenController.changeIndex(value);
+                        con.changeIndex(value);
                       },
                     ),
                   ),

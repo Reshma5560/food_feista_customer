@@ -253,6 +253,8 @@ class FoodVariant {
   final String? id;
   final String? foodId;
   final String? variationName;
+  final RxInt? isSelected;
+
   final dynamic createdBy;
   final dynamic updatedBy;
   final dynamic deletedAt;
@@ -264,6 +266,7 @@ class FoodVariant {
     this.id,
     this.foodId,
     this.variationName,
+    this.isSelected,
     this.createdBy,
     this.updatedBy,
     this.deletedAt,
@@ -277,6 +280,7 @@ class FoodVariant {
         foodId: json["food_id"],
         variationName: json["variation_name"],
         createdBy: json["created_by"],
+        isSelected: RxInt(0),
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),

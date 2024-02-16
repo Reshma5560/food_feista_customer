@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,7 @@ import 'package:get/get.dart';
 class EditAccountScreen extends StatelessWidget {
   EditAccountScreen({super.key});
 
-  final editAccountController = Get.put(EditAccountController());
+  final EditAccountController con = Get.put(EditAccountController());
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +54,13 @@ class EditAccountScreen extends StatelessWidget {
                         Icons.person,
                         color: AppColors.greyFontColor,
                       ),
-                      controller: editAccountController.firstNameCon,
-                      errorMessage: editAccountController.firstNameError.value,
-                      showError: editAccountController.firstNameValidation.value,
+                      controller: con.firstNameCon,
+                      errorMessage: con.firstNameError.value,
+                      showError: con.firstNameValidation.value,
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
-                        editAccountController.firstNameValidation.value = false;
+                        con.firstNameValidation.value = false;
                       },
                     ),
                     SizedBox(height: 10.w),
@@ -70,13 +71,13 @@ class EditAccountScreen extends StatelessWidget {
                         Icons.person,
                         color: AppColors.greyFontColor,
                       ),
-                      controller: editAccountController.lastNameCon,
-                      errorMessage: editAccountController.lastNameError.value,
-                      showError: editAccountController.lastNameValidation.value,
+                      controller: con.lastNameCon,
+                      errorMessage: con.lastNameError.value,
+                      showError: con.lastNameValidation.value,
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
-                        editAccountController.lastNameValidation.value = false;
+                        con.lastNameValidation.value = false;
                       },
                     ),
                     SizedBox(height: 10.w),
@@ -88,19 +89,19 @@ class EditAccountScreen extends StatelessWidget {
                         Icons.email,
                         color: AppColors.greyFontColor,
                       ),
-                      controller: editAccountController.emailCon,
-                      errorMessage: editAccountController.emailError.value,
-                      showError: editAccountController.emailValidation.value,
+                      controller: con.emailCon,
+                      errorMessage: con.emailError.value,
+                      showError: con.emailValidation.value,
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) {
-                        editAccountController.emailValidation.value = false;
+                        con.emailValidation.value = false;
                       },
                     ),
                     SizedBox(height: 10.w),
                     AppTextField(
-                      controller: editAccountController.mobileNumberCon,
-                      errorMessage: editAccountController.mobileError.value,
-                      showError: editAccountController.isMobileValid.value,
+                      controller: con.mobileNumberCon,
+                      errorMessage: con.mobileError.value,
+                      showError: con.isMobileValid.value,
                       // titleText: "Mobile Number",
                       hintText: "Mobile Number",
                       prefixIcon: Icon(
@@ -113,27 +114,36 @@ class EditAccountScreen extends StatelessWidget {
                         LengthLimitingTextInputFormatter(10),
                       ],
                       onChanged: (value) {
-                        if (editAccountController.mobileNumberCon.value.text.length == 10) {
+                        if (con.mobileNumberCon.value.text.length == 10) {
                           FocusScope.of(context).unfocus();
                         }
-                        editAccountController.isMobileValid.value = false;
+                        con.isMobileValid.value = false;
                       },
                     ),
                     SizedBox(
                       height: 30.h,
                     ),
-                    AppButton(
-                      onPressed: () {
-                        DesktopRepository().editProfileApiCall(
-                          isLoader: editAccountController.isLoader,
-                          // params: {
-
-                          //   "image":editAccountController.name
-                          //       // editAccountController.selectedProfileImage?.path
-                          // },
-                        );
-                      },
-                      title: "Update",
+                    Obx(
+                      () => AppButton(
+                        loader: con.isLoader.value,
+                        onPressed: () async {
+                          DesktopRepository().editProfileApiCall(
+                            isLoader: con.isLoader,
+                            data: {
+                              "first_name": con.firstNameCon.text.trim(),
+                              "last_name": con.lastNameCon.text.trim(),
+                              "email": con.emailCon.text.trim(),
+                              "phone": con.mobileNumberCon.text.trim(),
+                              if (con.apiImage != null)
+                                "image": await dio.MultipartFile.fromFile(
+                                  con.apiImage!.path,
+                                  filename: con.imagePath.value.split("/").last,
+                                ),
+                            },
+                          );
+                        },
+                        title: "Update",
+                      ),
                     )
                   ],
                 ).paddingSymmetric(horizontal: 20))
@@ -163,13 +173,16 @@ class EditAccountScreen extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Obx(
-                () => editAccountController.imagePath.isNotEmpty
+                () => con.imagePath.isNotEmpty
                     ? Image.file(
-                        io.File(editAccountController.imagePath.value),
+                        io.File(con.imagePath.value),
                         fit: BoxFit.cover,
                       )
-                    : editAccountController.image.value.isNotEmpty
-                        ? Image.network(editAccountController.image.value)
+                    : con.image.value.isNotEmpty
+                        ? Image.network(
+                            con.image.value,
+                            fit: BoxFit.cover,
+                          )
                         : Image.network(
                             "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
                             fit: BoxFit.cover,
@@ -185,7 +198,7 @@ class EditAccountScreen extends StatelessWidget {
           child: Center(
             child: GestureDetector(
               onTap: () {
-                editAccountController.showImagePickerBottomSheet();
+                con.showImagePickerBottomSheet();
               },
               child: Container(
                   padding: const EdgeInsets.all(4),

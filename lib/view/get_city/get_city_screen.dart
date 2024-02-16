@@ -118,7 +118,7 @@ class GetCityScreen extends StatelessWidget {
                                             // log("text");
                                             City selectedCity = suggestion as City;
                                             con.cityTextController.value.text = selectedCity.cityName.toString();
-                                            con.cityId.value = selectedCity.id.toString();
+                                            con.cityId.value = selectedCity.cityName.toString();
                                           },
                                         ),
                                         const SizedBox(height: 20),
@@ -141,10 +141,11 @@ class GetCityScreen extends StatelessWidget {
                                                       if (con.isLoading.isFalse) {
                                                         FocusScope.of(context).unfocus();
 
-                                                        /// Set User Token
-                                                        await LocalStorage.setCity(city: con.cityId.value);
-
-                                                        Get.offAllNamed(AppRoutes.indexScreen);
+                                                        if (con.cityTextController.value.text.isNotEmpty) {
+                                                          /// Set User location
+                                                          await LocalStorage.setCity(city: con.cityId.value);
+                                                          Get.offAllNamed(AppRoutes.indexScreen);
+                                                        }
                                                       }
                                                     },
                                                   ),

@@ -13,8 +13,7 @@ class AppAssets {
   static String scanningIcon = '${iconPath}ic_scanning.png';
   static String searchIcon = '${iconPath}ic_search.png';
   static String shoppingBasketIcon = '${iconPath}ic_shopping_basket.png';
-  static String piggyBank="${iconPath}ic_piggy_bank.png";
-  
+  static String piggyBank = "${iconPath}ic_piggy_bank.png";
 
   /// IMAGES ///
   static String appLogo = '${imagesPath}app_logo.png';
@@ -24,7 +23,8 @@ class AppAssets {
   static String searchDataEmpty = '${imagesPath}search_empty.png';
   static String vegImg = '${imagesPath}veg.png';
   static String nonVegImg = '${imagesPath}non_veg.png';
-
+  static String locationBanner = '${imagesPath}location_banner.png';
+  static String bgBanner = '${imagesPath}bg_image.png';
 
   /// SVG ///
 

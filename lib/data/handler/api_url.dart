@@ -35,6 +35,7 @@ class ApiUrls {
   ///order api
   static String getOrderListUrl = 'get-order';
   static String orderTrackUrl = "order-detail";
+  static String placeOrderUrl = "create-order";
 
   ///wish list
   static String getWishListUrl = "get-wishlist";

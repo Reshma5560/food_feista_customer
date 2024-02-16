@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodapplication/data/models/get_cupon_model.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 
 import '../data/models/get_cart_data_model.dart';
 import '../data/models/get_food_item_data_model.dart';
 
 class CartController extends GetxController {
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
   RxBool isOpen = false.obs;
 
   Rx<TextEditingController> couponController = TextEditingController().obs;
@@ -18,11 +19,19 @@ class CartController extends GetxController {
   RxList<FoodVariant> foodItemVariantData = <FoodVariant>[].obs;
   Rx<GetCartDataModel> cartData = GetCartDataModel().obs;
 
+  List variantData = [];
+  List variantDataForAPI = [];
+
   Rx<double> totalAmount = 0.00.obs;
+  RxInt couponDiscount = 0.obs;
+  RxInt selectedIndex = (-1).obs;
+  RxString couponId = "".obs;
 
   @override
   Future<void> onReady() async {
-    await DesktopRepository().getCartAPI();
+    if (LocalStorage.token.value.isNotEmpty) {
+      await DesktopRepository().getCartAPI();
+    }
     super.onReady();
   }
 

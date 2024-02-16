@@ -95,7 +95,7 @@ class AppTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (/*titleText != null &&*/ errorMessage != null) {
+    if (/*titleText != null && */ errorMessage != null) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

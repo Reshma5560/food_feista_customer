@@ -12,8 +12,8 @@ class ManageAddressController extends GetxController {
   RxBool isLoader = true.obs;
 
   @override
-  void onReady() {
-    AuthRepository().getAddressApiCall(isLoader: isLoader);
+  Future<void> onReady() async {
+    await AuthRepository().getAddressApiCall(isLoader: isLoader);
     super.onReady();
   }
 }
