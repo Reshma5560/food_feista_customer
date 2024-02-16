@@ -1653,6 +1653,8 @@ class Food {
   final RxInt? price;
   final RxInt? itemCount;
   final RxDouble? totalPrice;
+  final RxDouble? variantPrice;
+  final RxDouble? addonsPrice;
   final int? tax;
   final String? taxType;
   final double? discount;
@@ -1696,6 +1698,8 @@ class Food {
     this.price,
     this.itemCount,
     this.totalPrice,
+    this.variantPrice,
+    this.addonsPrice,
     this.tax,
     this.taxType,
     this.discount,
@@ -1740,6 +1744,8 @@ class Food {
         price: RxInt(json["price"]),
         itemCount: RxInt(1),
         totalPrice: RxDouble(0.0),
+        addonsPrice: RxDouble(0.0),
+        variantPrice: RxDouble(0.0),
         tax: json["tax"],
         taxType: json["tax_type"],
         discount: double.parse(json["discount"].toString()),

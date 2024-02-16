@@ -53,6 +53,7 @@ class ApiUrls {
   ///restaurant
   static String restaurantDetailsUrl = "restaurant-detail";
   static String addToCartUrl = "custom-cart";
+  static String updateCartUrl = "update-cart-data";
   static String applyCouponUrl = "restaurant/coupon/list";
 
   ///review

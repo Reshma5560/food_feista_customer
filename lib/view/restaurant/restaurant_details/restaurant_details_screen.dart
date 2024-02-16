@@ -253,7 +253,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      "₹ ${item?.price}",
+                                      "₹ ${item?.price?.value}",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -565,7 +565,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
   }
 
   _addItem(BuildContext context, {required Food item}) {
-    item.totalPrice?.value = double.parse(item.price.toString());
+    item.totalPrice?.value = (double.parse(item.price!.value.toString()) * item.itemCount!.value);
 
     return Get.bottomSheet(
       isDismissible: false,
@@ -655,6 +655,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                             con.variantData.add(
                                               {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
                                             );
+                                            item.variantPrice?.value = item.variantPrice!.value + double.parse(data?.price.toString() ?? "0");
                                             item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
                                             con.variantDataForAPI.add(data?.id);
                                             con.variantData.take(2);
@@ -681,6 +682,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                                         con.variantData.add(
                                                           {"id": item.foodVariant?[index].id, "food_variation_id": data?.id, "price": data?.price},
                                                         );
+                                                        item.variantPrice?.value =
+                                                            item.variantPrice!.value + double.parse(data?.price.toString() ?? "0");
                                                         item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
                                                         con.variantDataForAPI.add(data?.id);
                                                         printWhite("------------------   ${con.variantData}");
@@ -691,6 +694,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                                         con.variantData.removeAt(selIndex);
 
                                                         con.variantDataForAPI.removeAt(selIndex);
+                                                        item.variantPrice?.value =
+                                                            item.variantPrice!.value + double.parse(data?.price.toString() ?? "0");
                                                         item.totalPrice?.value = (item.totalPrice!.value + double.parse(data?.price ?? "0"));
                                                         con.variantData.insert(
                                                           selIndex,
@@ -788,6 +793,14 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                       item.addons!.length,
                                       (index) {
                                         var data = item.addons![index];
+
+                                        if (data.isSelected?.value == true) {
+                                          con.addonsData.add(data.id);
+                                          item.addonsPrice?.value = item.addonsPrice!.value + double.parse(data.price.toString());
+                                          item.totalPrice?.value = (item.totalPrice!.value + double.parse(data.price.toString()));
+                                          // printWhite(con.addonsData);
+                                        }
+
                                         return Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -809,12 +822,16 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                                                     if (data.isSelected?.value == true) {
                                                       con.addonsData.add(data.id);
-                                                      item.totalPrice?.value = (item.totalPrice!.value + double.parse(data.price.toString()));
+                                                      item.addonsPrice?.value = item.addonsPrice!.value + double.parse(data.price.toString());
+                                                      item.totalPrice?.value =
+                                                          (item.totalPrice!.value + (double.parse(data.price.toString()) * item.itemCount!.value));
                                                       printWhite(con.addonsData);
                                                     } else {
                                                       if (con.addonsData.contains(data.id)) {
                                                         con.addonsData.remove(data.id);
-                                                        item.totalPrice?.value = (item.totalPrice!.value - double.parse(data.price.toString()));
+                                                        item.addonsPrice?.value = item.addonsPrice!.value - double.parse(data.price.toString());
+                                                        item.totalPrice?.value =
+                                                            (item.totalPrice!.value - (double.parse(data.price.toString()) * item.itemCount!.value));
                                                         printWhite(con.addonsData);
                                                       }
                                                     }
@@ -861,13 +878,26 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                     if (item.itemCount!.value < item.minimumCartQuantity!.toInt()) {
                                     } else {
                                       item.itemCount?.value--;
-                                      item.totalPrice?.value = (item.totalPrice!.value - double.parse(item.price?.value.toString() ?? "0"));
+
+                                      ///old one
+                                      item.totalPrice?.value = (item.totalPrice!.value -
+                                          (double.parse(
+                                                item.price?.value.toString() ?? "0",
+                                              ) +
+                                              double.parse(
+                                                item.addonsPrice.toString(),
+                                              ) +
+                                              double.parse(
+                                                item.variantPrice.toString(),
+                                              )));
+
+                                      // item.totalPrice?.value = (item.totalPrice!.value - double.parse(item.totalPrice!.value.toString()));
 
                                       // con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
                                     }
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                                     child: Icon(
                                       Icons.remove,
@@ -894,13 +924,23 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                     } else {
                                       // itemCount++;
                                       item.itemCount?.value++;
-                                      item.totalPrice?.value = (item.totalPrice!.value + double.parse(item.price?.value.toString() ?? "0"));
+                                      // item.totalPrice?.value = (item.totalPrice!.value + double.parse(item.price?.value.toString() ?? "0"));///old one
+                                      item.totalPrice?.value = (item.totalPrice!.value +
+                                          (double.parse(
+                                                item.price?.value.toString() ?? "0",
+                                              ) +
+                                              double.parse(
+                                                item.addonsPrice.toString(),
+                                              ) +
+                                              double.parse(
+                                                item.variantPrice.toString(),
+                                              )));
 
                                       // con.totalAmount.value = con.totalAmount.value + double.parse(item.price?.value.toString() ?? "0");
                                     }
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                                     child: Icon(
                                       Icons.add,
@@ -914,7 +954,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                             Expanded(
                               child: Obx(
                                 () => Text(
-                                  "₹${item.totalPrice.toString()}",
+                                  "₹${item.totalPrice?.value.toString()}",
                                   style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
                                 ),
                               ),
@@ -923,8 +963,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       AppButton(
-                        width: 100,
+                        width: 110,
                         height: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 10),
                         onPressed: () async {
                           await RestaurantRepository().addToCartItemAPI(
                             params: {

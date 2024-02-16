@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import '../../../data/models/get_cart_data_model.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../repositories/desktop_repositories.dart';
+import '../../../repositories/restaurant_repositories.dart';
 import '../../../res/app_dialog.dart';
 import '../../../res/app_strings.dart';
 import '../../../res/color_print.dart';
@@ -197,7 +198,7 @@ class CartScreen extends StatelessWidget {
                                                                     }
                                                                   },
                                                                   child: Container(
-                                                                    padding: const EdgeInsets.all(8),
+                                                                    padding: const EdgeInsets.all(5),
                                                                     decoration: BoxDecoration(
                                                                         color: Theme.of(context).primaryColor,
                                                                         borderRadius: BorderRadius.circular(25)),
@@ -233,7 +234,7 @@ class CartScreen extends StatelessWidget {
                                                                     }
                                                                   },
                                                                   child: Container(
-                                                                    padding: const EdgeInsets.all(8),
+                                                                    padding: const EdgeInsets.all(5),
                                                                     decoration: BoxDecoration(
                                                                         color: Theme.of(context).primaryColor,
                                                                         borderRadius: BorderRadius.circular(25)),
@@ -475,7 +476,7 @@ class CartScreen extends StatelessWidget {
                                               style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
                                             ),
                                             Text(
-                                              "₹ ${con.totalAmount.value}",
+                                              "₹ ${con.cartData.value.data?.totalPrice ?? "0"}",
                                               style: AppStyle.authTitleStyle().copyWith(fontSize: 15.sp),
                                             ),
                                           ],
@@ -561,7 +562,7 @@ class CartScreen extends StatelessWidget {
 
   _addItem(BuildContext context, {required CartDetail item}) {
     // final CartDataController cartDataController = Get.find<CartDataController>();
-
+    item.totalPrice?.value = (double.parse(item.price.toString()) * item.itemCount!.value);
     // item.totalPrice?.value = double.parse(item.price.toString()) * item.itemCount!.value;
 
     return Get.bottomSheet(
@@ -665,18 +666,6 @@ class CartScreen extends StatelessWidget {
                                                 }
                                               }
                                             }
-
-                                            // item.variantIds?.forEach((element) {
-                                            //   // printWhite("------------------1   $element");
-                                            //   // printWhite("------------------2   ${data?.id}");
-                                            //   if (element == data?.id.toString()) {
-                                            //     con.variantData.add(
-                                            //       {"id": con.foodItemVariantData[index].id, "food_variation_id": data?.id, "price": data?.price},
-                                            //     );
-                                            //     con.variantDataForAPI.add(data?.id);
-                                            //     con.variantData.take(2);
-                                            //   }
-                                            // });
                                           }
 
                                           return Padding(
@@ -795,67 +784,81 @@ class CartScreen extends StatelessWidget {
                         )
                       else
                         const SizedBox.shrink(),
-                      // (item.addons != null && item.addons!.isNotEmpty)
-                      //     ? Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Text(
-                      //         "AddOns",
-                      //         style: AppStyle.authTitleStyle().copyWith(
-                      //           fontSize: 20,
-                      //           fontWeight: FontWeight.w600,
-                      //         ),
-                      //       ),
-                      //       Column(
-                      //         children: List.generate(
-                      //           item.addons!.length,
-                      //               (index) {
-                      //             var data = item.addons![index];
-                      //             return Row(
-                      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //               children: [
-                      //                 Text(
-                      //                   "${data.addonName ?? " "}(${data.price ?? "0"})",
-                      //                   style: AppStyle.authTitleStyle().copyWith(
-                      //                     fontSize: 15,
-                      //                     color: AppColors.black,
-                      //                     fontWeight: FontWeight.w500,
-                      //                   ),
-                      //                 ),
-                      //                 Obx(
-                      //                       () => Transform.scale(
-                      //                     scale: 0.7,
-                      //                     child: Checkbox(
-                      //                       value: data.isSelected?.value,
-                      //                       onChanged: (value) {
-                      //                         data.isSelected?.value = !data.isSelected!.value;
-                      //
-                      //                         if (data.isSelected?.value == true) {
-                      //                           con.addonsData.add(data.id);
-                      //                           item.totalPrice?.value = (item.totalPrice!.value + double.parse(data.price.toString()));
-                      //                           printWhite(con.addonsData);
-                      //                         } else {
-                      //                           if (con.addonsData.contains(data.id)) {
-                      //                             con.addonsData.remove(data.id);
-                      //                             item.totalPrice?.value = (item.totalPrice!.value - double.parse(data.price.toString()));
-                      //                             printWhite(con.addonsData);
-                      //                           }
-                      //                         }
-                      //                       },
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               ],
-                      //             );
-                      //           },
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // )
-                      //     : const SizedBox.shrink(),
+                      (con.foodItemAddonData.isNotEmpty)
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "AddOns",
+                                    style: AppStyle.authTitleStyle().copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Column(
+                                    children: List.generate(
+                                      con.foodItemAddonData.length,
+                                      (index) {
+                                        var data = con.foodItemAddonData[index];
+                                        if (item.addonIds != null) {
+                                          for (int i = 0; i < item.addonIds!.length; i++) {
+                                            if (item.addonIds![i] == data.id.toString()) {
+                                              item.addonsPrice?.value = item.addonsPrice!.value + double.parse(data.price.toString());
+                                              data.isSelected?.value = true;
+                                              con.addonsData.add(data.id);
+                                              printWhite("--------addonsData----------$i   ${con.addonsData}");
+                                            }
+                                          }
+                                        }
+                                        return Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "${data.addonName ?? " "}(${data.price ?? "0"})",
+                                              style: AppStyle.authTitleStyle().copyWith(
+                                                fontSize: 15,
+                                                color: AppColors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Obx(
+                                              () => Transform.scale(
+                                                scale: 0.7,
+                                                child: Checkbox(
+                                                  value: data.isSelected?.value,
+                                                  onChanged: (value) {
+                                                    data.isSelected?.value = !data.isSelected!.value;
+                                                    if (data.isSelected?.value == true) {
+                                                      con.addonsData.add(data.id);
+                                                      item.addonsPrice?.value = item.addonsPrice!.value + double.parse(data.price.toString());
+                                                      item.totalPrice?.value =
+                                                          (item.totalPrice!.value + (double.parse(data.price.toString()) * item.itemCount!.value));
+
+                                                      printWhite(con.addonsData);
+                                                    } else {
+                                                      if (con.addonsData.contains(data.id)) {
+                                                        con.addonsData.remove(data.id);
+                                                        item.addonsPrice?.value = item.addonsPrice!.value - double.parse(data.price.toString());
+                                                        item.totalPrice?.value =
+                                                            (item.totalPrice!.value - (double.parse(data.price.toString()) * item.itemCount!.value));
+                                                        printWhite(con.addonsData);
+                                                      }
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                       const SizedBox(
                         height: defaultPadding,
                       ),
@@ -882,14 +885,14 @@ class CartScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Obx(
-                                  () => Text(
-                                    item.totalPrice?.value == double.parse(item.price ?? "0")
-                                        ? "₹${item.price?.toString()}"
-                                        : "₹${item.totalPrice?.value}",
-                                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
-                                  ),
-                                ),
+                                // Obx(
+                                //   () => Text(
+                                //     item.totalPrice?.value == double.parse(item.price ?? "0")
+                                //         ? "₹${item.price?.toString()}"
+                                //         : "₹${item.totalPrice?.value}",
+                                //     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
+                                //   ),
+                                // ),
                                 Row(
                                   children: [
                                     InkWell(
@@ -897,13 +900,22 @@ class CartScreen extends StatelessWidget {
                                         if (item.itemCount!.value == 1) {
                                         } else {
                                           item.itemCount?.value--;
-                                          item.totalPrice?.value = (item.totalPrice!.value - double.parse(item.price ?? "0"));
+                                          item.totalPrice?.value = (item.totalPrice!.value -
+                                              (double.parse(
+                                                    item.food!.price.toString(),
+                                                  ) +
+                                                  double.parse(
+                                                    item.addonsPrice.toString(),
+                                                  ) +
+                                                  double.parse(
+                                                    item.variantPrice.toString(),
+                                                  )));
 
                                           con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
                                         }
                                       },
                                       child: Container(
-                                        padding: const EdgeInsets.all(8),
+                                        padding: const EdgeInsets.all(5),
                                         decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                                         child: Icon(
                                           Icons.remove,
@@ -928,15 +940,23 @@ class CartScreen extends StatelessWidget {
                                       onTap: () {
                                         if (item.itemCount!.value >= item.food!.maximumCartQuantity!.toInt()) {
                                         } else {
-                                          // itemCount++;
                                           item.itemCount?.value++;
-                                          item.totalPrice?.value = (item.totalPrice!.value + double.parse(item.price ?? "0"));
+                                          item.totalPrice?.value = (item.totalPrice!.value +
+                                              (double.parse(
+                                                    item.food!.price.toString(),
+                                                  ) +
+                                                  double.parse(
+                                                    item.addonsPrice.toString(),
+                                                  ) +
+                                                  double.parse(
+                                                    item.variantPrice.toString(),
+                                                  )));
 
                                           con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
                                         }
                                       },
                                       child: Container(
-                                        padding: const EdgeInsets.all(8),
+                                        padding: const EdgeInsets.all(5),
                                         decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                                         child: Icon(
                                           Icons.add,
@@ -960,24 +980,27 @@ class CartScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // AppButton(
-                      //   width: 100,
-                      //   height: 30,
-                      //   onPressed: () async {
-                      //     await RestaurantRepository().addToCartItemAPI(
-                      //       params: {
-                      //         "restaurant_id": con.restaurantDetails?.id ?? "",
-                      //         "food_id": item.id ?? "",
-                      //         "total_price": item.totalPrice?.value.toString() ?? "",
-                      //         "total_qty": item.itemCount?.value.toString() ?? "",
-                      //         "variant_options": con.variantDataForAPI,
-                      //         "addons": con.addonsData,
-                      //       },
-                      //     );
-                      //     Get.back();
-                      //   },
-                      //   title: "Add to cart",
-                      // )
+                      AppButton(
+                        width: 100,
+                        height: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 10),
+                        onPressed: () async {
+                          await RestaurantRepository().updateCartItemAPI(
+                            params: {
+                              "cart_id": con.cartData.value.data?.id,
+                              "restaurant_id": con.cartData.value.data?.restaurantId ?? "",
+                              "food_id": item.foodId ?? "",
+                              "total_price": item.totalPrice?.value.toString() ?? "",
+                              "total_qty": item.itemCount?.value.toString() ?? "",
+                              "variant_options": con.variantDataForAPI,
+                              "addons": con.addonsData,
+                              "cart_detail_id": item.id,
+                            },
+                          );
+                          Get.back();
+                        },
+                        title: "Update",
+                      )
                     ],
                   ),
                 ),
@@ -987,250 +1010,10 @@ class CartScreen extends StatelessWidget {
         ),
       ),
     ).whenComplete(() {
+      item.totalPrice?.value = (double.parse(item.price.toString()) * item.itemCount!.value);
       con.variantData.clear();
       con.variantDataForAPI.clear();
+      con.addonsData.clear();
     });
   }
-
-// _editItem(BuildContext context, {required CartDetail data}) {
-//   return Get.bottomSheet(
-//     isDismissible: false,
-//     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.circular(defaultRadius * 3),
-//     ),
-//     Container(
-//       decoration: const BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.only(
-//           topLeft: Radius.circular(defaultRadius * 3),
-//           topRight: Radius.circular(defaultRadius * 3),
-//         ),
-//       ),
-//       width: Get.width,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(vertical: defaultPadding).copyWith(bottom: 0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           mainAxisSize: MainAxisSize.max,
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Text(
-//                     data.food?.foodName ?? "",
-//                     style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
-//                   ),
-//                   InkWell(
-//                     onTap: () {
-//                       con.isOpen.value = false;
-//                       Get.back();
-//                     },
-//                     child: Icon(
-//                       Icons.close,
-//                       color: AppColors.black,
-//                       size: 24,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const SizedBox(
-//               height: defaultPadding - 6,
-//             ),
-//             Container(
-//               height: 1,
-//               width: Get.width,
-//               color: AppColors.black,
-//             ),
-//             const SizedBox(
-//               height: defaultPadding - 6,
-//             ),
-//             Expanded(
-//               child: SingleChildScrollView(
-//                 child: Column(
-//                   children: [
-//                     con.foodItemVariantData.isNotEmpty
-//                         ? Padding(
-//                             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-//                             child: Column(
-//                               children: List.generate(
-//                                 con.foodItemVariantData.length,
-//                                 (index) {
-//                                   return Column(
-//                                     crossAxisAlignment: CrossAxisAlignment.start,
-//                                     children: [
-//                                       Text(
-//                                         con.foodItemVariantData[index].variationName ?? "",
-//                                         style: AppStyle.authTitleStyle().copyWith(
-//                                           fontSize: 20,
-//                                           fontWeight: FontWeight.w600,
-//                                         ),
-//                                       ),
-//                                       const SizedBox(
-//                                         height: defaultPadding - 6,
-//                                       ),
-//                                       Column(
-//                                         children: List.generate(
-//                                           con.foodItemVariantData[index].foodVariantOption?.length ?? 0,
-//                                           (index1) {
-//                                             var variantData = con.foodItemVariantData[index].foodVariantOption?[index1];
-//                                             return Padding(
-//                                               padding: const EdgeInsets.only(right: defaultPadding - 6),
-//                                               child: InkWell(
-//                                                 onTap: () {},
-//                                                 child: Padding(
-//                                                   padding: const EdgeInsets.only(bottom: defaultPadding),
-//                                                   child: Row(
-//                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                                     children: [
-//                                                       Text(
-//                                                         variantData?.variationOptionName ?? "",
-//                                                         style: AppStyle.authTitleStyle().copyWith(
-//                                                           fontSize: 15,
-//                                                           color: AppColors.black,
-//                                                           fontWeight: FontWeight.w500,
-//                                                         ),
-//                                                       ),
-//                                                       Container(
-//                                                         height: 15,
-//                                                         width: 15,
-//                                                         decoration: BoxDecoration(
-//                                                           shape: BoxShape.circle,
-//                                                           border: Border.all(color: Theme.of(context).primaryColor, width: 2),
-//                                                           // color: Theme.of(context).primaryColor,
-//                                                         ),
-//                                                         child: Padding(
-//                                                           padding: const EdgeInsets.all(1.5),
-//                                                           child: Container(
-//                                                             decoration: BoxDecoration(
-//                                                               shape: BoxShape.circle,
-//                                                               color: Theme.of(context).primaryColor,
-//                                                             ),
-//                                                           ),
-//                                                         ),
-//                                                       ),
-//                                                     ],
-//                                                   ),
-//                                                 ),
-//                                               ),
-//                                             );
-//                                           },
-//                                         ),
-//                                       ),
-//                                       const SizedBox(
-//                                         height: defaultPadding - 6,
-//                                       ),
-//                                     ],
-//                                   );
-//                                 },
-//                               ),
-//                             ),
-//                           )
-//                         : const SizedBox.shrink(),
-//                     con.foodItemAddonData.isNotEmpty
-//                         ? Padding(
-//                             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-//                             child: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text(
-//                                   "AddOns",
-//                                   style: AppStyle.authTitleStyle().copyWith(
-//                                     fontSize: 20,
-//                                     fontWeight: FontWeight.w600,
-//                                   ),
-//                                 ),
-//                                 Column(
-//                                   children: List.generate(
-//                                     con.foodItemAddonData.length,
-//                                     (index) {
-//                                       var addonsData = con.foodItemAddonData[index];
-//                                       return Row(
-//                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                         children: [
-//                                           Text(
-//                                             "${addonsData.addonName ?? " "}(${addonsData.price ?? "0"})",
-//                                             style: AppStyle.authTitleStyle().copyWith(
-//                                               fontSize: 15,
-//                                               color: AppColors.black,
-//                                               fontWeight: FontWeight.w500,
-//                                             ),
-//                                           ),
-//                                           Obx(
-//                                             () => Transform.scale(
-//                                               scale: 0.7,
-//                                               child: Checkbox(
-//                                                 value: addonsData.isSelected?.value,
-//                                                 onChanged: (value) {
-//                                                   addonsData.isSelected?.value = !addonsData.isSelected!.value;
-//                                                   if (addonsData.isSelected?.value == true) {
-//                                                     // data.totalPrice?.value = (data.totalPrice!.value + double.parse(data.price ?? "0"));
-//
-//                                                     con.totalAmount.value = con.totalAmount.value + double.parse(addonsData.price.toString());
-//                                                     data.totalPrice?.value = (data.totalPrice!.value + double.parse(addonsData.price.toString()));
-//                                                     // printWhite(con.addonsData);
-//                                                   } else {
-//                                                     data.totalPrice?.value = (data.totalPrice!.value - double.parse(addonsData.price.toString()));
-//                                                   }
-//                                                   // if (data.isActive?.value == 1) {
-//                                                   //   data.isActive?.value = 0;
-//                                                   //   printWhite(data.isActive?.value);
-//                                                   // } else {
-//                                                   //   data.isActive?.value = 1;
-//                                                   //   printWhite(data.isActive?.value);
-//                                                   // }
-//                                                 },
-//                                               ),
-//                                             ),
-//                                           ),
-//                                         ],
-//                                       );
-//                                     },
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           )
-//                         : const SizedBox.shrink(),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             Container(
-//               height: 60,
-//               decoration: BoxDecoration(
-//                 color: AppColors.white,
-//                 boxShadow: AppStyle.boxShadow(
-//                   offset: const Offset(0, -4),
-//                 ),
-//               ),
-//               child: Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-//                 child: Row(
-//                   children: [
-//                     Expanded(
-//                       child: Text(
-//                         "₹${data.price.toString()}",
-//                         style: AppStyle.authTitleStyle().copyWith(fontSize: 24, color: AppColors.black),
-//                       ),
-//                     ),
-//                     AppButton(
-//                       width: 100,
-//                       height: 30,
-//                       onPressed: () {},
-//                       title: "Continue",
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ),
-//   );
-// }
 }

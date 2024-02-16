@@ -18,7 +18,7 @@ class CartController extends GetxController {
   RxList<ItemAddon> foodItemAddonData = <ItemAddon>[].obs;
   RxList<FoodVariant> foodItemVariantData = <FoodVariant>[].obs;
   Rx<GetCartDataModel> cartData = GetCartDataModel().obs;
-
+  RxList addonsData = [].obs;
   List variantData = [];
   List variantDataForAPI = [];
 

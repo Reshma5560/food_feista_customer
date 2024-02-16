@@ -301,8 +301,8 @@ class DesktopRepository {
           if (con.cartItemData.isNotEmpty) {
             con.totalAmount.value = 0;
             for (var i = 0; i < con.cartItemData.length; i++) {
-              con.cartItemData[i].totalPrice?.value = double.parse(con.cartItemData[i].price ?? "0");
-              con.totalAmount.value = con.totalAmount.value + double.parse(con.cartItemData[i].price ?? "0");
+              con.cartItemData[i].totalPrice?.value = double.parse(con.cartItemData[i].subtotal ?? "0");
+              con.totalAmount.value = con.totalAmount.value + double.parse(con.cartItemData[i].subtotal ?? "0");
 
               printData(key: "TOTAL ", value: con.totalAmount.value);
             }
@@ -352,7 +352,7 @@ class DesktopRepository {
           printData(key: "foodItemAddonData length", value: con.foodItemAddonData.length);
           con.foodItemVariantData.value = searchModel.data?.foodVariant ?? [];
 
-          printData(key: "foodItemAddonData length", value: con.foodItemVariantData.length);
+          printData(key: "foodItemVariantData length", value: con.foodItemVariantData.length);
 
           return response;
         },

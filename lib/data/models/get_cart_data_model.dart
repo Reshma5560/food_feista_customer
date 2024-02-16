@@ -98,6 +98,8 @@ class CartDetail {
   final int? quantity;
   final RxInt? itemCount;
   final RxDouble? totalPrice;
+  final RxDouble? variantPrice;
+  final RxDouble? addonsPrice;
   final String? subtotal;
   final String? price;
   final dynamic tax;
@@ -118,6 +120,8 @@ class CartDetail {
     this.quantity,
     this.itemCount,
     this.totalPrice,
+    this.variantPrice,
+    this.addonsPrice,
     this.subtotal,
     this.price,
     this.tax,
@@ -137,8 +141,10 @@ class CartDetail {
         foodId: json["food_id"],
         restaurantId: json["restaurant_id"],
         quantity: json["quantity"],
-        itemCount: RxInt(1),
+        itemCount: RxInt(json["quantity"]),
         totalPrice: RxDouble(0.0),
+        addonsPrice: RxDouble(0.0),
+        variantPrice: RxDouble(0.0),
         subtotal: json["subtotal"],
         price: json["price"],
         tax: json["tax"],

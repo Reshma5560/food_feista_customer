@@ -67,7 +67,7 @@ class RestaurantRepository {
     }
   }
 
-  ///DELETE CART ITEM API
+  ///ADD CART ITEM API
   Future<dynamic> addToCartItemAPI({dynamic params}) async {
     // final CartController con = Get.find<CartController>();
     final IndexController indexCon = Get.find<IndexController>();
@@ -92,6 +92,33 @@ class RestaurantRepository {
       printError(type: this, errText: "$e");
     } finally {
       printWhite("ITEM ADD INTO CART SUCCESS");
+    }
+  }
+
+  Future<dynamic> updateCartItemAPI({dynamic params}) async {
+    // // final CartController con = Get.find<CartController>();
+    // final IndexController indexCon = Get.find<IndexController>();
+    try {
+      await APIFunction().postApiCall(apiName: ApiUrls.updateCartUrl, params: params).then(
+        (response) async {
+          printData(key: "update cart item, response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            if (!isValEmpty(response["message"])) {
+              toast(response["message"].toString());
+              await DesktopRepository().getCartAPI();
+              // indexCon.selectedIndex.value = 3;
+              //
+              // Get.offNamedUntil(AppRoutes.indexScreen, (route) => route.isFirst);
+              // Get.back();
+            }
+          }
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: this, errText: "$e");
+    } finally {
+      printWhite("ITEM UPDATE INTO CART SUCCESS");
     }
   }
 }
