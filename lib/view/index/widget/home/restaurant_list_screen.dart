@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodapplication/res/app_button.dart';
 import 'package:get/get.dart';
 
 import '../../../../controller/restaurant_list_controller.dart';
@@ -41,8 +42,10 @@ class RestaurantListScreen extends StatelessWidget {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   controller: con.scrollController,
-                                  padding: const EdgeInsets.all((defaultPadding - 6) * 2),
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  padding: const EdgeInsets.all(
+                                      (defaultPadding - 6) * 2),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     mainAxisSpacing: (defaultPadding - 6) * 2,
                                     crossAxisSpacing: (defaultPadding - 6) * 2,
@@ -52,40 +55,62 @@ class RestaurantListScreen extends StatelessWidget {
                                   itemBuilder: (context, i) {
                                     var item = con.restaurantList[i];
                                     return InkWell(
-                                      onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
-                                        item.id.toString(),
-                                        item.restaurantName,
-                                      ]),
+                                      onTap: () => Get.toNamed(
+                                          AppRoutes.restaurantDetailsScreen,
+                                          arguments: [
+                                            item.id.toString(),
+                                            item.restaurantName,
+                                          ]),
                                       child: Container(
                                         // width: 180,
                                         // margin: const EdgeInsets.only(right: defaultPadding - 6),
                                         decoration: BoxDecoration(
                                           color: AppColors.greyShad1,
-                                          borderRadius: BorderRadius.circular(defaultRadius),
+                                          borderRadius: BorderRadius.circular(
+                                              defaultRadius),
                                         ),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Expanded(
                                                   child: Text(
-                                                    item.restaurantName ?? "".toUpperCase(),
+                                                    item.restaurantName ??
+                                                        "".toUpperCase(),
                                                     // textAlign: TextAlign.center,
                                                     maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: AppColors.red,
+                                                        fontSize: 12.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                   ),
                                                 ),
                                                 Obx(
                                                   () => InkWell(
                                                     onTap: () async {
-                                                      await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
+                                                      await DesktopRepository()
+                                                          .postWishListAPI(
+                                                              index: i,
+                                                              id: item.id ?? "",
+                                                              isWishList:
+                                                                  false);
                                                     },
                                                     child: Icon(
-                                                      item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
+                                                      item.favorite?.value == 1
+                                                          ? Icons
+                                                              .favorite_outlined
+                                                          : Icons
+                                                              .favorite_outline_outlined,
                                                       color: Colors.red,
                                                     ),
                                                   ),
@@ -98,16 +123,24 @@ class RestaurantListScreen extends StatelessWidget {
                                               textAlign: TextAlign.left,
                                               maxLines: 3,
                                               overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(color: AppColors.groupSubText, fontSize: 12.sp),
+                                              style: TextStyle(
+                                                  color: AppColors.groupSubText,
+                                                  fontSize: 12.sp),
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   item.distanceKm ?? "",
                                                   style: TextStyle(
-                                                      color: AppColors.black.withOpacity(0.7), fontSize: 13.sp, fontWeight: FontWeight.w500),
+                                                      color: AppColors.black
+                                                          .withOpacity(0.7),
+                                                      fontSize: 13.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                 ),
                                                 Container(
                                                   height: 25,
@@ -116,10 +149,14 @@ class RestaurantListScreen extends StatelessWidget {
                                                   // padding: const EdgeInsets.all(2),
                                                   decoration: BoxDecoration(
                                                     color: Colors.green,
-                                                    borderRadius: BorderRadius.circular(8),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
                                                   ),
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Icon(
                                                         Icons.star,
@@ -129,7 +166,12 @@ class RestaurantListScreen extends StatelessWidget {
                                                       const SizedBox(width: 3),
                                                       Text(
                                                         item.ratingCount ?? "",
-                                                        style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                                        style: TextStyle(
+                                                            color:
+                                                                AppColors.white,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 12.sp),
                                                       ),
                                                     ],
                                                   ),
@@ -143,11 +185,14 @@ class RestaurantListScreen extends StatelessWidget {
                                                 width: Get.width,
                                                 imageUrl: item.logo ?? "",
                                                 fit: BoxFit.fill,
-                                                borderRadius: BorderRadius.circular(defaultRadius),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        defaultRadius),
                                               ),
                                             ),
                                           ],
-                                        ).paddingSymmetric(horizontal: 10, vertical: 10),
+                                        ).paddingSymmetric(
+                                            horizontal: 10, vertical: 10),
                                       ),
                                     );
                                   },
@@ -188,9 +233,112 @@ class RestaurantListScreen extends StatelessWidget {
               Get.back();
             },
           ),
+          actions: [
+            InkWell(
+                onTap: () {
+                  _filterRestaurant();
+                },
+                child: Icon(Icons.filter_alt))
+          ],
           title: "Restaurant",
           centerTitle: true,
-          titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 14)),
+          titleStyle: AppStyle.customAppBarTitleStyle()
+              .copyWith(color: AppColors.black, fontSize: 14)),
     );
+  }
+
+  void _filterRestaurant() {
+    Get.bottomSheet(
+      isDismissible: false,
+      backgroundColor: Theme.of(Get.context!).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(defaultRadius * 3),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(defaultRadius * 3),
+            topRight: Radius.circular(defaultRadius * 3),
+          ),
+        ),
+        width: Get.width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: defaultPadding)
+              .copyWith(bottom: 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Filter",
+                      style: AppStyle.authTitleStyle()
+                          .copyWith(fontSize: 24, color: AppColors.black),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: AppColors.black,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: defaultPadding - 6,
+              ),
+              Container(
+                height: 1,
+                width: Get.width,
+                color: AppColors.black,
+              ),
+              Wrap(
+                children: _buildChoiceList(),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              AppButton(
+                onPressed: () async {
+                  await DesktopRepository().getRestaurantListAPI(
+                      isInitial: true, categoryID: con.categoryId.value);
+                },
+                child: Text("Filter"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  _buildChoiceList() {
+    List<Widget> choices = <Widget>[];
+    for (var item in con.getCuisineListData) {
+      choices.add(Container(
+        padding: const EdgeInsets.all(2.0),
+        child: ChoiceChip(
+          selectedColor: Theme.of(Get.context!).primaryColor,
+          label: Text(item.cuisineName ?? ""),
+          selected: con.selectedChoice.contains(item.id),
+          //  == item.id,
+          onSelected: (selected) {
+            con.selectedChoice.contains(item.id)
+                ? con.selectedChoice.remove(item.id)
+                : con.selectedChoice.add(item.id ?? "");
+          },
+        ),
+      ));
+    }
+    return choices;
   }
 }

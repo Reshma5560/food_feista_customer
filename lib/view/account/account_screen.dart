@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodapplication/common_widgets/custom_alert_dislog.dart';
 import 'package:foodapplication/controller/account/account_controller.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_button.dart';
@@ -47,7 +46,8 @@ class AccountScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: defaultPadding),
                       child: AppButton(
                         onPressed: () {
                           Get.offAllNamed(AppRoutes.loginScreen);
@@ -146,7 +146,8 @@ class AccountScreen extends StatelessWidget {
         // ),
         title: "My Account",
         centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+        titleStyle:
+            AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
       ),
     );
   }
@@ -260,31 +261,32 @@ class AccountScreen extends StatelessWidget {
         CustomListTile(
           icon: Icons.logout,
           title: 'LOGOUT',
-          onPressed: () => showDialog(
-            barrierDismissible: false,
-            context: Get.context!,
-            builder: (context) {
-              return CustomLogoutAlertDialog(
-                text: "Logout",
-                content: "Are you sure you want logout ?",
-                yesButtonText: "Yes",
-                onYesPressed: () {
-                  con.isLoader.value = true;
-                  LocalStorage.clearLocalStorage().then(
-                    (value) {
-                      con.isLoader.value = false;
-                      Get.offAllNamed(AppRoutes.loginScreen);
-                    },
-                  );
-                },
-                //  () async => await DesktopRepository()
-                //     .logOutApiCall(isLoader: profileController.isLoader),
-                noButtonText: "No",
-                onNoPressed: () => Get.back(),
-                bgColor: Theme.of(context).primaryColor,
-              );
-            },
-          ),
+          onPressed: () {},
+          // onPressed: () => showDialog(
+          //   barrierDismissible: false,
+          //   context: Get.context!,
+          //   builder: (context) {
+          //     return CustomLogoutAlertDialog(
+          //       text: "Logout",
+          //       content: "Are you sure you want logout ?",
+          //       yesButtonText: "Yes",
+          //       onYesPressed: () {
+          //         con.isLoader.value = true;
+          //         LocalStorage.clearLocalStorage().then(
+          //           (value) {
+          //             con.isLoader.value = false;
+          //             Get.offAllNamed(AppRoutes.loginScreen);
+          //           },
+          //         );
+          //       },
+          //       //  () async => await DesktopRepository()
+          //       //     .logOutApiCall(isLoader: profileController.isLoader),
+          //       noButtonText: "No",
+          //       onNoPressed: () => Get.back(),
+          //       bgColor: Theme.of(context).primaryColor,
+          //     );
+          //   },
+          // ),
         ),
       ],
     );
@@ -296,7 +298,8 @@ class CustomListTile extends StatelessWidget {
   final String title;
   final void Function()? onPressed;
 
-  const CustomListTile({super.key, required this.icon, required this.title, this.onPressed});
+  const CustomListTile(
+      {super.key, required this.icon, required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -310,7 +313,10 @@ class CustomListTile extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
+        Expanded(
+            child: Text(title,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: 14))),
         Icon(
           Icons.arrow_forward_ios,
           size: defaultPadding,
