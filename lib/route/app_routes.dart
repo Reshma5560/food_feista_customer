@@ -22,4 +22,6 @@ class AppRoutes {
   static String orderTrackScreen = "/ORDER_TRACK_SCREEN";
   static String placeOrderScreen = "/PLACE_ORDER_SCREEN";
   static String locationEnableScreen = "/LOCATION_ENABLE_SCREEN";
+  static String restaurantListScreen = "/RESTAURANT_LIST_SCREEN";
+  static String categoryListScreen = "/CATEGORY_LIST_SCREEN";
 }

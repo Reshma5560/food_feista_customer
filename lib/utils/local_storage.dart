@@ -16,6 +16,8 @@ class Prefs {
   static const String isUserActive = "USER_ACTIVE";
   static const String isUserVerify = "USER_VERIFY";
   static const String isUserCity = "USER_CITY";
+  static const String userLat = "USER_LAt";
+  static const String userLong = "USER_LONG";
 
   static const String userEmail = "USER_EMAIL";
   static const String userPassword = "USER_PASSWORD";
@@ -39,6 +41,8 @@ class LocalStorage {
   static RxString lastName = "".obs;
   static RxString userImage = "".obs;
   static RxString userCity = "".obs;
+  static RxDouble userLat = 0.0.obs;
+  static RxDouble userLong = 0.0.obs;
   static RxInt mobileNumber = 0.obs;
   static RxBool isUserActive = false.obs;
   static RxBool isUserVerify = false.obs;
@@ -104,6 +108,15 @@ class LocalStorage {
   static Future<void> setCity({required String city}) async {
     await prefs.write(Prefs.isUserCity, city.isNotEmpty ? city : userCity);
     userCity.value = prefs.read(Prefs.isUserCity) ?? "";
+  }
+
+  static Future<void> setLatLong({required double lat, required double long}) async {
+    await prefs.write(Prefs.userLat, lat != 0.0 ? lat : userLat.value);
+    await prefs.write(Prefs.userLong, long != 0.0 ? long : userLong.value);
+    userLat.value = prefs.read(Prefs.userLat) ?? 0.0;
+    userLong.value = prefs.read(Prefs.userLong) ?? 0.0;
+    printData(key: "User LAT", value: "${LocalStorage.userLat.value}");
+    printData(key: "User LONG", value: "${LocalStorage.userLong.value}");
   }
 
   /// Store device info
@@ -172,6 +185,8 @@ class LocalStorage {
     email.value = prefs.read(Prefs.userEmail) ?? "";
     password.value = prefs.read(Prefs.userPassword) ?? "";
     isRemember.value = prefs.read(Prefs.rememberMe) ?? false;
+    userLat.value = prefs.read(Prefs.userLat) ?? 0.0;
+    userLong.value = prefs.read(Prefs.userLong) ?? 0.0;
     // isGuestUser.value = prefs.read(Prefs.isGuestUser) ?? true;
     // showPreview.value = prefs.read(Prefs.showPreview) ?? true;
     // likeConcept.value = prefs.read(Prefs.likeConcept) ?? true;
@@ -204,5 +219,7 @@ class LocalStorage {
     printData(key: "User CITY", value: LocalStorage.userCity.value);
     printData(key: "User EMAIL", value: LocalStorage.email.value);
     printData(key: "User PASSWORD", value: LocalStorage.password.value);
+    printData(key: "User LAT", value: LocalStorage.userLat.value);
+    printData(key: "User LONG", value: LocalStorage.userLong.value);
   }
 }

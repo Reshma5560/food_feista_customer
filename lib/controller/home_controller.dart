@@ -39,8 +39,8 @@ class HomeController extends GetxController {
   List<String> sellingTypeList = ["Recent Selling", "Top Selling", "Whats New", "Deal Products"];
 
   @override
-  void onReady() {
-    DesktopRepository().getHomeData();
+  Future<void> onReady() async {
+   await DesktopRepository().getHomeData();
     super.onReady();
   }
 }

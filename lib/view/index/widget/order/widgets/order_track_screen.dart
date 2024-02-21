@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/order_tracker_controller.dart';
 import 'package:foodapplication/packages/cached_network_image/cached_network_image.dart';
 import 'package:foodapplication/res/app_assets.dart';
+import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
@@ -22,28 +23,35 @@ class OrderTrackScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: TweenAnimationBuilder(
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeOutCubic,
-        tween: Tween(begin: 20.0, end: 1.0),
-        builder: (context, value, child) {
-          return AnimatedOpacity(
-            opacity: value == 20 ? 0 : 1,
-            duration: const Duration(milliseconds: 700),
-            child: Obx(
-              () => con.isLoading.isTrue
-                  ? const AppLoader()
-                  : Column(
-                      children: [
-                        _appHeader(context),
-                        const SizedBox(height: 10),
-                        Expanded(child: _bodyModule()),
-                      ],
-                    ),
-            ),
-          );
-        },
+      body: Obx(
+        () => con.isLoading.isTrue
+            ? const AppLoader()
+            : Column(
+                children: [
+                  _appHeader(context),
+                  const SizedBox(height: 10),
+                  Expanded(child: _bodyModule()),
+                ],
+              ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: (con.orderTrackModel.value.data?.orderStatus?.statusName == "Order Delivered")
+          ? FloatingActionButton.extended(
+              label: Text(
+                "Add Review",
+                style: AppStyle.customAppBarTitleStyle().copyWith(fontSize: 14),
+              ),
+              icon: const Icon(Icons.add),
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: () {},
+              // child: Row(
+              //   children: [
+              //     Text("Add Review"),
+              //     Icon(Icons.add),
+              //   ],
+              // ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 
@@ -73,7 +81,7 @@ class OrderTrackScreen extends StatelessWidget {
   Widget _bodyModule() {
     var item = con.orderTrackModel.value.data;
     return ListView(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: kFloatingActionButtonMargin + 48),
       physics: const RangeMaintainingScrollPhysics(),
       shrinkWrap: true,
       children: [
@@ -83,21 +91,21 @@ class OrderTrackScreen extends StatelessWidget {
         ),
         Text(
           "${item?.restaurant?.restaurantName}",
-          style: TextStyle(fontSize: 14, color: AppColors.black, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 14.sp, color: AppColors.black, fontWeight: FontWeight.w600),
         ),
         Text(
           "${item?.restaurant?.address}",
-          style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w500),
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        // Divider(
+        //   color: AppColors.grey,
+        // ),
         SizedBox(
           height: 15.h,
         ),
         Text(
           "Your Order",
-          style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 14.sp, color: AppColors.black, fontWeight: FontWeight.w600),
         ),
         Divider(
           color: AppColors.grey,
@@ -107,11 +115,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Item total",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w500),
             ),
             Text(
               "₹${item?.orderAmount}",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -127,11 +135,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Taxes",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
             Text(
               "₹0.0",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -143,11 +151,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Delivery Charge",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
             Text(
               "₹0.0",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -159,11 +167,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Restaurant Packibg Charges",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
             Text(
               "₹0.0",
-              style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
+              style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -175,11 +183,11 @@ class OrderTrackScreen extends StatelessWidget {
           children: [
             Text(
               "Grand total",
-              style: TextStyle(fontSize: 15, color: AppColors.black, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 15.sp, color: AppColors.black, fontWeight: FontWeight.w700),
             ),
             Text(
               "₹${item?.orderAmount}",
-              style: TextStyle(fontSize: 15, color: AppColors.black, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 15.sp, color: AppColors.black, fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -191,51 +199,51 @@ class OrderTrackScreen extends StatelessWidget {
         ),
         Text(
           "Order Details",
-          style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 14.sp, color: AppColors.black, fontWeight: FontWeight.w600),
         ),
         Divider(
           color: AppColors.grey,
         ),
         Text(
           "Order Number",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
           "${item?.invoiceNumber}",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Text(
           "Payment",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
           "${item?.paymentStatus?.statusName}",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Text(
           "Date",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
           "${DateFormat("MMMM DD,yyy").format(item?.createdAt ?? DateTime.now())} at ${DateFormat("HH:mm a").format(item?.createdAt ?? DateTime.now())}",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
         ),
         Text(
           "Phone number",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         Text(
           item?.user?.phone?.replaceRange(6, 10, "XXXX") ?? "",
-          style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
         ),
         SizedBox(
           height: 10.h,
@@ -244,14 +252,14 @@ class OrderTrackScreen extends StatelessWidget {
           visible: item?.deliveryAddress != null ? true : false,
           child: Text(
             "Deliver to",
-            style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
           ),
         ),
         Visibility(
           visible: item?.deliveryAddress != null ? true : false,
           child: Text(
             "${item?.deliveryAddress?.house ?? ""} ${item?.deliveryAddress?.road ?? ""} ${item?.deliveryAddress?.address}, ${item?.deliveryAddress?.city?.cityName}, ${item?.deliveryAddress?.state?.stateName}.",
-            style: TextStyle(fontSize: 10, color: AppColors.black, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 12.sp, color: AppColors.black, fontWeight: FontWeight.w400),
           ),
         ),
         SizedBox(
@@ -280,6 +288,14 @@ class OrderTrackScreen extends StatelessWidget {
         SizedBox(
           height: 15.h,
         ),
+        Obx(
+          () => con.isCanceled.isTrue
+              ? AppButton(
+                  onPressed: () {},
+                  title: "CANCEL ORDER",
+                )
+              : const SizedBox.shrink(),
+        ),
       ],
     ).paddingSymmetric(horizontal: 10.w);
   }
@@ -299,58 +315,62 @@ class OrderTrackScreen extends StatelessWidget {
               height: 60.h,
               width: 60.w,
               fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(defaultRadius),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        item?.food?.foodName ?? "",
-                        style: TextStyle(fontSize: 13, color: AppColors.black, fontWeight: FontWeight.w400),
-                      ),
-                      Image.asset(
-                        item?.food?.veg == 0 ? AppAssets.nonVegImg : AppAssets.vegImg,
-                        height: 20,
-                        width: 20,
-                      )
-                    ],
-                  ),
-                  // Visibility(
-                  //   visible: item.variant.isNotEmpty ? true : false,
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         "Types of ${item.food.foodName} : ",
-                  //         style: TextStyle(fontSize: 12),
-                  //       ),
-                  //       SizedBox(
-                  //         height: 20,
-                  //         child: ListView.builder(
-                  //           scrollDirection: Axis.horizontal,
-                  //           shrinkWrap: true,
-                  //           itemCount: item.variant.length,
-                  //           itemBuilder: (BuildContext context, int index) {
-                  //             return Text(
-                  //               "${item.variant[index].foodVariant.variationName} (${item.variant[index].variationOptionName})",
-                  //               maxLines: 2,
-                  //               overflow: TextOverflow.ellipsis,
-                  //               style: TextStyle(fontSize: 12),
-                  //             );
-                  //           },
-                  //         ),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
-                  Text(
-                    "${item?.quantity} X ₹${item?.food?.price}",
-                    style: TextStyle(fontSize: 12, color: AppColors.black, fontWeight: FontWeight.w400),
-                  )
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(left: defaultPadding - 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item?.food?.foodName ?? "",
+                          style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w500),
+                        ),
+                        Image.asset(
+                          item?.food?.veg == 0 ? AppAssets.nonVegImg : AppAssets.vegImg,
+                          height: 20,
+                          width: 20,
+                        )
+                      ],
+                    ),
+                    // Visibility(
+                    //   visible: item.variant.isNotEmpty ? true : false,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //       Text(
+                    //         "Types of ${item.food.foodName} : ",
+                    //         style: TextStyle(fontSize: 12),
+                    //       ),
+                    //       SizedBox(
+                    //         height: 20,
+                    //         child: ListView.builder(
+                    //           scrollDirection: Axis.horizontal,
+                    //           shrinkWrap: true,
+                    //           itemCount: item.variant.length,
+                    //           itemBuilder: (BuildContext context, int index) {
+                    //             return Text(
+                    //               "${item.variant[index].foodVariant.variationName} (${item.variant[index].variationOptionName})",
+                    //               maxLines: 2,
+                    //               overflow: TextOverflow.ellipsis,
+                    //               style: TextStyle(fontSize: 12),
+                    //             );
+                    //           },
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                    Text(
+                      "${item?.quantity} X ₹${item?.food?.price}",
+                      style: TextStyle(fontSize: 13.sp, color: AppColors.black, fontWeight: FontWeight.w400),
+                    )
+                  ],
+                ),
               ),
             ),
           ],

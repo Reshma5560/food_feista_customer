@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -148,8 +147,10 @@ class HomeScreen extends StatelessWidget {
           if (con.categoryList.isNotEmpty)
             TitleButtonRowWidget(
               title: "BROWSE FOOD CATEGORY",
-              buttonText: /*con.categoryList.length > 4 ? "View All" :*/ "",
-              onPressed: () {},
+              buttonText: con.categoryList.length > 4 ? "View All" : "",
+              onPressed: () {
+                Get.toNamed(AppRoutes.categoryListScreen);
+              },
             ).paddingSymmetric(horizontal: 5),
           // if (con.categoryList.isNotEmpty) const SizedBox(height: 10),
           if (con.categoryList.isNotEmpty) _categoryModule(),
@@ -157,8 +158,10 @@ class HomeScreen extends StatelessWidget {
           if (con.restaurantList.isNotEmpty)
             TitleButtonRowWidget(
               title: "OUR SPECIAL RESTAURANT",
-              buttonText: "",
-              onPressed: () {},
+              buttonText: con.restaurantList.length >= 4 ? "View All" : "",
+              onPressed: () {
+                Get.toNamed(AppRoutes.restaurantListScreen);
+              },
             ).paddingSymmetric(horizontal: 5),
           if (con.restaurantList.isNotEmpty) _restaurantModule(),
           const SizedBox(height: 10),
@@ -262,48 +265,55 @@ class HomeScreen extends StatelessWidget {
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: con.categoryList.length,
+        itemCount: 4,
         itemBuilder: (BuildContext context, int index) {
           var item = con.categoryList[index];
-          return Container(
-            width: 100,
-            height: Get.height * 0.2,
-            margin: const EdgeInsets.only(right: defaultPadding - 6),
-            // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.greyShad1,
-              borderRadius: BorderRadius.circular(defaultRadius),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(defaultRadius),
-                      topRight: Radius.circular(defaultRadius),
-                    ),
-                    child: Image.network(
-                      item.image ?? "",
-                      fit: BoxFit.cover,
-                      // height: ,
+          return InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () {
+              Get.toNamed(AppRoutes.restaurantListScreen, arguments: {"category_id": item.id});
+            },
+            child: Container(
+              width: 100,
+              height: Get.height * 0.2,
+              margin: const EdgeInsets.only(right: defaultPadding - 6),
+              // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.greyShad1,
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(defaultRadius),
+                        topRight: Radius.circular(defaultRadius),
+                      ),
+                      child: Image.network(
+                        item.image ?? "",
+                        fit: BoxFit.cover,
+                        // height: ,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: defaultPadding - 10,
-                ),
-                Text(
-                  item.categoryName ?? "",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
-                ),
-                const SizedBox(
-                  height: defaultPadding - 10,
-                ),
-              ],
+                  const SizedBox(
+                    height: defaultPadding - 10,
+                  ),
+                  Text(
+                    item.categoryName ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                  ),
+                  const SizedBox(
+                    height: defaultPadding - 10,
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -312,83 +322,104 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _restaurantModule() {
-    return Obx(
-      () => SizedBox(
-        height: 210,
-        child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemCount: con.restaurantList.length,
-          itemBuilder: (context, i) {
-            Restaurant item = con.restaurantList[i];
-            return InkWell(
-              onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
-                item.id.toString(),
-                item.restaurantName,
-              ]),
-              child: Container(
-                width: 150,
-                margin: const EdgeInsets.only(right: defaultPadding - 6),
-                decoration: BoxDecoration(
-                  color: AppColors.greyShad1,
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.restaurantName ?? "".toUpperCase(),
-                            // textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: AppColors.red, fontSize: 12),
-                          ),
-                        ),
-                        Obx(
-                          () => InkWell(
-                            onTap: () async {
-                              await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
-                            },
-                            child: Icon(
-                              item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      item.address ?? "".toUpperCase(),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: AppColors.groupSubText, fontSize: 12),
-                    ),
-                    const SizedBox(height: 10),
-                    CachedNetworkImage(
-                      imageUrl: item.logo ?? "",
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, str, obj) {
-                        return Image.asset(
-                          AppAssets.appLogo,
-                          height: 100,
-                          width: 100,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    ),
-                  ],
-                ).paddingSymmetric(horizontal: 10, vertical: 10),
+    return SizedBox(
+      height: 270,
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: 4,
+        itemBuilder: (context, i) {
+          Restaurant item = con.restaurantList[i];
+          return InkWell(
+            onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+              item.id.toString(),
+              item.restaurantName,
+            ]),
+            child: Container(
+              width: 180,
+              margin: const EdgeInsets.only(right: defaultPadding - 6),
+              decoration: BoxDecoration(
+                color: AppColors.greyShad1,
+                borderRadius: BorderRadius.circular(defaultRadius),
               ),
-            );
-          },
-        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.restaurantName ?? "".toUpperCase(),
+                          // textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Obx(
+                        () => InkWell(
+                          onTap: () async {
+                            await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
+                          },
+                          child: Icon(
+                            item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.address ?? "".toUpperCase(),
+                          textAlign: TextAlign.left,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: AppColors.groupSubText, fontSize: 12.sp),
+                        ),
+                      ),
+                      Container(
+                        height: 22,
+                        width: 32,
+                        alignment: Alignment.center,
+                        // padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          item.ratingCount ?? "",
+                          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    item.distance ?? "",
+                    style: TextStyle(color: AppColors.black.withOpacity(0.7), fontSize: 13.sp, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    flex: 1,
+                    child: MFNetworkImage(
+                      width: Get.width,
+                      imageUrl: item.logo ?? "",
+                      fit: BoxFit.fill,
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                    ),
+                  ),
+                ],
+              ).paddingSymmetric(horizontal: 10, vertical: 10),
+            ),
+          );
+        },
       ),
     );
   }

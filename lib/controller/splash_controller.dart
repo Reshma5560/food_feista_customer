@@ -4,8 +4,11 @@ import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../utils/local_storage.dart';
+import 'location_permission_controler.dart';
 
 class SplashController extends GetxController {
+  LocationPermissionController con = Get.put(LocationPermissionController());
+
   @override
   void onInit() {
     navigation();

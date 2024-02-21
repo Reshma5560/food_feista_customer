@@ -10,8 +10,7 @@ import 'api_class.dart';
 
 class APIFunction {
   /// ------ To Call Post Api -------------------->>>
-  Future<dynamic> postApiCall(
-      {required String apiName, dynamic params, bool? isDecode}) async {
+  Future<dynamic> postApiCall({required String apiName, dynamic params, bool? isDecode, dynamic queryParameters}) async {
     if (await getConnectivityResult()) {
       if (!isValEmpty(params)) {
         log("-=-=-=-Post Api=-=-=-> $params");
@@ -20,6 +19,7 @@ class APIFunction {
         apiName,
         isDecode: isDecode ?? false,
         data: params,
+        queryParameters: queryParameters,
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -32,8 +32,7 @@ class APIFunction {
   }
 
   /// ------ To Call Put Api -------------------->>>
-  Future<dynamic> putApiCall(
-      {required String apiName, dynamic params, data, bool? isDecode}) async {
+  Future<dynamic> putApiCall({required String apiName, dynamic params, data, bool? isDecode}) async {
     if (await getConnectivityResult()) {
       if (!isValEmpty(params)) {
         log("-=-=-=-Put Api=-=-=-> $params");
@@ -110,10 +109,7 @@ class APIFunction {
   } */
 
   /// ------ To Call Post Api -------------------->>>
-  Future<dynamic> deleteApiCall(
-      {required String apiName,
-      dynamic params,
-      bool isFormData = false}) async {
+  Future<dynamic> deleteApiCall({required String apiName, dynamic params, bool isFormData = false}) async {
     if (await getConnectivityResult()) {
       var response = await HttpUtil().delete(
         apiName,
@@ -121,7 +117,7 @@ class APIFunction {
         options: Options(
           headers: {
             "Content-Type": "application/json",
-              "Authorization": "Bearer ${LocalStorage.token.value}",
+            "Authorization": "Bearer ${LocalStorage.token.value}",
           },
         ),
       );

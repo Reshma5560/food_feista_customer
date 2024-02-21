@@ -103,6 +103,7 @@ class OrderTrackData {
   final Restaurant? restaurant;
   final dynamic deliveryMan;
   final List<OrderDetail>? orderDetail;
+  final CommentsClass? comments;
 
   OrderTrackData({
     this.id,
@@ -183,6 +184,7 @@ class OrderTrackData {
     this.restaurant,
     this.deliveryMan,
     this.orderDetail,
+    this.comments,
   });
 
   factory OrderTrackData.fromJson(Map<String, dynamic> json) => OrderTrackData(
@@ -253,8 +255,8 @@ class OrderTrackData {
         createdBy: json["created_by"],
         updatedBy: json["updated_by"],
         deletedAt: json["deleted_at"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]).toLocal(),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]).toLocal(),
         discountOnProductBy: json["discount_on_product_by"],
         subscriptionId: json["subscription_id"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
@@ -264,6 +266,7 @@ class OrderTrackData {
         restaurant: json["restaurant"] == null ? null : Restaurant.fromJson(json["restaurant"]),
         deliveryMan: json["delivery_man"],
         orderDetail: json["order_detail"] == null ? [] : List<OrderDetail>.from(json["order_detail"]!.map((x) => OrderDetail.fromJson(x))),
+        comments: json["comments"] == null ? null : CommentsClass.fromJson(json["comments"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -345,6 +348,7 @@ class OrderTrackData {
         "restaurant": restaurant?.toJson(),
         "delivery_man": deliveryMan,
         "order_detail": orderDetail == null ? [] : List<dynamic>.from(orderDetail!.map((x) => x.toJson())),
+        "comments": comments?.toJson(),
       };
 }
 
@@ -1489,5 +1493,61 @@ class User {
         "ref_by": refBy,
         "temp_token": tempToken,
         "current_language_key": currentLanguageKey,
+      };
+}
+
+class CommentsClass {
+  final String? id;
+  final String? body;
+  final int? rating;
+  final String? commentableType;
+  final String? commentableId;
+  final int? isActive;
+  final String? createdBy;
+  final dynamic updatedBy;
+  final dynamic deletedAt;
+  final dynamic createdAt;
+  final dynamic updatedAt;
+
+  CommentsClass({
+    this.id,
+    this.body,
+    this.rating,
+    this.commentableType,
+    this.commentableId,
+    this.isActive,
+    this.createdBy,
+    this.updatedBy,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory CommentsClass.fromJson(Map<String, dynamic> json) => CommentsClass(
+        id: json["id"],
+        body: json["body"],
+        rating: json["rating"],
+        commentableType: json["commentable_type"],
+        commentableId: json["commentable_id"],
+        isActive: json["is_active"],
+        createdBy: json["created_by"],
+        updatedBy: json["updated_by"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "body": body,
+        "rating": rating,
+        "commentable_type": commentableType,
+        "commentable_id": commentableId,
+        "is_active": isActive,
+        "created_by": createdBy,
+        "updated_by": updatedBy,
+        "deleted_at": deletedAt,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class OrderTrackController extends GetxController {
   Rx<OrderTrackModel> orderTrackModel = OrderTrackModel().obs;
   RxBool isLoading = true.obs;
+  RxBool isCanceled = true.obs;
   var orderId = Get.arguments['orderId'];
 
   @override

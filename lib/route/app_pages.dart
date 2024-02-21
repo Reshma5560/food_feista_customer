@@ -9,6 +9,8 @@ import 'package:foodapplication/view/auth/location_enable_screen.dart';
 import 'package:foodapplication/view/auth/login_screen.dart';
 import 'package:foodapplication/view/auth/signup_screen.dart';
 import 'package:foodapplication/view/get_city/get_city_screen.dart';
+import 'package:foodapplication/view/index/widget/home/category_list_screen.dart';
+import 'package:foodapplication/view/index/widget/home/restaurant_list_screen.dart';
 import 'package:foodapplication/view/index/widget/home_screen.dart';
 import 'package:foodapplication/view/index/widget/order/widgets/order_track_screen.dart';
 import 'package:foodapplication/view/index/widget/plac_order_screen.dart';
@@ -108,6 +110,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.locationEnableScreen,
       page: () => LocationEnableScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.restaurantListScreen,
+      page: () => RestaurantListScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.categoryListScreen,
+      page: () => CategoryListScreen(),
     ),
   ];
 }

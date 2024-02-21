@@ -54,8 +54,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
                               children: [
                                 MFNetworkImage(
                                   imageUrl: con.restaurantDetails?.coverPhoto ?? "",
-                                  fit: BoxFit.cover,
-                                  height: 200,
+                                  fit: BoxFit.fill,
+                                  height: 250,
                                   width: Get.width,
                                   borderRadius: BorderRadius.circular(10),
                                 ),

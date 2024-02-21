@@ -51,6 +51,7 @@ class WishListScreen extends StatelessWidget {
                                 subtitle: AppStrings.wishListNotFoundSubtitle,
                               )
                             : ListView.separated(
+                                controller: con.scrollController,
                                 padding: const EdgeInsets.symmetric(vertical: defaultPadding),
                                 shrinkWrap: true,
                                 separatorBuilder: (context, index) {

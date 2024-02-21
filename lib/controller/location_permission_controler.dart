@@ -68,9 +68,10 @@ class LocationPermissionController extends GetxController with WidgetsBindingObs
   }
 
   Future<void> getCurrentPosition() async {
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) async {
       currentPosition = position;
       if (currentPosition != null) {
+        await LocalStorage.setLatLong(lat: position.latitude, long: position.longitude);
         getAddressFromLatLng(currentPosition!);
       }
     }).catchError((e) {
@@ -85,8 +86,10 @@ class LocationPermissionController extends GetxController with WidgetsBindingObs
       currentAddress.value = place.locality ?? "" /*'${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}'*/;
       printYellow("-----------------  ${currentAddress.value}");
       if (currentAddress.value.isNotEmpty) {
-        await LocalStorage.setCity(city: currentAddress.value);
-        Get.offAllNamed(AppRoutes.indexScreen);
+        if (currentAddress.value != LocalStorage.userCity.value) {
+          await LocalStorage.setCity(city: currentAddress.value);
+          Get.offAllNamed(AppRoutes.indexScreen);
+        }
       }
     }).catchError((e) {
       debugPrint(e);

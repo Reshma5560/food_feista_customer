@@ -184,69 +184,71 @@ class CartScreen extends StatelessWidget {
                                                                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.black),
                                                               ),
                                                             ),
-                                                            Row(
-                                                              children: [
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    if (item.itemCount!.value == 1) {
-                                                                    } else {
-                                                                      item.itemCount?.value--;
-                                                                      item.totalPrice?.value =
-                                                                          (item.totalPrice!.value - double.parse(item.price ?? "0"));
 
-                                                                      con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
-                                                                    }
-                                                                  },
-                                                                  child: Container(
-                                                                    padding: const EdgeInsets.all(5),
-                                                                    decoration: BoxDecoration(
-                                                                        color: Theme.of(context).primaryColor,
-                                                                        borderRadius: BorderRadius.circular(25)),
-                                                                    child: Icon(
-                                                                      Icons.remove,
-                                                                      size: 15,
-                                                                      color: AppColors.white,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 5,
-                                                                ),
-                                                                Obx(
-                                                                  () => Text(
-                                                                    item.itemCount?.value.toString() ?? "",
-                                                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 5,
-                                                                ),
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    if (item.itemCount!.value >= item.food!.maximumCartQuantity!.toInt()) {
-                                                                    } else {
-                                                                      // itemCount++;
-                                                                      item.itemCount?.value++;
-                                                                      item.totalPrice?.value =
-                                                                          (item.totalPrice!.value + double.parse(item.price ?? "0"));
-
-                                                                      con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
-                                                                    }
-                                                                  },
-                                                                  child: Container(
-                                                                    padding: const EdgeInsets.all(5),
-                                                                    decoration: BoxDecoration(
-                                                                        color: Theme.of(context).primaryColor,
-                                                                        borderRadius: BorderRadius.circular(25)),
-                                                                    child: Icon(
-                                                                      Icons.add,
-                                                                      size: 15,
-                                                                      color: AppColors.white,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                            Text("Qty : ${item.quantity}"),
+                                                            // Row(
+                                                            //   children: [
+                                                            //     InkWell(
+                                                            //       onTap: () {
+                                                            //         if (item.itemCount!.value == 1) {
+                                                            //         } else {
+                                                            //           item.itemCount?.value--;
+                                                            //           item.totalPrice?.value =
+                                                            //               (item.totalPrice!.value - double.parse(item.price ?? "0"));
+                                                            //
+                                                            //           con.totalAmount.value = con.totalAmount.value - double.parse(item.price ?? "0");
+                                                            //         }
+                                                            //       },
+                                                            //       child: Container(
+                                                            //         padding: const EdgeInsets.all(5),
+                                                            //         decoration: BoxDecoration(
+                                                            //             color: Theme.of(context).primaryColor,
+                                                            //             borderRadius: BorderRadius.circular(25)),
+                                                            //         child: Icon(
+                                                            //           Icons.remove,
+                                                            //           size: 15,
+                                                            //           color: AppColors.white,
+                                                            //         ),
+                                                            //       ),
+                                                            //     ),
+                                                            //     const SizedBox(
+                                                            //       width: 5,
+                                                            //     ),
+                                                            //     Obx(
+                                                            //       () => Text(
+                                                            //         item.itemCount?.value.toString() ?? "",
+                                                            //         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                                            //       ),
+                                                            //     ),
+                                                            //     const SizedBox(
+                                                            //       width: 5,
+                                                            //     ),
+                                                            //     InkWell(
+                                                            //       onTap: () {
+                                                            //         if (item.itemCount!.value >= item.food!.maximumCartQuantity!.toInt()) {
+                                                            //         } else {
+                                                            //           // itemCount++;
+                                                            //           item.itemCount?.value++;
+                                                            //           item.totalPrice?.value =
+                                                            //               (item.totalPrice!.value + double.parse(item.price ?? "0"));
+                                                            //
+                                                            //           con.totalAmount.value = con.totalAmount.value + double.parse(item.price ?? "0");
+                                                            //         }
+                                                            //       },
+                                                            //       child: Container(
+                                                            //         padding: const EdgeInsets.all(5),
+                                                            //         decoration: BoxDecoration(
+                                                            //             color: Theme.of(context).primaryColor,
+                                                            //             borderRadius: BorderRadius.circular(25)),
+                                                            //         child: Icon(
+                                                            //           Icons.add,
+                                                            //           size: 15,
+                                                            //           color: AppColors.white,
+                                                            //         ),
+                                                            //       ),
+                                                            //     ),
+                                                            //   ],
+                                                            // ),
                                                           ],
                                                         ),
                                                       ],
@@ -270,36 +272,9 @@ class CartScreen extends StatelessWidget {
                           ),
                           Obx(
                             () => SizedBox(
-                              height: con.cartItemData.length <= 2 ? Get.height / 5 : defaultPadding - 6,
+                              height: con.cartItemData.length <= 2 ? Get.height / 2.5 : defaultPadding - 6,
                             ),
                           ),
-                          // Obx(
-                          //   () => con.cartItemData.isNotEmpty
-                          //       ? Padding(
-                          //           padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 6).copyWith(top: defaultPadding),
-                          //           child: AppTextField(
-                          //             hintText: "Enter Coupon Code",
-                          //             hintStyle: TextStyle(
-                          //               color: Theme.of(context).primaryColor.withOpacity(0.5),
-                          //             ),
-                          //             readOnly: true,
-                          //             enabled: false,
-                          //             controller: con.couponController.value,
-                          //             fillColor: Theme.of(context).colorScheme.background,
-                          //             suffixIcon: Padding(
-                          //               padding: const EdgeInsets.all(8),
-                          //               child: AppButton(
-                          //                 width: 100,
-                          //                 height: 40,
-                          //                 title: "APPLY",
-                          //                 onPressed: () {},
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         )
-                          //       : const SizedBox.shrink(),
-                          // ),
-
                           Obx(
                             () => con.couponItemData.isNotEmpty
                                 ? ListView.separated(
@@ -376,7 +351,6 @@ class CartScreen extends StatelessWidget {
                                   )
                                 : const SizedBox.shrink(),
                           ),
-
                           Obx(
                             () => con.cartItemData.isNotEmpty
                                 ? Container(
@@ -412,22 +386,6 @@ class CartScreen extends StatelessWidget {
                                         const SizedBox(
                                           height: defaultPadding - 10,
                                         ),
-                                        // Row(
-                                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //   children: [
-                                        //     Text(
-                                        //       "Delivery Fee".toUpperCase(),
-                                        //       style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-                                        //     ),
-                                        //     Text(
-                                        //       "₹ 00",
-                                        //       style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp),
-                                        //     ),
-                                        //   ],
-                                        // ),
-                                        // const SizedBox(
-                                        //   height: defaultPadding - 10,
-                                        // ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
@@ -497,6 +455,7 @@ class CartScreen extends StatelessWidget {
                                           arguments: {
                                             "cart_id": con.cartData.value.data?.id,
                                             "coupon_id": con.couponId.value,
+                                            "payable_amount": con.cartData.value.data?.totalPrice,
                                           },
                                         );
                                       },

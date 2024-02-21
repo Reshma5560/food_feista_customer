@@ -29,8 +29,10 @@ class ApiUrls {
   ///account api
   static String contactUsUrl = "contact-us";
 
-  //home data
+  ///home data
   static String homeDataUrl = "home/city";
+  static String categoryListUrl = "category-list";
+  static String restaurantListUrl = "restaurant-filter";
 
   ///order api
   static String getOrderListUrl = 'get-order';

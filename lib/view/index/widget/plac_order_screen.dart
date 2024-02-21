@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/res/app_text_field.dart';
+import 'package:foodapplication/res/ui_utils.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/account/components/manage_Address_controller.dart';
 import '../../../controller/place_order_controller.dart';
+import '../../../controller/razoraypay_controller.dart';
 import '../../../repositories/desktop_repositories.dart';
 import '../../../res/app_appbar.dart';
 import '../../../res/app_button.dart';
@@ -19,6 +21,7 @@ class PlaceOrderScreen extends StatelessWidget {
 
   final PlaceOrderController con = Get.put(PlaceOrderController());
   final ManageAddressController addCon = Get.put(ManageAddressController());
+  final RazorpayController razorpayCon = Get.put(RazorpayController());
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +180,7 @@ class PlaceOrderScreen extends StatelessWidget {
                               ),
                               ListView.builder(
                                 padding: EdgeInsets.zero,
-                                itemCount: 1,
+                                itemCount: 2,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
@@ -186,7 +189,12 @@ class PlaceOrderScreen extends StatelessWidget {
                                     splashColor: Colors.transparent,
                                     onTap: () {
                                       con.selectedIndex2.value = index;
-                                      con.paymentType.value = "COD";
+
+                                      if (index == 0) {
+                                        con.paymentType.value = "COD";
+                                      } else {
+                                        con.paymentType.value = "Razor";
+                                      }
                                     },
                                     child: Obx(
                                       () => Container(
@@ -202,12 +210,14 @@ class PlaceOrderScreen extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Cash On Delivery",
+                                              index == 0 ? "Cash On Delivery" : "Razorpay",
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: con.selectedIndex2.value == index ? Theme.of(context).primaryColor : AppColors.grey,
+                                                color: con.selectedIndex2.value == index
+                                                    ? Theme.of(context).primaryColor
+                                                    : AppColors.black.withOpacity(0.5),
                                               ),
                                             )
                                           ],
@@ -249,17 +259,29 @@ class PlaceOrderScreen extends StatelessWidget {
                 child: AppButton(
                   loader: con.isLoader.value,
                   onPressed: () async {
-                    await DesktopRepository().createOrderApiCall(
-                      isLoader: con.isLoader,
-                      params: {
-                        "address_id": con.addressId.value,
-                        "cart_id": con.cartId.value,
-                        "coupon_id": con.couponId.value,
-                        "payment_type_name": con.paymentType.value,
-                        "payment_id": "",
-                        "order_note": con.noteCon.value.text.trim(),
-                      },
-                    );
+                    if (con.addressId.value.isNotEmpty && con.paymentType.value.isNotEmpty) {
+                      if (con.paymentType.value == "COD") {
+                        await DesktopRepository().createOrderApiCall(
+                          isLoader: con.isLoader,
+                          params: {
+                            "address_id": con.addressId.value,
+                            "cart_id": con.cartId.value,
+                            "coupon_id": con.couponId.value,
+                            "payment_type_name": con.paymentType.value,
+                            "payment_id": "",
+                            "order_note": con.noteCon.value.text.trim(),
+                          },
+                        );
+                      } else {
+                        razorpayCon.openCheckout(amount: con.amount.value);
+                      }
+                    } else {
+                      if (con.addressId.value.isEmpty) {
+                        toast("Please select your address");
+                      } else if (con.paymentType.value.isEmpty) {
+                        toast("Please select your payment type");
+                      }
+                    }
                   },
                   title: "Place Order".toUpperCase(),
                 ),

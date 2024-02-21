@@ -85,6 +85,12 @@ class RestaurantRepository {
               // Get.back();
             }
           }
+          if (!isValEmpty(response) && response["status"] == false) {
+            if (!isValEmpty(response["message"])) {
+              toast(response["message"].toString());
+            }
+          }
+
           return response;
         },
       );

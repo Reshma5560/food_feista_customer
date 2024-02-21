@@ -1,8 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:foodapplication/controller/account/account_controller.dart';
-import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/controller/account/components/wish_list_controller.dart';
 import 'package:foodapplication/controller/cart_controller.dart';
 import 'package:foodapplication/controller/my_order_controller.dart';
@@ -12,6 +13,7 @@ import 'package:foodapplication/data/api/api_function.dart';
 import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/data/models/get_order_model.dart';
 import 'package:foodapplication/data/models/order_track_model.dart';
+import 'package:foodapplication/res/app_dialog.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
@@ -19,12 +21,16 @@ import 'package:foodapplication/utils/local_storage.dart';
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
+import '../controller/category_list_controller.dart';
 import '../controller/home_controller.dart';
+import '../controller/restaurant_list_controller.dart';
+import '../data/models/category__list_model.dart';
 import '../data/models/get_cart_data_model.dart';
 import '../data/models/get_cupon_model.dart';
 import '../data/models/get_food_item_data_model.dart';
 import '../data/models/get_profile_model.dart';
 import '../data/models/home_data_model.dart';
+import '../data/models/restaurant_list_model.dart';
 import '../data/models/search_item_data_model.dart';
 import '../data/models/wish_list_data_model.dart';
 
@@ -92,7 +98,7 @@ class DesktopRepository {
   }
 
   Future<dynamic> editProfileApiCall({RxBool? isLoader, dynamic data}) async {
-    final EditAccountController con = Get.find<EditAccountController>();
+    // final EditAccountController con = Get.find<EditAccountController>();
     try {
       isLoader?.value = true;
       printYellow(data);
@@ -125,7 +131,10 @@ class DesktopRepository {
     final HomeController con = Get.find<HomeController>();
 
     try {
-      await APIFunction().getApiCall(apiName: "${ApiUrls.homeDataUrl}/${LocalStorage.userCity.value}").then(
+      await APIFunction().getApiCall(
+        apiName: "${ApiUrls.homeDataUrl}/${LocalStorage.userCity.value}",
+        queryParameters: {"latitudeTo": LocalStorage.userLat, "longitudeTo": LocalStorage.userLong},
+      ).then(
         (response) async {
           HomeDataModel homeDataModel = HomeDataModel.fromJson(response);
           if (homeDataModel.status == true) {
@@ -204,7 +213,8 @@ class DesktopRepository {
   ///post wish list api
   Future<dynamic> postWishListAPI({required String id, required int index, required bool isWishList}) async {
     try {
-      final HomeController homeCom = Get.find<HomeController>();
+      final HomeController homeCon = Get.find<HomeController>();
+      final RestaurantListController restCon = Get.find<RestaurantListController>();
       await APIFunction().postApiCall(apiName: "${ApiUrls.postWishListUrl}/$id").then(
         (response) async {
           if (!isValEmpty(response["message"])) {
@@ -215,10 +225,12 @@ class DesktopRepository {
               toast(response["message"].toString());
               await getHomeData();
             } else {
-              if (homeCom.restaurantList[index].favorite?.value == 1) {
-                homeCom.restaurantList[index].favorite?.value = 0;
+              if (homeCon.restaurantList[index].favorite?.value == 1) {
+                homeCon.restaurantList[index].favorite?.value = 0;
+                restCon.restaurantList[index].favorite?.value = 0;
               } else {
-                homeCom.restaurantList[index].favorite?.value = 1;
+                homeCon.restaurantList[index].favorite?.value = 1;
+                restCon.restaurantList[index].favorite?.value = 1;
               }
             }
           }
@@ -234,7 +246,7 @@ class DesktopRepository {
 
   //order track api call
   Future<dynamic> orderTrackApiCall({required String orderId}) async {
-    final con = Get.find<OrderTrackController>();
+    final OrderTrackController con = Get.find<OrderTrackController>();
 
     try {
       await APIFunction().getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId").then(
@@ -244,6 +256,17 @@ class DesktopRepository {
             OrderTrackModel data = OrderTrackModel.fromJson(response);
 
             con.orderTrackModel.value = data;
+
+            Timer.periodic(const Duration(seconds: 1), (timer) {
+              DateTime now = DateTime.parse(DateTime.now().toIso8601String());
+              Duration difference = now.difference(con.orderTrackModel.value.data?.createdAt ?? DateTime.now().toLocal());
+              if (difference.inMinutes < 1) {
+                con.isCanceled.value = true;
+              } else {
+                con.isCanceled.value = false;
+                timer.cancel();
+              }
+            });
           }
           return response;
         },
@@ -445,15 +468,25 @@ class DesktopRepository {
       //   "phone": editAccountController.mobileNumberCon.text.trim(),
       //   "image": await dio.MultipartFile.fromFile(editAccountController.imagePath.value, filename: editAccountController.imagePath.value),
       // });
+      printYellow(json.encode(params));
+
       await APIFunction().postApiCall(apiName: ApiUrls.placeOrderUrl, params: params).then(
         (response) async {
           printData(key: "place order response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
             if (!isValEmpty(response["message"])) {
-              toast(response["message"].toString());
+              printYellow("-----------------  ${response["data"]["invoice_number"]}");
+              // toast(response["message"].toString());
+              AppDialogs.successItemDialog(
+                Get.context!,
+                deleteOnTap: () {
+                  Get.offAllNamed(AppRoutes.indexScreen);
+                },
+                orderID: response["data"]["invoice_number"].toString(),
+              );
+
               // await getProfileApiCall();
               // Get.back();
-              Get.offAllNamed(AppRoutes.indexScreen);
             }
           } else {
             if (!isValEmpty(response) && response["status"] == false) {
@@ -472,6 +505,91 @@ class DesktopRepository {
       }
     } finally {
       isLoader?.value = false;
+    }
+  }
+
+  ///get category list api
+  Future<dynamic> getCategoryListAPI({required bool isInitial}) async {
+    final CategoryListController con = Get.find<CategoryListController>();
+    try {
+      if (await getConnectivityResult()) {
+        if (isInitial) {
+          con.categoryList.clear();
+          con.page.value = 1;
+          con.isLoading.value = true;
+          con.nextPageStop.value = true;
+        }
+
+        if (con.nextPageStop.isTrue) {
+          await APIFunction().getApiCall(apiName: "${ApiUrls.categoryListUrl}?page=${con.page.value}?per_page=40").then(
+            (response) async {
+              CategoryListModel homeTipModel = CategoryListModel.fromJson(response);
+              con.categoryList.value += homeTipModel.data?.data ?? [];
+              con.page.value++;
+              printData(key: "WISH LIST length", value: con.categoryList.length);
+              if (con.categoryList.length == homeTipModel.data?.total) {
+                con.nextPageStop.value = false;
+              }
+              return response;
+            },
+          );
+        }
+      }
+    } catch (e) {
+      printError(type: "getCategoryListAPI", errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+      con.paginationLoading.value = false;
+    }
+  }
+
+  ///get restaurant list api
+  Future<dynamic> getRestaurantListAPI({required bool isInitial, String? categoryID}) async {
+    final RestaurantListController con = Get.find<RestaurantListController>();
+    try {
+      if (await getConnectivityResult()) {
+        if (isInitial) {
+          con.restaurantList.clear();
+          con.page.value = 1;
+          con.isLoading.value = true;
+          con.nextPageStop.value = true;
+        }
+        if (con.nextPageStop.isTrue) {
+          await APIFunction().postApiCall(
+            apiName: "${ApiUrls.restaurantListUrl}/${LocalStorage.userCity.value}",
+            params: {
+              "cuisine_id": [],
+              "veg": 0,
+              "non_veg": 1,
+              "pure_veg": false,
+              "latitudeTo": LocalStorage.userLat.value,
+              "longitudeTo": LocalStorage.userLong.value,
+              "distance": true,
+            },
+            queryParameters: {
+              "page": con.page.value,
+              "per_page": 20,
+              "category_id": categoryID,
+            },
+          ).then(
+            (response) async {
+              RestaurantListModel restaurantListDataModel = RestaurantListModel.fromJson(response);
+              con.restaurantList.value += restaurantListDataModel.data?.data ?? [];
+              con.page.value++;
+              printData(key: "RESTAURANT LIST length", value: con.restaurantList.length);
+              if (con.restaurantList.length == restaurantListDataModel.data?.total) {
+                con.nextPageStop.value = false;
+              }
+              return response;
+            },
+          );
+        }
+      }
+    } catch (e) {
+      printError(type: "getRestaurantListAPI", errText: "$e");
+    } finally {
+      con.isLoading.value = false;
+      con.paginationLoading.value = false;
     }
   }
 }

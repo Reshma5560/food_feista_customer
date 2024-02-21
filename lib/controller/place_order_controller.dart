@@ -10,6 +10,7 @@ class PlaceOrderController extends GetxController {
   RxString paymentType = "".obs;
   RxString cartId = "".obs;
   RxString couponId = "".obs;
+  RxString amount = "".obs;
   RxBool isLoader = false.obs;
   Rx<TextEditingController> noteCon = TextEditingController().obs;
 
@@ -30,6 +31,10 @@ class PlaceOrderController extends GetxController {
       if (Get.arguments["coupon_id"].runtimeType == String) {
         couponId.value = Get.arguments["coupon_id"];
         printYellow(couponId.value);
+      }
+      if (Get.arguments["payable_amount"].runtimeType == String) {
+        amount.value = Get.arguments["payable_amount"];
+        printYellow(amount.value);
       }
     }
 

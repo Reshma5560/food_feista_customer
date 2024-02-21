@@ -295,6 +295,8 @@ class Restaurant {
   final bool? freeDeliveryDistanceStatus;
   final String? freeDeliveryDistanceValue;
   final List<dynamic>? translations;
+  final String? ratingCount;
+  final String? distance;
 
   Restaurant({
     this.id,
@@ -367,6 +369,8 @@ class Restaurant {
     this.freeDeliveryDistanceStatus,
     this.freeDeliveryDistanceValue,
     this.translations,
+    this.ratingCount,
+    this.distance,
   });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
@@ -439,6 +443,8 @@ class Restaurant {
         gstCode: json["gst_code"],
         freeDeliveryDistanceStatus: json["free_delivery_distance_status"],
         freeDeliveryDistanceValue: json["free_delivery_distance_value"],
+        ratingCount: json["rating_count"],
+        distance: json["distance_km"],
         translations: json["translations"] == null ? [] : List<dynamic>.from(json["translations"]!.map((x) => x)),
       );
 }

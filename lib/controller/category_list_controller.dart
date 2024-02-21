@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../data/models/wish_list_data_model.dart';
-import '../../../repositories/desktop_repositories.dart';
+import '../data/models/category__list_model.dart';
+import '../repositories/desktop_repositories.dart';
 
-class WishListController extends GetxController {
-  RxBool isLoading = false.obs;
+class CategoryListController extends GetxController {
+  RxBool isLoading = true.obs;
   RxBool paginationLoading = false.obs;
   RxBool nextPageStop = true.obs;
   RxInt page = 1.obs;
   ScrollController scrollController = ScrollController();
-  RxList<WishRestaurant> wishListData = <WishRestaurant>[].obs;
+  RxList<CategoryListDatum> categoryList = <CategoryListDatum>[].obs;
 
   @override
-  void onReady() {
-    DesktopRepository().getWishListAPI(isInitial: true);
+  Future<void> onReady() async {
+    await DesktopRepository().getCategoryListAPI(isInitial: true);
     manageScrollController();
     super.onReady();
   }
@@ -25,7 +25,7 @@ class WishListController extends GetxController {
         if (scrollController.position.maxScrollExtent == scrollController.position.pixels && isLoading.isFalse) {
           if (nextPageStop.isTrue && paginationLoading.isFalse) {
             paginationLoading.value = true;
-            DesktopRepository().getWishListAPI(isInitial: false);
+            DesktopRepository().getCategoryListAPI(isInitial: false);
           }
         }
       },

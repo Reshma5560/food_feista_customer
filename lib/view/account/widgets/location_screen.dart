@@ -8,13 +8,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/location_controller.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/route/app_routes.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
 class LocationScreen extends StatelessWidget {
   LocationScreen({super.key});
 
-  final con = Get.put(LocationController());
+  final LocationController con = Get.put(LocationController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class LocationScreen extends StatelessWidget {
               options: MapOptions(
                   center: con.latValue.value.isNotEmpty && con.longValue.value.isNotEmpty
                       ? LatLng(double.parse(con.longValue.value), double.parse(con.latValue.value))
-                      : const LatLng(40.7128, -74.0060
+                      : LatLng(LocalStorage.userLat.value, LocalStorage.userLong.value
                           // double.parse("screenController.productDetails!.branch.longitude"),
                           // doubleouble.parse("screenController.productDetails!.branch.latitude"),
                           ),
