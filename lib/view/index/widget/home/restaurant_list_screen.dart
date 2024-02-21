@@ -93,38 +93,48 @@ class RestaurantListScreen extends StatelessWidget {
                                               ],
                                             ),
                                             const SizedBox(height: 10),
+                                            Text(
+                                              item.address ?? "".toUpperCase(),
+                                              textAlign: TextAlign.left,
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(color: AppColors.groupSubText, fontSize: 12.sp),
+                                            ),
+                                            const SizedBox(height: 10),
                                             Row(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    item.address ?? "".toUpperCase(),
-                                                    textAlign: TextAlign.left,
-                                                    maxLines: 3,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(color: AppColors.groupSubText, fontSize: 12.sp),
-                                                  ),
+                                                Text(
+                                                  item.distanceKm ?? "",
+                                                  style: TextStyle(
+                                                      color: AppColors.black.withOpacity(0.7), fontSize: 13.sp, fontWeight: FontWeight.w500),
                                                 ),
                                                 Container(
-                                                  height: 22,
-                                                  width: 32,
+                                                  height: 25,
+                                                  width: 45,
                                                   alignment: Alignment.center,
                                                   // padding: const EdgeInsets.all(2),
                                                   decoration: BoxDecoration(
                                                     color: Colors.green,
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
-                                                  child: Text(
-                                                    item.ratingCount ?? "",
-                                                    style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.yellow,
+                                                        size: 10.sp,
+                                                      ),
+                                                      const SizedBox(width: 3),
+                                                      Text(
+                                                        item.ratingCount ?? "",
+                                                        style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              item.distanceKm ?? "",
-                                              style: TextStyle(color: AppColors.black.withOpacity(0.7), fontSize: 13.sp, fontWeight: FontWeight.w500),
                                             ),
                                             const SizedBox(height: 10),
                                             Expanded(
