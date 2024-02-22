@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../data/models/get_review_model.dart';
@@ -8,13 +9,21 @@ class RestaurantDetailsScreenController extends GetxController {
   String restaurantId = Get.arguments[0];
   String restaurantName = Get.arguments[1];
   RxBool isLoading = true.obs;
+  RxBool isLoadingReview = false.obs;
   RxInt selectMenu = 0.obs;
+  RxInt userOrderCount = 0.obs;
   RxBool overviewListVisible = false.obs;
   RxBool photosListVisible = false.obs;
   RxBool isOpen = false.obs;
   RxList addonsData = [].obs;
   List variantData = [];
   List variantDataForAPI = [];
+
+  ///add review variable
+  RxDouble ratingValue = 0.0.obs;
+  Rx<TextEditingController> commentCon = TextEditingController().obs;
+  RxBool isValid = false.obs;
+  RxString commentError = "".obs;
 
   List<String> menuList = ["ORDER ONLINE", "OVERVIEW", "REVIEW", "PHOTOS"];
 

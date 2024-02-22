@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/res/app_loader.dart';
+import 'package:foodapplication/res/app_text_field.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/utils/local_storage.dart';
@@ -52,12 +54,64 @@ class RestaurantDetailsScreen extends StatelessWidget {
                         : SingleChildScrollView(
                             child: Column(
                               children: [
-                                MFNetworkImage(
-                                  imageUrl: con.restaurantDetails?.coverPhoto ?? "",
-                                  fit: BoxFit.fill,
-                                  height: 250,
-                                  width: Get.width,
-                                  borderRadius: BorderRadius.circular(10),
+                                Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    MFNetworkImage(
+                                      imageUrl: con.restaurantDetails?.coverPhoto ?? "",
+                                      fit: BoxFit.fill,
+                                      height: 300,
+                                      width: Get.width,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      child: Image(
+                                        image: AssetImage(
+                                          AppAssets.bgBanner,
+                                        ),
+                                        width: Get.width,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: defaultPadding, horizontal: defaultPadding),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "From you: ${con.restaurantDetails?.distance ?? " "}",
+                                            style: TextStyle(color: AppColors.white, fontSize: 13.sp, fontWeight: FontWeight.w500),
+                                          ),
+                                          Container(
+                                            height: 25,
+                                            width: 45,
+                                            alignment: Alignment.center,
+                                            // padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.yellow,
+                                                  size: 10.sp,
+                                                ),
+                                                const SizedBox(width: 3),
+                                                Text(
+                                                  con.restaurantDetails?.ratingCount ?? "",
+                                                  style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 20),
                                 _menuTypeListModule().paddingSymmetric(horizontal: 10),
@@ -72,6 +126,151 @@ class RestaurantDetailsScreen extends StatelessWidget {
             ).paddingOnly(bottom: 20),
           );
         },
+      ),
+      floatingActionButton: Obx(
+        () => (LocalStorage.token.value.isNotEmpty && con.menuList[con.selectMenu.value] == "REVIEW" && con.userOrderCount.value > 0)
+            ? FloatingActionButton.extended(
+                backgroundColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (ctx) => Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(defaultRadius),
+                      ),
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      insetPadding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                      child: Container(
+                        width: Get.width,
+                        padding: const EdgeInsets.all(defaultPadding),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "LEAVE COMMENTS",
+                                  style: AppStyle.authTitleStyle().copyWith(fontSize: 18.sp, color: AppColors.black),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  icon: const Icon(Icons.clear, color: Colors.black),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: defaultPadding),
+                            Text(
+                              "Rating *",
+                              style: AppStyle.authSubtitleStyle(),
+                            ),
+                            RatingBar.builder(
+                              initialRating: 0,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding: const EdgeInsets.only(right: 5),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              onRatingUpdate: (rating) {
+                                con.ratingValue.value = rating;
+                              },
+                            ),
+                            const SizedBox(height: defaultPadding),
+                            Text(
+                              "COMMENT *",
+                              style: AppStyle.authSubtitleStyle(),
+                            ),
+                            const SizedBox(height: 5),
+                            Obx(
+                              () => AppTextField(
+                                maxLines: 3,
+                                controller: con.commentCon.value,
+                                showError: con.isValid.value,
+                                errorMessage: con.commentError.value,
+                              ),
+                            ),
+                            const SizedBox(height: defaultPadding),
+                            Obx(
+                              () => AppButton(
+                                onPressed: () async {
+                                  FocusScope.of(context).unfocus();
+
+                                  /// comment validation
+                                  if (con.commentCon.value.text.trim().isEmpty) {
+                                    con.isValid.value = true;
+                                    con.commentError.value = "Please enter your comment";
+                                  } else {
+                                    con.isValid.value = false;
+                                  }
+
+                                  ///rating validation
+                                  if (con.ratingValue.value == 0.0) {
+                                    toast("Please select rating value minimum 1");
+                                  }
+
+                                  if (con.isValid.isFalse && con.ratingValue.value != 0.0) {
+                                    await RestaurantRepository().addRestaurantReviewAPI(params: {
+                                      "restaurant_id": con.restaurantId,
+                                      "description": con.commentCon.value.text.trim(),
+                                      "rating": con.ratingValue.value.toString(),
+                                    });
+                                  }
+                                },
+                                loader: con.isLoadingReview.value,
+                                title: "Submit",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // contentPadding: EdgeInsets.zero,
+                      // actionsPadding: EdgeInsets.zero,
+                      // title: const Text("Alert Dialog Box"),
+                      // content: Container(
+                      //   width: Get.width,
+                      //   decoration: BoxDecoration(
+                      //     color: AppColors.white,
+                      //   ),
+                      //   child: const Text("You have raised a Alert Dialog Box"),
+                      // ),
+                      // actions: <Widget>[
+                      //   TextButton(
+                      //     onPressed: () {
+                      //       Navigator.of(ctx).pop();
+                      //     },
+                      //     child: Container(
+                      //       color: Colors.green,
+                      //       padding: const EdgeInsets.all(14),
+                      //       child: const Text("okay"),
+                      //     ),
+                      //   ),
+                      // ],
+                    ),
+                  ).whenComplete(() {
+                    con.isValid.value = false;
+                    con.commentError.value = "";
+                    con.commentCon.value.clear();
+                  });
+                },
+                label: Text(
+                  "Add Review",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(fontSize: 14),
+                ),
+                icon: const Icon(Icons.add),
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
@@ -502,11 +701,12 @@ class RestaurantDetailsScreen extends StatelessWidget {
         ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
+          padding: const EdgeInsets.only(bottom: kFloatingActionButtonMargin + 48, top: defaultPadding),
           itemBuilder: (context, i) {
             ReviewComment item = con.restaurantReviewList[i];
             String dateString = item.createdAt.toString();
             DateTime dateTime = DateTime.parse(dateString);
-            String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+            String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
 
             return Row(
               children: [

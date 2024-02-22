@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodapplication/controller/account/components/about_us_controller.dart';
-import 'package:foodapplication/res/app_assets.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:foodapplication/controller/auth/cms_controller.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +9,7 @@ import '../../../res/app_appbar.dart';
 class AboutUsScreen extends StatelessWidget {
   AboutUsScreen({super.key});
 
-  final AboutUsController con = Get.put(AboutUsController());
+  final CmsController con = Get.find<CmsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +35,20 @@ class AboutUsScreen extends StatelessWidget {
                   child: ListView(
                     physics: const RangeMaintainingScrollPhysics(),
                     children: [
-                      Center(
-                        child: Image.asset(
-                          AppAssets.appLogo,
-                          width: Get.width / 2,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
+                      // Center(
+                      //   child: Image.asset(
+                      //     AppAssets.appLogo,
+                      //     width: Get.width / 2,
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: defaultPadding,
+                      // ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                        child: Text(
+                        child: Html(
+                          data: con.aboutUsData.value.body,
+                        ), /*Text(
                           '''🍽️ Welcome to [Your Food App Name], the ultimate destination for food enthusiasts and gastronomic explorers! 🌮
 
 Our Story
@@ -71,7 +73,7 @@ Whether you're a seasoned connoisseur or just starting your exploration, [Your F
 
 📲 [Download Now] and let your food adventure begin!''',
                           style: Theme.of(context).textTheme.titleSmall,
-                        ),
+                        ),*/
                       ),
                     ],
                   ),

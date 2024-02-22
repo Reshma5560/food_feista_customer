@@ -211,6 +211,7 @@ class LoginScreen extends StatelessWidget {
                                                     params: {
                                                       "email": con.emailCon.value.text.trim(),
                                                       "password": con.passwordCon.value.text.trim(),
+                                                      "fcm_token": LocalStorage.deviceToken.value,
                                                     },
                                                   );
                                                 }

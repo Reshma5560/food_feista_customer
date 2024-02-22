@@ -6,9 +6,11 @@ import 'package:foodapplication/controller/account/components/manage_Address_con
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
+import '../controller/auth/cms_controller.dart';
 import '../controller/get_city_controller.dart';
 import '../data/api/api_function.dart';
 import '../data/handler/api_url.dart';
+import '../data/models/cms_page_model.dart';
 import '../data/models/get_add_by_id_model.dart';
 import '../data/models/get_address_model.dart';
 import '../data/models/get_city_model.dart';
@@ -95,6 +97,7 @@ class AuthRepository {
               toast(response["message"].toString());
               Get.back();
               Get.back();
+              await AuthRepository().getAddressApiCall();
               // Get.offAllNamed(AppRoutes.manageAddressScreen);
             }
           }
@@ -228,14 +231,13 @@ class AuthRepository {
     }
   }
 
-//get all address list api
-  Future<dynamic> getAddressApiCall({required RxBool isLoader}) async {
-    final con = Get.find<ManageAddressController>();
+  ///get all address list api
+  Future<dynamic> getAddressApiCall() async {
+    final ManageAddressController con = Get.find<ManageAddressController>();
 
     try {
       await APIFunction().getApiCall(apiName: ApiUrls.getAddressUrl).then(
         (response) async {
-          print("get address  response $response");
           if (!isValEmpty(response) && response["status"] == true) {
             GetAddressModel data = GetAddressModel.fromJson(response);
 
@@ -243,7 +245,6 @@ class AuthRepository {
             log("${con.getAddressData}");
             con.addressList.clear();
             con.addressList.addAll(con.getAddressData!.data);
-            print(con.addressList.length);
           }
           return response;
         },
@@ -255,7 +256,7 @@ class AuthRepository {
       }
       rethrow;
     } finally {
-      isLoader.value = false;
+      con.isLoader.value = false;
     }
   }
 
@@ -313,7 +314,6 @@ class AuthRepository {
               }
             }
 
-            print(con.stateList.length);
             for (int i = 0; i < con.stateList.length; i++) {
               // log("state 123");
               // log("getAddressModel.data.stateId  ${con.getAddressData!.data.stateId}");
@@ -324,7 +324,6 @@ class AuthRepository {
               }
             }
 
-            print(con.cityList.length);
             for (int i = 0; i < con.cityList.length; i++) {
               // log("city 123");
               // log("getAddressModel.data.cityId  ${con.getAddressData!.data.cityId}");
@@ -365,7 +364,7 @@ class AuthRepository {
           log(response['status'].toString());
           if (!isValEmpty(response) && response["status"] == true) {
             if (isSuccessStatus.value) {
-              await getAddressApiCall(isLoader: false.obs).then((value) => isLoader?.value = false);
+              await getAddressApiCall().then((value) => isLoader?.value = false);
             } else {
               log("getAddressByIdApiCall else");
             }
@@ -482,6 +481,43 @@ class AuthRepository {
       }
     } finally {
       isLoader?.value = false;
+    }
+  }
+
+  ///get cms pages api
+  Future<dynamic> getCmsApiCall() async {
+    final CmsController con = Get.find<CmsController>();
+    try {
+      await APIFunction().getApiCall(apiName: ApiUrls.cmsPageUrl).then(
+        (response) async {
+          if (!isValEmpty(response) && response["status"] == true) {
+            CmsPagesModel data = CmsPagesModel.fromJson(response);
+
+            data.data?.forEach(
+              (element) {
+                if (element.cmsPageName == "About Us") {
+                  con.aboutUsData.value = element;
+                }
+                if (element.cmsPageName == "Terms and Condition") {
+                  con.termsAndConditionsData.value = element;
+                }
+                if (element.cmsPageName == "Privacy Policy") {
+                  con.privacyPolicyData.value = element;
+                }
+              },
+            );
+          }
+          return response;
+        },
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        printWarning(e.response?.statusCode);
+        printError(type: this, errText: "$e");
+      }
+      rethrow;
+    } finally {
+      con.isLoading.value = false;
     }
   }
 }

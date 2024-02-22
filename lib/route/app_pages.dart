@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 
 import '../view/account/widgets/about_us_screen.dart';
 import '../view/account/widgets/contact_us_screen.dart';
+import '../view/account/widgets/privacy_policy_screen.dart';
 import '../view/account/widgets/terms_conditions_screen.dart';
 import '../view/account/widgets/wish_list_screen.dart';
 import '../view/index/bottom_screen.dart';
@@ -50,6 +51,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.termsConditionsScreen,
       page: () => TermsConditionsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.privacyPolicyScreen,
+      page: () => PrivacyPolicyScreen(),
     ),
     GetPage(
       name: AppRoutes.contactUsScreen,

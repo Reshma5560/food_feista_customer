@@ -43,20 +43,33 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         _appHeader(context),
                         const SizedBox(height: 10),
-                        (con.bannerList.isEmpty &&
-                                con.categoryList.isEmpty &&
-                                con.restaurantList.isEmpty &&
-                                con.blogList.isEmpty &&
-                                con.trendingFoodList.isEmpty)
-                            ? EmptyElement(
-                                height: Get.height / 1.8,
-                                imageHeight: Get.width / 2.4,
-                                imageWidth: Get.width / 2,
-                                spacing: 0,
-                                title: "Data Not Found",
-                                // subtitle: AppStrings.cartListNotFoundSubtitle,
-                              )
-                            : _bodyModule(),
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              await DesktopRepository().getHomeData();
+                            },
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(decelerationRate: ScrollDecelerationRate.fast),
+                              child: Column(
+                                children: [
+                                  (con.bannerList.isEmpty &&
+                                          con.categoryList.isEmpty &&
+                                          con.restaurantList.isEmpty &&
+                                          con.blogList.isEmpty &&
+                                          con.trendingFoodList.isEmpty)
+                                      ? EmptyElement(
+                                          height: Get.height / 1.8,
+                                          imageHeight: Get.width / 2.4,
+                                          imageWidth: Get.width / 2,
+                                          spacing: 0,
+                                          title: "Data Not Found",
+                                        )
+                                      : _bodyModule(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ).paddingOnly(bottom: 20),
             ),
@@ -130,60 +143,59 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _bodyModule() {
-    return Expanded(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          // AppTextField(
-          //   controller: con.searchCon,
-          //   fillColor: AppColors.greyShad1,
-          //   hintText: "search",
-          //   hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
-          //   prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
-          // ),
-          // const SizedBox(height: 10),
-          if (con.bannerList.isNotEmpty) _sliderModule(),
-          const SizedBox(height: 10),
-          if (con.categoryList.isNotEmpty)
-            TitleButtonRowWidget(
-              title: "BROWSE FOOD CATEGORY",
-              buttonText: con.categoryList.length > 4 ? "View All" : "",
-              onPressed: () {
-                Get.toNamed(AppRoutes.categoryListScreen);
-              },
-            ).paddingSymmetric(horizontal: 5),
-          // if (con.categoryList.isNotEmpty) const SizedBox(height: 10),
-          if (con.categoryList.isNotEmpty) _categoryModule(),
-          const SizedBox(height: 10),
-          if (con.restaurantList.isNotEmpty)
-            TitleButtonRowWidget(
-              title: "OUR SPECIAL RESTAURANT",
-              buttonText: con.restaurantList.length > 4 ? "View All" : "",
-              onPressed: () {
-                Get.toNamed(AppRoutes.restaurantListScreen);
-              },
-            ).paddingSymmetric(horizontal: 5),
-          if (con.restaurantList.isNotEmpty) _restaurantModule(),
-          const SizedBox(height: 10),
-          if (con.blogList.isNotEmpty)
-            TitleButtonRowWidget(
-              title: "BLOGS",
-              buttonText: "",
-              onPressed: () {},
-            ).paddingSymmetric(horizontal: 5),
-          // if (con.blogList.isNotEmpty) const SizedBox(height: 10),
-          if (con.blogList.isNotEmpty) _blogModule(),
-          if (con.trendingFoodList.isNotEmpty)
-            TitleButtonRowWidget(
-              title: "trending Foods".toUpperCase(),
-              buttonText: "View All",
-              onPressed: () {},
-            ).paddingSymmetric(horizontal: 5),
-          const SizedBox(height: 10),
-          if (con.trendingFoodList.isNotEmpty) _trendingFoodsModule()
-        ],
-      ).paddingSymmetric(horizontal: 10),
-    );
+    return Column(
+      // physics: const NeverScrollableScrollPhysics(),
+      // padding: EdgeInsets.zero,
+      children: [
+        // AppTextField(
+        //   controller: con.searchCon,
+        //   fillColor: AppColors.greyShad1,
+        //   hintText: "search",
+        //   hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
+        //   prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
+        // ),
+        // const SizedBox(height: 10),
+        if (con.bannerList.isNotEmpty) _sliderModule(),
+        const SizedBox(height: 10),
+        if (con.categoryList.isNotEmpty)
+          TitleButtonRowWidget(
+            title: "BROWSE FOOD CATEGORY",
+            buttonText: con.categoryList.length > 4 ? "View All" : "",
+            onPressed: () {
+              Get.toNamed(AppRoutes.categoryListScreen);
+            },
+          ).paddingSymmetric(horizontal: 5),
+        // if (con.categoryList.isNotEmpty) const SizedBox(height: 10),
+        if (con.categoryList.isNotEmpty) _categoryModule(),
+        const SizedBox(height: 10),
+        if (con.restaurantList.isNotEmpty)
+          TitleButtonRowWidget(
+            title: "OUR SPECIAL RESTAURANT",
+            buttonText: con.restaurantList.length >= 4 ? "View All" : "",
+            onPressed: () {
+              Get.toNamed(AppRoutes.restaurantListScreen);
+            },
+          ).paddingSymmetric(horizontal: 5),
+        if (con.restaurantList.isNotEmpty) _restaurantModule(),
+        const SizedBox(height: 10),
+        if (con.blogList.isNotEmpty)
+          TitleButtonRowWidget(
+            title: "BLOGS",
+            buttonText: "",
+            onPressed: () {},
+          ).paddingSymmetric(horizontal: 5),
+        // if (con.blogList.isNotEmpty) const SizedBox(height: 10),
+        if (con.blogList.isNotEmpty) _blogModule(),
+        if (con.trendingFoodList.isNotEmpty)
+          TitleButtonRowWidget(
+            title: "trending Foods".toUpperCase(),
+            buttonText: "View All",
+            onPressed: () {},
+          ).paddingSymmetric(horizontal: 5),
+        const SizedBox(height: 10),
+        if (con.trendingFoodList.isNotEmpty) _trendingFoodsModule()
+      ],
+    ).paddingSymmetric(horizontal: 10);
   }
 
   Widget _sliderModule() {
@@ -551,7 +563,6 @@ class HomeScreen extends StatelessWidget {
   Widget _blogModule() {
     return SizedBox(
       height: Get.height * 0.2,
-      width: 250,
       child: ListView.builder(
         padding: EdgeInsets.zero,
         itemCount: con.blogList.length,

@@ -1120,15 +1120,18 @@ RestaurantDetailModel restaurantDetailModelFromJson(String str) => RestaurantDet
 
 class RestaurantDetailModel {
   final bool? status;
+  final int? userOrderCount;
   final RestaurantDetails? data;
 
   RestaurantDetailModel({
     this.status,
     this.data,
+    this.userOrderCount,
   });
 
   factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) => RestaurantDetailModel(
         status: json["status"],
+        userOrderCount: json["user_order_count"],
         data: json["data"] == null ? null : RestaurantDetails.fromJson(json["data"]),
       );
 }
@@ -1162,6 +1165,8 @@ class RestaurantDetails {
   final dynamic metaDescription;
   final dynamic metaImage;
   final int? tax;
+  final String? ratingCount;
+  final String? distance;
   final dynamic commission;
   final String? coverPhoto;
   final String? slug;
@@ -1223,6 +1228,8 @@ class RestaurantDetails {
     this.tinNumber,
     this.date,
     this.tags,
+    this.ratingCount,
+    this.distance,
     this.licenseDocument,
     this.latitude,
     this.longitude,
@@ -1303,6 +1310,8 @@ class RestaurantDetails {
         tinNumber: json["tin_number"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
         tags: json["tags"],
+        ratingCount: json["rating_count"],
+        distance: json["distance_km"],
         licenseDocument: json["license_document"],
         latitude: json["latitude"],
         longitude: json["longitude"],

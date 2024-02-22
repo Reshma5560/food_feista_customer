@@ -37,6 +37,7 @@ class ApiUrls {
   ///order api
   static String getOrderListUrl = 'get-order';
   static String orderTrackUrl = "order-detail";
+  static String addOrderReviewUrl = "user-review";
   static String placeOrderUrl = "create-order";
 
   ///wish list
@@ -61,6 +62,10 @@ class ApiUrls {
 
   ///review
   static String restaurantReviewUrl = "get-restaurant-review";
+  static String addRestaurantReviewUrl = "restaurant-review";
+
+  ///CMS PAGES
+  static String cmsPageUrl = "cms-page-list";
 // //? Bottombar Api's
 // static String groups = "group/group-list";
 // static String newGroup = "group/new-group";

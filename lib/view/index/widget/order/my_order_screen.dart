@@ -30,19 +30,15 @@ class MyOrderScreen extends StatelessWidget {
           return AnimatedOpacity(
             opacity: value == 20 ? 0 : 1,
             duration: const Duration(milliseconds: 700),
-            child: Obx(
-              () => con.isLoading.isTrue
-                  ? const AppLoader()
-                  : Column(
-                      children: [
-                        _appHeader(context),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: _bodyModule(),
-                        ),
-                      ],
-                    ).paddingOnly(bottom: 20),
-            ),
+            child: Column(
+              children: [
+                _appHeader(context),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Obx(() => con.isLoading.isTrue ? const AppLoader() : _bodyModule()),
+                ),
+              ],
+            ).paddingOnly(bottom: 20),
           );
         },
       ),
@@ -93,77 +89,82 @@ class MyOrderScreen extends StatelessWidget {
                 ],
               ),
             )
-          : ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              shrinkWrap: true,
-              itemCount: con.orderList.length,
-              itemBuilder: (BuildContext context, int index) {
-                var item = con.orderList[index];
-
-                return InkWell(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.orderTrackScreen, arguments: {'orderId': item.id});
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                    decoration: BoxDecoration(
-                      boxShadow: AppStyle.boxShadow(),
-                      color: AppColors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Image.network(
-                              item.restaurant?.logo ?? "",
-                              height: 70,
-                              width: 70,
-                              fit: BoxFit.cover,
-                            )),
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                      child: Text(
-                                    item.restaurant?.restaurantName ?? "",
-                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor),
-                                  )),
-                                  Text(
-                                    "\$${item.orderAmount.toString()}",
-                                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-                                  )
-                                ],
-                              ),
-                              Text(DateFormat('DD MMM yyyy, HH:mma').format(item.createdAt ?? DateTime.now()),
-                                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: AppColors.black)),
-                              Text("${item.orderDetail?[0].quantity} Item",
-                                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14, color: AppColors.black)),
-                              Text(
-                                "Order ID - ${item.invoiceNumber}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text("Payment Type - ${item.paymentType?.paymentTypeName ?? ""}"),
-                              Text(item.orderStatus?.statusName ?? "",
-                                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+          : RefreshIndicator(
+              onRefresh: () async {
+                await DesktopRepository().getOrderApiCall();
               },
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                shrinkWrap: true,
+                itemCount: con.orderList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var item = con.orderList[index];
+
+                  return InkWell(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.orderTrackScreen, arguments: {'orderId': item.id});
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                      decoration: BoxDecoration(
+                        boxShadow: AppStyle.boxShadow(),
+                        color: AppColors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 1,
+                              child: Image.network(
+                                item.restaurant?.logo ?? "",
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover,
+                              )),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                      item.restaurant?.restaurantName ?? "",
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor),
+                                    )),
+                                    Text(
+                                      "\$${item.orderAmount.toString()}",
+                                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                                    )
+                                  ],
+                                ),
+                                Text(DateFormat('DD MMM yyyy, HH:mma').format(item.createdAt ?? DateTime.now()),
+                                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: AppColors.black)),
+                                Text("${item.orderDetail?[0].quantity} Item",
+                                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 14, color: AppColors.black)),
+                                Text(
+                                  "Order ID - ${item.invoiceNumber}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text("Payment Type - ${item.paymentType?.paymentTypeName ?? ""}"),
+                                Text(item.orderStatus?.statusName ?? "",
+                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:foodapplication/data/models/order_track_model.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:get/get.dart';
@@ -8,9 +9,17 @@ class OrderTrackController extends GetxController {
   RxBool isCanceled = true.obs;
   var orderId = Get.arguments['orderId'];
 
+  ///add review variable
+  RxDouble ratingForOrderValue = 0.0.obs;
+  RxDouble ratingForDeliveryMenValue = 0.0.obs;
+  Rx<TextEditingController> commentCon = TextEditingController().obs;
+  RxBool isValid = false.obs;
+  RxString commentError = "".obs;
+  RxBool isLoadingReview = false.obs;
+
   @override
   Future<void> onReady() async {
-    await DesktopRepository().orderTrackApiCall(orderId: orderId); // "9b3acdb9-facd-48f7-b42b-808a47ee202a");
+    await DesktopRepository().orderTrackApiCall(orderId: orderId);
     super.onReady();
   }
 }

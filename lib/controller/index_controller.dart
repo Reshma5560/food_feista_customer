@@ -6,7 +6,11 @@ import 'package:foodapplication/view/index/widget/order/my_order_screen.dart';
 import 'package:foodapplication/view/index/widget/search_screen.dart';
 import 'package:get/get.dart';
 
+import 'auth/cms_controller.dart';
+
 class IndexController extends GetxController {
+  final CmsController con = Get.put(CmsController());
+
   RxBool isLoading = false.obs;
   RxInt selectedIndex = 0.obs;
 

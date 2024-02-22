@@ -1,9 +1,11 @@
 // ignore_for_file: unused_local_variable, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/order_tracker_controller.dart';
 import 'package:foodapplication/packages/cached_network_image/cached_network_image.dart';
+import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
@@ -13,6 +15,9 @@ import 'package:foodapplication/res/widgets/app_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../res/app_text_field.dart';
+import '../../../../../res/ui_utils.dart';
 
 class OrderTrackScreen extends StatelessWidget {
   OrderTrackScreen({super.key});
@@ -35,23 +40,158 @@ class OrderTrackScreen extends StatelessWidget {
               ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: (con.orderTrackModel.value.data?.orderStatus?.statusName == "Order Delivered")
-          ? FloatingActionButton.extended(
-              label: Text(
-                "Add Review",
-                style: AppStyle.customAppBarTitleStyle().copyWith(fontSize: 14),
-              ),
-              icon: const Icon(Icons.add),
-              backgroundColor: Theme.of(context).primaryColor,
-              onPressed: () {},
-              // child: Row(
-              //   children: [
-              //     Text("Add Review"),
-              //     Icon(Icons.add),
-              //   ],
-              // ),
-            )
-          : const SizedBox.shrink(),
+      floatingActionButton: Obx(
+        () => (con.orderTrackModel.value.data?.orderStatus?.statusName == "Order Delivered" && con.orderTrackModel.value.data?.comments == null)
+            ? FloatingActionButton.extended(
+                label: Text(
+                  "Add Review",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(fontSize: 14),
+                ),
+                icon: const Icon(Icons.add),
+                backgroundColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (ctx) => Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(defaultRadius),
+                      ),
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      insetPadding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                      child: Container(
+                        width: Get.width,
+                        padding: const EdgeInsets.all(defaultPadding),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "REVIEW",
+                                    style: AppStyle.authTitleStyle().copyWith(fontSize: 18.sp, color: AppColors.black),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    icon: const Icon(Icons.clear, color: Colors.black),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Container(height: 1, color: Colors.grey),
+                              const SizedBox(height: defaultPadding),
+                              Text(
+                                "Order Rating *",
+                                style: AppStyle.authSubtitleStyle(),
+                              ),
+                              RatingBar.builder(
+                                initialRating: 0,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemPadding: const EdgeInsets.only(right: 5),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  con.ratingForOrderValue.value = rating;
+                                },
+                              ),
+                              const SizedBox(height: defaultPadding),
+                              Text(
+                                "Deliverymen Rating *",
+                                style: AppStyle.authSubtitleStyle(),
+                              ),
+                              RatingBar.builder(
+                                initialRating: 0,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemPadding: const EdgeInsets.only(right: 5),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  con.ratingForDeliveryMenValue.value = rating;
+                                },
+                              ),
+                              const SizedBox(height: defaultPadding),
+                              Text(
+                                "COMMENT *",
+                                style: AppStyle.authSubtitleStyle(),
+                              ),
+                              const SizedBox(height: 5),
+                              Obx(
+                                () => AppTextField(
+                                  maxLines: 3,
+                                  controller: con.commentCon.value,
+                                  showError: con.isValid.value,
+                                  errorMessage: con.commentError.value,
+                                ),
+                              ),
+                              const SizedBox(height: defaultPadding),
+                              Obx(
+                                () => AppButton(
+                                  onPressed: () async {
+                                    FocusScope.of(context).unfocus();
+
+                                    /// comment validation
+                                    if (con.commentCon.value.text.trim().isEmpty) {
+                                      con.isValid.value = true;
+                                      con.commentError.value = "Please enter your comment";
+                                    } else {
+                                      con.isValid.value = false;
+                                    }
+
+                                    ///rating validation
+                                    if (con.ratingForOrderValue.value == 0.0) {
+                                      toast("Please select Order rating value minimum 1");
+                                    } else if (con.ratingForDeliveryMenValue.value == 0.0) {
+                                      toast("Please select deliverymen rating value minimum 1");
+                                    }
+
+                                    if (con.isValid.isFalse && con.ratingForOrderValue.value != 0.0 && con.ratingForDeliveryMenValue.value != 0.0) {
+                                      await DesktopRepository().addOrderReviewAPI(
+                                        params: {
+                                          "order_id": con.orderId,
+                                          "body": con.commentCon.value.text.trim(),
+                                          "order_rating": con.ratingForOrderValue.value.toString(),
+                                          "deliveryman_rating": con.ratingForDeliveryMenValue.value.toString(),
+                                        },
+                                      );
+                                    }
+                                  },
+                                  loader: con.isLoadingReview.value,
+                                  title: "Submit",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ).whenComplete(() {
+                    con.isValid.value = false;
+                    con.commentError.value = "";
+                    con.commentCon.value.clear();
+                  });
+                },
+              )
+            : const SizedBox.shrink(),
+      ),
     );
   }
 

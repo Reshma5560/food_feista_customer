@@ -34,7 +34,9 @@ class LocationScreen extends StatelessWidget {
                           // doubleouble.parse("screenController.productDetails!.branch.latitude"),
                           ),
                   onTap: (TapPosition position, LatLng latLng) {
-                    con.handleTap(latLng, position: position);
+                    con.handleTap(
+                      latLng, /* position: position*/
+                    );
                   },
                   zoom: 14),
               children: [

@@ -12,6 +12,10 @@ class RestaurantListController extends GetxController {
   RxInt page = 1.obs;
   ScrollController scrollController = ScrollController();
 
+  RxInt selectVeg = 0.obs;
+  RxInt selectNonVeg = 0.obs;
+  RxBool selectPureVeg = false.obs;
+  RxBool isNearByMe = false.obs;
   RxString categoryId = "".obs;
 
   RxList<RestaurantListDatum> restaurantList = <RestaurantListDatum>[].obs;
@@ -32,21 +36,18 @@ class RestaurantListController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    await DesktopRepository()
-        .getRestaurantListAPI(isInitial: true, categoryID: categoryId.value);
+    await DesktopRepository().getRestaurantListAPI(isInitial: true, categoryID: categoryId.value);
+    await DesktopRepository().getCuisineApiCall(isLoader: isLoading);
     manageScrollController();
   }
 
   void manageScrollController() async {
     scrollController.addListener(
       () async {
-        if (scrollController.position.maxScrollExtent ==
-                scrollController.position.pixels &&
-            isLoading.isFalse) {
+        if (scrollController.position.maxScrollExtent == scrollController.position.pixels && isLoading.isFalse) {
           if (nextPageStop.isTrue && paginationLoading.isFalse) {
             paginationLoading.value = true;
-            await DesktopRepository().getRestaurantListAPI(
-                isInitial: false, categoryID: categoryId.value);
+            await DesktopRepository().getRestaurantListAPI(isInitial: false, categoryID: categoryId.value);
           }
         }
       },

@@ -6,6 +6,7 @@ class AppRoutes {
   static String notificationScreen = '/NOTIFICATION_SCREEN';
   static String aboutUsScreen = '/ABOUT_US_SCREEN';
   static String termsConditionsScreen = '/TERMS_CONDITIONS_SCREEN';
+  static String privacyPolicyScreen = '/PRIVACY_POLICY_SCREEN';
   static String contactUsScreen = '/CONTACT_US_SCREEN';
   static String indexScreen = "/INDEX_SCREEN";
   static String editAccountScreen = "/EDIT_ACCOUNT_SCREEN";

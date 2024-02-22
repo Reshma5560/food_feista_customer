@@ -13,7 +13,7 @@ class ManageAddressController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    await AuthRepository().getAddressApiCall(isLoader: isLoader);
+    await AuthRepository().getAddressApiCall();
     super.onReady();
   }
 }

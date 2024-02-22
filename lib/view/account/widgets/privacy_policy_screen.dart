@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import '../../../controller/auth/cms_controller.dart';
 import '../../../res/app_appbar.dart';
 
-class TermsConditionsScreen extends StatelessWidget {
-  TermsConditionsScreen({super.key});
+class PrivacyPolicyScreen extends StatelessWidget {
+  PrivacyPolicyScreen({super.key});
 
   final CmsController con = Get.find<CmsController>();
 
@@ -26,7 +26,7 @@ class TermsConditionsScreen extends StatelessWidget {
             child: Column(
               children: [
                 CommonAppBar(
-                  title: "Terms & Condition",
+                  title: "Privacy Policy",
                   onPressed: () {
                     Get.back();
                   },
@@ -47,7 +47,7 @@ class TermsConditionsScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                         child: Html(
-                          data: con.termsAndConditionsData.value.body,
+                          data: con.privacyPolicyData.value.body,
                         ), /*Text(
                           '''1. Acceptance of Terms
 

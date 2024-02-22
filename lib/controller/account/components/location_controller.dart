@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter_map/flutter_map.dart';
 import 'package:foodapplication/res/app_enum.dart';
 import 'package:foodapplication/res/color_print.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
@@ -19,10 +19,10 @@ class LocationController extends GetxController {
   RxString longValue = "".obs;
   RxBool isDisable = true.obs;
 
-  void handleTap(
-    LatLng latLng, {
+  void handleTap(LatLng latLng /*, {
     TapPosition? position,
-  }) async {
+  }*/
+      ) async {
     isLoader(true);
     tappedLocation.value = latLng;
 
@@ -64,6 +64,8 @@ class LocationController extends GetxController {
         long = double.parse(Get.arguments["long"].toString());
         log("$lat $long");
         handleTap(LatLng(lat, long));
+      } else {
+        handleTap(LatLng(LocalStorage.userLat.value, LocalStorage.userLong.value));
       }
     }
     super.onInit();
