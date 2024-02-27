@@ -36,42 +36,52 @@ class HomeScreen extends StatelessWidget {
           return AnimatedOpacity(
             opacity: value == 20 ? 0 : 1,
             duration: const Duration(milliseconds: 700),
-            child: Obx(
-              () => con.isLoading.isTrue
-                  ? const AppLoader()
-                  : Column(
-                      children: [
-                        _appHeader(context),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: RefreshIndicator(
-                            onRefresh: () async {
-                              await DesktopRepository().getHomeData();
-                            },
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(decelerationRate: ScrollDecelerationRate.fast),
-                              child: Column(
-                                children: [
-                                  (con.bannerList.isEmpty &&
-                                          con.categoryList.isEmpty &&
-                                          con.restaurantList.isEmpty &&
-                                          con.blogList.isEmpty &&
-                                          con.trendingFoodList.isEmpty)
-                                      ? EmptyElement(
-                                          height: Get.height / 1.8,
-                                          imageHeight: Get.width / 2.4,
-                                          imageWidth: Get.width / 2,
-                                          spacing: 0,
-                                          title: "Data Not Found",
-                                        )
-                                      : _bodyModule(),
-                                ],
+            child: Stack(
+              children: [
+                Image.asset("assets/images/bg_home_image.png"),
+                Obx(
+                  () => con.isLoading.isTrue
+                      ? const AppLoader()
+                      : Column(
+                          children: [
+                            _appHeader(context),
+                            const SizedBox(height: 10),
+                            Expanded(
+                              child: RefreshIndicator(
+                                onRefresh: () async {
+                                  await DesktopRepository().getHomeData();
+                                },
+                                child: SingleChildScrollView(
+                                  physics: const BouncingScrollPhysics(
+                                      decelerationRate:
+                                          ScrollDecelerationRate.fast),
+                                  child: Column(
+                                    children: [
+                                      (con.bannerList.isEmpty &&
+                                              con.categoryList.isEmpty &&
+                                              con.restaurantList.isEmpty &&
+                                              con.blogList.isEmpty &&
+                                              con.trendingFoodList.isEmpty)
+                                          ? EmptyElement(
+                                              height: Get.height / 1.8,
+                                              imageHeight: Get.width / 2.4,
+                                              imageWidth: Get.width / 2,
+                                              spacing: 0,
+                                              title: "Data Not Found",
+                                            )
+                                          : _bodyModule(),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              height: 50.h,
+                            )
+                          ],
                         ),
-                      ],
-                    ).paddingOnly(bottom: 20),
+                ),
+              ],
             ),
           );
         },
@@ -80,64 +90,62 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _appHeader(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(defaultRadius * 3),
-        bottomRight: Radius.circular(defaultRadius * 3),
-      ),
-      child: MyAppBar(
-        bgColor: Theme.of(context).colorScheme.background,
-        child: Row(
-          children: [
-            Center(
-              child: Obx(
-                () => LocalStorage.userImage.isNotEmpty
-                    ? MFNetworkImage(
-                        height: 40,
-                        width: 40,
-                        imageUrl: LocalStorage.userImage.value,
-                        fit: BoxFit.cover,
+    return MyAppBar(
+      bgColor: Colors.transparent, // Theme.of(context).colorScheme.background,
+      child: Row(
+        children: [
+          Center(
+            child: Obx(
+              () => LocalStorage.userImage.isNotEmpty
+                  ? MFNetworkImage(
+                      height: 40,
+                      width: 40,
+                      imageUrl: LocalStorage.userImage.value,
+                      fit: BoxFit.cover,
+                      shape: BoxShape.circle,
+                    )
+                  : Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
                         shape: BoxShape.circle,
-                      )
-                    : Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle,
 
-                          // image: DecorationImage(
-                          //   image: AssetImage(AppAssets.profileIcon),
-                          //   onError: (exception, stackTrace) => Image.asset(
-                          //     AppAssets.profileIcon,
-                          //     fit: BoxFit.fill,
-                          //   ),
-                          // ),
-                        ),
-                        child: Icon(Icons.person_2_outlined, color: AppColors.white),
+                        // image: DecorationImage(
+                        //   image: AssetImage(AppAssets.profileIcon),
+                        //   onError: (exception, stackTrace) => Image.asset(
+                        //     AppAssets.profileIcon,
+                        //     fit: BoxFit.fill,
+                        //   ),
+                        // ),
                       ),
+                      child:
+                          Icon(Icons.person_2_outlined, color: AppColors.white),
+                    ),
+            ),
+          ),
+          const SizedBox(
+            width: defaultPadding - 6,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Welcome",
+                style: AppStyle.customAppBarTitleStyle().copyWith(
+                    color: AppColors.black.withOpacity(0.5), fontSize: 13.sp),
               ),
-            ),
-            const SizedBox(
-              width: defaultPadding - 6,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Welcome",
-                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black.withOpacity(0.5), fontSize: 13.sp),
-                ),
-                Text(
-                  (LocalStorage.firstName.isNotEmpty && LocalStorage.lastName.isNotEmpty)
-                      ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
-                      : "Please Login !!",
-                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
-                ),
-              ],
-            ),
-          ],
-        ),
+              Text(
+                (LocalStorage.firstName.isNotEmpty &&
+                        LocalStorage.lastName.isNotEmpty)
+                    ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
+                    : "Please Login !!",
+                style: AppStyle.customAppBarTitleStyle()
+                    .copyWith(color: AppColors.black),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -199,8 +207,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _sliderModule() {
-    return Stack(
-      alignment: Alignment.bottomCenter,
+    return Column(
+      // alignment: Alignment.bottomCenter,
       children: [
         CarouselSlider.builder(
           itemCount: con.bannerList.length,
@@ -212,12 +220,12 @@ class HomeScreen extends StatelessWidget {
                   width: Get.width,
                   imageUrl: con.bannerList[i].image ?? "",
                   fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(defaultRadius),
+                  borderRadius: BorderRadius.circular(20.r),
                   // filterQuality: FilterQuality.high,
                   // shape: BoxShape.circle,
                 ),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(defaultRadius),
+                  borderRadius: BorderRadius.circular(20.r),
                   child: Image(
                     image: AssetImage(
                       AppAssets.bgBanner,
@@ -245,19 +253,22 @@ class HomeScreen extends StatelessWidget {
             return Obx(
               () => con.activeSliderIndex.value == index
                   ? Container(
-                      width: 8,
-                      height: 8,
+                      width: 10,
+                      height: 10,
                       margin: const EdgeInsets.symmetric(horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        // border: Border.all(color: AppColors.red),
-                        color: AppColors.red,
+                        border: Border.all(
+                            color: Theme.of(Get.context!).primaryColor,
+                            width: 2),
+                        color: AppColors.white,
                       ),
                     )
                   : Container(
                       width: 6,
                       height: 6,
-                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.grey,
@@ -271,71 +282,94 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _categoryModule() {
-    return SizedBox(
-      height: Get.height * 0.2,
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int index) {
-          var item = con.categoryList[index];
-          return InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: () {
-              Get.toNamed(AppRoutes.restaurantListScreen, arguments: {"category_id": item.id});
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Container(
+          height: Get.height * 0.1,
+          decoration: BoxDecoration(
+              color: Color(0xffFFF2DF),
+              borderRadius: BorderRadius.circular(14.r)),
+        ),
+        SizedBox(
+          height: Get.height * 0.2,
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: 4,
+            itemBuilder: (BuildContext context, int index) {
+              var item = con.categoryList[index];
+              return InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () {
+                  Get.toNamed(AppRoutes.restaurantListScreen,
+                      arguments: {"category_id": item.id});
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5.w),
+                  width: 102,
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  height: Get.height * 0.2,
+                  // margin: const EdgeInsets.only(right: defaultPadding - 6),
+                  // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.yellow.withAlpha(56),
+                    // .withOpacity(0.16),
+                    borderRadius: BorderRadius.circular(defaultRadius),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          50.r,
+                        ),
+                        child: Image.network(
+                          item.image ?? "",
+                          fit: BoxFit.cover,
+                          height: 70,
+                          width: 70,
+                          // height: ,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: defaultPadding - 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6.w, vertical: 3.h),
+                        decoration: BoxDecoration(
+                            color: AppColors.yellow.withOpacity(0.16),
+                            borderRadius: BorderRadius.circular(7.r)),
+                        child: Text(
+                          item.categoryName ?? "",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              // color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11.sp),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: defaultPadding - 10,
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
-            child: Container(
-              width: 100,
-              height: Get.height * 0.2,
-              margin: const EdgeInsets.only(right: defaultPadding - 6),
-              // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.greyShad1,
-                borderRadius: BorderRadius.circular(defaultRadius),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(defaultRadius),
-                        topRight: Radius.circular(defaultRadius),
-                      ),
-                      child: Image.network(
-                        item.image ?? "",
-                        fit: BoxFit.cover,
-                        // height: ,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: defaultPadding - 10,
-                  ),
-                  Text(
-                    item.categoryName ?? "",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
-                  ),
-                  const SizedBox(
-                    height: defaultPadding - 10,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _restaurantModule() {
     return SizedBox(
-      height: 270,
+      height: 240,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -343,65 +377,88 @@ class HomeScreen extends StatelessWidget {
         itemBuilder: (context, i) {
           Restaurant item = con.restaurantList[i];
           return InkWell(
-            onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+            onTap: () =>
+                Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
               item.id.toString(),
               item.restaurantName,
             ]),
             child: Container(
-              width: 180,
+              width: 170,
               margin: const EdgeInsets.only(right: defaultPadding - 6),
               decoration: BoxDecoration(
-                color: AppColors.greyShad1,
+                color: Color(0xffFFF9EE),
                 borderRadius: BorderRadius.circular(defaultRadius),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Stack(
                     children: [
-                      Expanded(
-                        child: Text(
-                          item.restaurantName ?? "".toUpperCase(),
-                          // textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: AppColors.red, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                      Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                        ),
+                        child: MFNetworkImage(
+                          width: Get.width,
+                          imageUrl: item.logo ?? "",
+                          fit: BoxFit.fill,
+                          height: 100,
+                          borderRadius: BorderRadius.circular(defaultRadius),
                         ),
                       ),
-                      Obx(
-                        () => InkWell(
-                          onTap: () async {
-                            await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
-                          },
-                          child: Icon(
-                            item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
-                            color: Colors.red,
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Obx(
+                          () => InkWell(
+                            onTap: () async {
+                              await DesktopRepository().postWishListAPI(
+                                  index: i,
+                                  id: item.id ?? "",
+                                  isWishList: false);
+                            },
+                            child: Icon(
+                              item.favorite?.value == 1
+                                  ? Icons.favorite_outlined
+                                  : Icons.favorite_outline_outlined,
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                    item.address ?? "".toUpperCase(),
-                    textAlign: TextAlign.left,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: AppColors.groupSubText, fontSize: 12.sp),
+                  Expanded(
+                    child: Text(
+                      item.restaurantName ?? "".toUpperCase(),
+                      // textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Expanded(
+                    child: Text(
+                      item.address ?? "".toUpperCase(),
+                      textAlign: TextAlign.left,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: AppColors.groupSubText, fontSize: 10.sp),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        item.distance ?? "",
-                        style: TextStyle(color: AppColors.black.withOpacity(0.7), fontSize: 13.sp, fontWeight: FontWeight.w500),
-                      ),
                       Container(
-                        height: 25,
-                        width: 45,
+                        height: 18,
+                        width: 30,
                         alignment: Alignment.center,
                         // padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
@@ -409,7 +466,6 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.star,
@@ -419,22 +475,22 @@ class HomeScreen extends StatelessWidget {
                             const SizedBox(width: 3),
                             Text(
                               item.ratingCount ?? "",
-                              style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 12.sp),
+                              style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10.sp),
                             ),
                           ],
                         ),
                       ),
+                      Text(
+                        item.distance ?? "",
+                        style: TextStyle(
+                            color: AppColors.black.withOpacity(0.7),
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ],
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    flex: 1,
-                    child: MFNetworkImage(
-                      width: Get.width,
-                      imageUrl: item.logo ?? "",
-                      fit: BoxFit.fill,
-                      borderRadius: BorderRadius.circular(defaultRadius),
-                    ),
                   ),
                 ],
               ).paddingSymmetric(horizontal: 10, vertical: 10),
@@ -462,7 +518,9 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   width: 100,
                   decoration: BoxDecoration(
-                      color: con.selectSellType.value == index ? Theme.of(context).primaryColor : AppColors.white,
+                      color: con.selectSellType.value == index
+                          ? Theme.of(context).primaryColor
+                          : AppColors.white,
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
                       ),
@@ -472,7 +530,9 @@ class HomeScreen extends StatelessWidget {
                       con.sellingTypeList[index],
                       style: TextStyle(
                           fontSize: 11,
-                          color: con.selectSellType.value == index ? AppColors.white : Theme.of(context).primaryColor,
+                          color: con.selectSellType.value == index
+                              ? AppColors.white
+                              : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -494,7 +554,9 @@ class HomeScreen extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(color: AppColors.greyShad1, borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(
+              color: AppColors.greyShad1,
+              borderRadius: BorderRadius.circular(15)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,30 +576,45 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       item.title ?? "",
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23, color: Theme.of(context).primaryColor),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 23,
+                          color: Theme.of(context).primaryColor),
                     ),
                     Text(
                       item.descripton ?? "",
-                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10, color: AppColors.black),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          color: AppColors.black),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: Text(
                             "\$${item.price?.toString()}",
-                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.black),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 20,
+                                color: AppColors.black),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             "Type - ${item.type?.toString()}",
-                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 8.5,
+                                color: AppColors.black),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             "Qty - ${item.qty?.toString()}",
-                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 8.5,
+                                color: AppColors.black),
                           ),
                         ),
                       ],
@@ -547,7 +624,9 @@ class HomeScreen extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(25)),
                 child: Icon(
                   Icons.add,
                   color: AppColors.white,
@@ -593,7 +672,8 @@ class HomeScreen extends StatelessWidget {
                     item.blogName ?? "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 13),
                   ),
                 ],
               ),
@@ -678,13 +758,19 @@ class HomeScreen extends StatelessWidget {
 
               // Coupon code show
               Container(
-                decoration: BoxDecoration(color: Colors.red.shade900, boxShadow: BoxShadows().shadow(), shape: BoxShape.circle
+                decoration: BoxDecoration(
+                    color: Colors.red.shade900,
+                    boxShadow: BoxShadows().shadow(),
+                    shape: BoxShape.circle
                     // borderRadius: BorderRadius.circular(25),
                     ),
                 child: Text(
                   "${item.discount!}${item.discountType == "percent" ? "%" : "₹"}\nOFF",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.white),
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white),
                 ).paddingAll(10),
               ).paddingOnly(top: 10),
             ],

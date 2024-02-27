@@ -16,24 +16,21 @@ class CommonAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(defaultRadius * 3),
-        bottomRight: Radius.circular(defaultRadius * 3),
-      ),
-      child: MyAppBar(
-        bgColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_outlined,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: onPressed,
+    return MyAppBar(
+      bgColor:
+          // Colors.transparent,
+          Theme.of(context).colorScheme.background,
+      leading: IconButton(
+        icon: Icon(
+          Icons.arrow_back_ios,
+          color: AppColors.black, //Theme.of(context).primaryColor,
         ),
-        title: title,
-        centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
+        onPressed: onPressed,
       ),
+      title: title,
+      centerTitle: true,
+      titleStyle:
+          AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
     );
   }
 }

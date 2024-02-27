@@ -45,6 +45,11 @@ class AppStyle {
         fontWeight: FontWeight.bold,
         fontSize: 36,
       );
+  static TextStyle loginTitleStyle() => TextStyle(
+        color: AppColors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 25.sp,
+      );
 
   static TextStyle authSubtitleStyle() => TextStyle(
         fontSize: 14.sp,
@@ -78,7 +83,12 @@ class AppStyle {
         fontWeight: FontWeight.w600,
       );
 
-  static boxShadow({double? blurRadius, double? spreadRadius, Color? color, Offset? offset}) => [
+  static boxShadow(
+          {double? blurRadius,
+          double? spreadRadius,
+          Color? color,
+          Offset? offset}) =>
+      [
         BoxShadow(
           color: color ?? AppColors.blackColor.withOpacity(0.2),
           spreadRadius: spreadRadius ?? 1,
@@ -87,7 +97,13 @@ class AppStyle {
         ),
       ];
 
-  static Widget simmerContainer({double? height, double? width, double? borderRadius, Widget? child, Decoration? decoration}) => Container(
+  static Widget simmerContainer(
+          {double? height,
+          double? width,
+          double? borderRadius,
+          Widget? child,
+          Decoration? decoration}) =>
+      Container(
         height: height,
         width: width,
         decoration: decoration ??

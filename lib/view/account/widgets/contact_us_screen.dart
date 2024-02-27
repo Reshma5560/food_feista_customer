@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/contact_us_controller.dart';
+import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
@@ -26,87 +28,111 @@ class ContactUsScreen extends StatelessWidget {
           return AnimatedOpacity(
             opacity: value == 20 ? 0 : 1,
             duration: const Duration(milliseconds: 700),
-            child: Column(
+            child: Stack(
               children: [
-                CommonAppBar(
-                  title: "Contact Us",
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: defaultPadding, vertical: defaultPadding),
-                    physics: const RangeMaintainingScrollPhysics(),
-                    children: [
-                      // Center(
-                      //   child: Image.asset(
-                      //     AppAssets.appLogo,
-                      //     width: Get.width / 2,
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   height: defaultPadding,
-                      // ),
-                      const SizedBox(
-                        height: defaultPadding,
+                Image.asset(AppAssets.appbarBgImage),
+                Column(
+                  children: [
+                    CommonAppBar(
+                      title: "Contact Us",
+                      onPressed: () {
+                        Get.back();
+                      },
+                    ),
+                    Expanded(
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: defaultPadding,
+                            vertical: defaultPadding),
+                        physics: const RangeMaintainingScrollPhysics(),
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.w, vertical: 20.h),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 2),
+                                color: Theme.of(context).colorScheme.background,
+                                boxShadow: AppStyle.boxShadow(),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              children: [
+                                // Center(
+                                //   child: Image.asset(
+                                //     AppAssets.appLogo,
+                                //     width: Get.width / 2,
+                                //   ),
+                                // ),
+                                // const SizedBox(
+                                //   height: defaultPadding,
+                                // ),
+                                // const SizedBox(
+                                //   height: defaultPadding,
+                                // ),
+                                // const Text(
+                                //   "Full Name",
+                                //   style: TextStyle(
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 16,
+                                //   ),
+                                // ),
+                                _fullNameRowModule(),
+                                const SizedBox(
+                                  height: defaultPadding,
+                                ),
+                                // const Text(
+                                //   "Mobile No",
+                                //   style: TextStyle(
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 16,
+                                //   ),
+                                // ),
+                                _mobileNoRowModule(),
+                                const SizedBox(
+                                  height: defaultPadding,
+                                ),
+                                // const Text(
+                                //   "Email Id",
+                                //   style: TextStyle(
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 16,
+                                //   ),
+                                // ),
+                                _emailRowModule(),
+                                const SizedBox(
+                                  height: defaultPadding,
+                                ),
+                                // const Text(
+                                //   "Feedback",
+                                //   style: TextStyle(
+                                //     fontWeight: FontWeight.w600,
+                                //     fontSize: 16,
+                                //   ),
+                                // ),
+                                _feedbackRowModule(),
+                                const SizedBox(
+                                  height: defaultPadding,
+                                ),
+                                const SizedBox(
+                                  height: defaultPadding,
+                                ),
+                                AppButton(
+                                  height: 30.h,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  onPressed: con.submitFunction,
+                                  child: Text(
+                                    "Submit",
+                                    style: AppStyle.mediumWhite(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      const Text(
-                        "Full Name",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      _fullNameRowModule(),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
-                      const Text(
-                        "Mobile No",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      _mobileNoRowModule(),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
-                      const Text(
-                        "Email Id",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      _emailRowModule(),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
-                      const Text(
-                        "Feedback",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      _feedbackRowModule(),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
-                      const SizedBox(
-                        height: defaultPadding,
-                      ),
-                      AppButton(
-                        onPressed: con.submitFunction,
-                        child: Text(
-                          "Submit",
-                          style: AppStyle.mediumWhite(),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -123,7 +149,7 @@ class ContactUsScreen extends StatelessWidget {
       controller: con.fullnameCon,
       // errorMessage: con.passwordError.value,
       // showError: con.passwordValidation.value,
-      fillColor: AppColors.greyShad1,
+      fillColor: AppColors.white,
       keyboardType: TextInputType.text,
       onChanged: (value) {
         // if (con.passwordCon.value.text.length == 8) {
@@ -137,6 +163,16 @@ class ContactUsScreen extends StatelessWidget {
         //   con.passwordError.value = "";
         // }
       },
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+
       inputFormatters: const [
         // FilteringTextInputFormatter.digitsOnly,
         // LengthLimitingTextInputFormatter(8),
@@ -151,7 +187,7 @@ class ContactUsScreen extends StatelessWidget {
       controller: con.mobilenoCon,
       // errorMessage: con.passwordError.value,
       // showError: con.passwordValidation.value,
-      fillColor: AppColors.greyShad1,
+      fillColor: AppColors.white,
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
         // if (con.passwordCon.value.text.length == 8) {
@@ -165,6 +201,16 @@ class ContactUsScreen extends StatelessWidget {
         //   con.passwordError.value = "";
         // }
       },
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(10),
@@ -179,9 +225,19 @@ class ContactUsScreen extends StatelessWidget {
       controller: con.emailCon,
       // errorMessage: con.emailError.value,
       readOnly: true,
-      fillColor: AppColors.greyShad1,
+      fillColor: AppColors.white,
       // showError: con.emailValidation.value,
       keyboardType: TextInputType.emailAddress,
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+
       onChanged: (value) {
         // con.emailValidation.value = false;
       },
@@ -195,8 +251,18 @@ class ContactUsScreen extends StatelessWidget {
       controller: con.feedbackCon,
       // errorMessage: con.passwordError.value,
       // showError: con.passwordValidation.value,
-      fillColor: AppColors.greyShad1,
+      fillColor: AppColors.white,
       keyboardType: TextInputType.emailAddress,
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(14.r)),
+          borderSide: BorderSide(color: AppColors.white)),
+
       onChanged: (value) {
         // if (con.passwordCon.value.text.length == 8) {
         //   con.passwordError.value = "";

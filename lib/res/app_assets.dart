@@ -14,6 +14,7 @@ class AppAssets {
   static String searchIcon = '${iconPath}ic_search.png';
   static String shoppingBasketIcon = '${iconPath}ic_shopping_basket.png';
   static String piggyBank = "${iconPath}ic_piggy_bank.png";
+  static String ratingThumb = "${iconPath}/rating_thumb.png";
 
   /// IMAGES ///
   static String appLogo = '${imagesPath}app_logo.png';
@@ -25,6 +26,9 @@ class AppAssets {
   static String nonVegImg = '${imagesPath}non_veg.png';
   static String locationBanner = '${imagesPath}location_banner.png';
   static String bgBanner = '${imagesPath}bg_image.png';
+  static String bgLightImage = '${imagesPath}bg_light_image.png';
+  static String bgLogo = '${imagesPath}bg_logo.png';
+  static String appbarBgImage = '${imagesPath}appbar_bg_img.png';
 
   /// SVG ///
 

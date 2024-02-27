@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodapplication/res/app_button.dart';
 import 'package:get/get.dart';
 
 import '../utils/local_storage.dart';
@@ -11,13 +12,17 @@ import 'app_style.dart';
 import 'color_print.dart';
 
 class AppDialogs {
-  static deleteCartDialog(BuildContext context, {required VoidCallback deleteOnTap}) {
+  static deleteCartDialog(BuildContext context,
+      {required VoidCallback deleteOnTap}) {
     return Get.dialog(
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: Dialog(
           backgroundColor: AppColors.white,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(defaultRadius.r),
+              side: BorderSide(
+                  color: Theme.of(context).primaryColor, width: 3.w)),
           clipBehavior: Clip.antiAlias,
           insetPadding: EdgeInsets.all(defaultPadding.w),
           elevation: 0,
@@ -27,14 +32,15 @@ class AppDialogs {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
+                padding: EdgeInsets.only(
+                    top: defaultPadding.w, bottom: defaultPadding / 2),
                 child: Text(
                   'Delete Cart!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.darkRed,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -43,44 +49,58 @@ class AppDialogs {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 5),
+                    padding: EdgeInsets.all(defaultPadding.w)
+                        .copyWith(top: 15, bottom: 5),
                     child: RichText(
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       text: TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                            fontFamily: AppStyle.fontFamilyName,
+                            height: 1.5),
                         children: <TextSpan>[
                           TextSpan(
                             text: 'Hey 👋 ',
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
-                            text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            text:
+                                "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: 'Are you sure you want to',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: ' delete ',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, color: AppColors.darkRed),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12.sp,
+                                color: AppColors.darkRed),
                           ),
                           TextSpan(
                             text: 'your cart ?',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                         ],
                       ),
                     ),
                   ),
                   Container(
-                    color: AppColors.darkRed.withOpacity(.1),
+                    color: Theme.of(context).primaryColor.withOpacity(.1),
                     margin: const EdgeInsets.all(defaultPadding),
                     padding: const EdgeInsets.all(defaultPadding / 1.5),
                     child: Text(
                       "Deleting your cart will remove all of your cart item delete.",
-                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 11.sp),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 11.sp),
                     ),
                   ),
                   Row(
@@ -88,36 +108,57 @@ class AppDialogs {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child: InkWell(
-                          onTap: () => Get.back(),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
-                            color: const Color(0xffF2F2F2),
-                            child: Center(
-                              child: Text(
-                                'Close',
-                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ),
-                        ),
+                        child: AppButton(
+                            borderRadius: BorderRadius.circular(15.r),
+                            height: 35.h,
+                            backgroundColor: AppColors.grey,
+                            onPressed: () => Get.back(),
+                            child: Text(
+                              'Close',
+                              style: TextStyle(
+                                  // color: AppColors.white,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w700),
+                            )),
+                      ),
+                      SizedBox(
+                        width: 10.h,
                       ),
                       Expanded(
-                        child: InkWell(
-                          onTap: deleteOnTap,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
-                            color: AppColors.kPrimaryColor,
-                            child: Center(
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
+                        child: AppButton(
+                            borderRadius: BorderRadius.circular(15.r),
+                            height: 35.h,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            onPressed: () => deleteOnTap,
+                            child: Text(
+                              'Delete',
+                              style: TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w700),
+                            )),
+                        //                                  InkWell(
+                        //   onTap: deleteOnTap,
+                        //   child: Container(
+                        //     padding: EdgeInsets.symmetric(
+                        //         vertical: defaultPadding.w - 5),
+                        //     color: AppColors.kPrimaryColor,
+                        //     child: Center(
+                        //       child: Text(
+                        //         'Delete',
+                        //         style: TextStyle(
+                        //             fontSize: 16.sp,
+                        //             fontWeight: FontWeight.w700,
+                        //             color: Colors.white),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ),
                     ],
+                  ).paddingSymmetric(horizontal: 15.w),
+                  SizedBox(
+                    height: 20.h,
                   ),
                 ],
               ),
@@ -128,13 +169,15 @@ class AppDialogs {
     );
   }
 
-  static deleteCartItemDialog(BuildContext context, {required VoidCallback deleteOnTap}) {
+  static deleteCartItemDialog(BuildContext context,
+      {required VoidCallback deleteOnTap}) {
     return Get.dialog(
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: Dialog(
           backgroundColor: AppColors.white,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
           clipBehavior: Clip.antiAlias,
           insetPadding: EdgeInsets.all(defaultPadding.w),
           elevation: 0,
@@ -144,7 +187,8 @@ class AppDialogs {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
+                padding: EdgeInsets.only(
+                    top: defaultPadding.w, bottom: defaultPadding / 2),
                 child: Text(
                   'Delete Cart Item!',
                   textAlign: TextAlign.center,
@@ -160,32 +204,45 @@ class AppDialogs {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 5),
+                    padding: EdgeInsets.all(defaultPadding.w)
+                        .copyWith(top: 15, bottom: 5),
                     child: RichText(
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       text: TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                            fontFamily: AppStyle.fontFamilyName,
+                            height: 1.5),
                         children: <TextSpan>[
                           TextSpan(
                             text: 'Hey 👋 ',
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
-                            text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            text:
+                                "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: 'Are you sure you want to',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: ' delete ',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, color: AppColors.darkRed),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12.sp,
+                                color: AppColors.darkRed),
                           ),
                           TextSpan(
                             text: 'your item?',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                         ],
                       ),
@@ -199,12 +256,15 @@ class AppDialogs {
                         child: InkWell(
                           onTap: () => Get.back(),
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: defaultPadding.w - 5),
                             color: const Color(0xffF2F2F2),
                             child: Center(
                               child: Text(
                                 'Close',
-                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ),
                           ),
@@ -214,12 +274,16 @@ class AppDialogs {
                         child: InkWell(
                           onTap: deleteOnTap,
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: defaultPadding.w - 5),
                             color: AppColors.kPrimaryColor,
                             child: Center(
                               child: Text(
                                 'Delete',
-                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white),
                               ),
                             ),
                           ),
@@ -236,13 +300,15 @@ class AppDialogs {
     );
   }
 
-  static enableLocationDialog(BuildContext context, {required VoidCallback deleteOnTap}) {
+  static enableLocationDialog(BuildContext context,
+      {required VoidCallback deleteOnTap}) {
     return Get.dialog(
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: Dialog(
           backgroundColor: AppColors.white,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
           clipBehavior: Clip.antiAlias,
           insetPadding: EdgeInsets.all(defaultPadding.w),
           elevation: 0,
@@ -252,7 +318,8 @@ class AppDialogs {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
+                padding: EdgeInsets.only(
+                    top: defaultPadding.w, bottom: defaultPadding / 2),
                 child: Text(
                   'Enable Location !',
                   textAlign: TextAlign.center,
@@ -268,16 +335,23 @@ class AppDialogs {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 15),
+                    padding: EdgeInsets.all(defaultPadding.w)
+                        .copyWith(top: 15, bottom: 15),
                     child: RichText(
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       text: TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                            fontFamily: AppStyle.fontFamilyName,
+                            height: 1.5),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'Hey 👋 Please turned off permissions required for this feature. It can be enable under',
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            text:
+                                'Hey 👋 Please turned off permissions required for this feature. It can be enable under',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           // TextSpan(
                           //   text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
@@ -288,8 +362,12 @@ class AppDialogs {
                           //   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
                           // ),
                           TextSpan(
-                            text: ' Phone Setting > Apps > ${AppStrings.appName} > Permission',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp, color: AppColors.darkRed),
+                            text:
+                                ' Phone Setting > Apps > ${AppStrings.appName} > Permission',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12.sp,
+                                color: AppColors.darkRed),
                           ),
                           // TextSpan(
                           //   text: 'your item?',
@@ -323,12 +401,16 @@ class AppDialogs {
                         child: InkWell(
                           onTap: deleteOnTap,
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: defaultPadding.w - 5),
                             color: AppColors.kPrimaryColor,
                             child: Center(
                               child: Text(
                                 'GO TO SETTING',
-                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white),
                               ),
                             ),
                           ),
@@ -345,15 +427,18 @@ class AppDialogs {
     );
   }
 
-  static successItemDialog(BuildContext context, {required VoidCallback deleteOnTap, required String orderID}) {
+  static successItemDialog(BuildContext context,
+      {required VoidCallback deleteOnTap, required String orderID}) {
     printYellow("-----------------  $orderID");
     return Get.dialog(
       barrierDismissible: false,
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
         child: Dialog(
-          backgroundColor: AppColors.white,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+              borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
           clipBehavior: Clip.antiAlias,
           insetPadding: EdgeInsets.all(defaultPadding.w),
           elevation: 0,
@@ -363,14 +448,15 @@ class AppDialogs {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: defaultPadding.w, bottom: defaultPadding / 2),
+                padding: EdgeInsets.only(
+                    top: defaultPadding.w, bottom: defaultPadding / 2),
                 child: Text(
                   'Thank you!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.darkRed,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -379,28 +465,41 @@ class AppDialogs {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(defaultPadding.w).copyWith(top: 15, bottom: 5),
+                    padding: EdgeInsets.all(defaultPadding.w)
+                        .copyWith(top: 15, bottom: 5),
                     child: RichText(
                       textAlign: TextAlign.center,
                       maxLines: 3,
                       text: TextSpan(
-                        style: TextStyle(color: Colors.black, fontSize: 15.sp, fontFamily: AppStyle.fontFamilyName, height: 1.5),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                            fontFamily: AppStyle.fontFamilyName,
+                            height: 1.5),
                         children: <TextSpan>[
                           TextSpan(
                             text: 'Hey 👋 ',
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
-                            text: "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
-                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12.sp),
+                            text:
+                                "${LocalStorage.firstName} ${LocalStorage.lastName}, ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 12.sp),
                           ),
                           TextSpan(
-                            text: 'Your order successfully placed, your oder id is',
-                            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12.sp),
+                            text:
+                                'Your order successfully placed, your oder id is',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                           TextSpan(
                             text: ' Invoice Number : $orderID ',
-                            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.darkRed),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.sp,
+                                color: AppColors.darkRed),
                           ),
                           // TextSpan(
                           //   text: 'your item?',
@@ -433,12 +532,16 @@ class AppDialogs {
                         child: InkWell(
                           onTap: deleteOnTap,
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: defaultPadding.w - 5),
+                            padding: EdgeInsets.symmetric(
+                                vertical: defaultPadding.w - 5),
                             color: AppColors.kPrimaryColor,
                             child: Center(
                               child: Text(
                                 'Okay',
-                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white),
                               ),
                             ),
                           ),

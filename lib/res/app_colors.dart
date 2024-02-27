@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static Color kPrimaryColor = const Color(0xffff5c5c);
-  static Color kBackgroundColor = const Color(0xFFffe9e9);
+  static Color kPrimaryColor = const Color(0xffFFC05D); //0xffff5c5c);
+  static Color kBackgroundColor = const Color(0xffFFF8EB); //0xFFffe9e9);
   static Color litePurple = const Color(0xFFD6ECF9);
   static Color errorColor = const Color(0xffFF6B6B);
 
@@ -22,6 +22,7 @@ class AppColors {
   static Color blackColor = const Color(0xff1E2035);
   static Color grey = const Color(0xffD9D9D9);
   static Color greyShad1 = const Color(0xfff3f3f3);
+  static Color iconGreyColor = const Color(0xffB3B3B3);
 
   static Color selectedTab = const Color(0xff2C2335).withOpacity(0.06);
   static Color searchFiledHintText = const Color(0xff4A4A4A);
@@ -31,6 +32,8 @@ class AppColors {
   static Color copyBackground = const Color(0xffFCF9FF);
   static Color whiteTransparent = const Color(0xffF8F8F8).withOpacity(0.63);
   static Color allGroupsText = const Color(0xffA6A6A6);
+
+  static Color yellow = const Color(0xffFFC05D);
 
   static List<Color> bannerGradientColorList = [
     const Color(0xff169A8A).withOpacity(0.1),

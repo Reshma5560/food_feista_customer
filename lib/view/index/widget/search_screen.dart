@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodapplication/res/app_assets.dart';
+import 'package:foodapplication/res/app_button.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/search_screen_controller.dart';
@@ -22,139 +24,228 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          _appHeader(context),
-          const SizedBox(
-            height: defaultPadding - 6,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 6),
-            child: AppTextField(
-              controller: con.searchCon.value,
-              fillColor: AppColors.greyShad1,
-              hintText: "Search",
-              hintStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w400, color: AppColors.hintColor),
-              prefixIcon: Icon(Icons.search, color: AppColors.hintColor),
-              onChanged: (value) {
-                Future.delayed(const Duration(seconds: 1)).then(
-                  (value) async {
-                    await DesktopRepository().getSearchItemAPI();
+          Image.asset(AppAssets.appbarBgImage),
+          Column(
+            children: [
+              _appHeader(context),
+              const SizedBox(
+                height: defaultPadding - 6,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: defaultPadding - 6),
+                child: AppTextField(
+                  controller: con.searchCon.value,
+                  fillColor: AppColors.white,
+                  hintText: "Search Your Favorite",
+                  hintStyle: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.hintColor),
+                  suffixIcon: AppButton(
+                    borderRadius: BorderRadius.circular(15.r),
+                    width: 90,
+                    onPressed: () async {
+                      await DesktopRepository().getSearchItemAPI();
+                    },
+                    child: Text(
+                      "Search",
+                      style: TextStyle(
+                          color: AppColors.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    con.searchCon.value.text = value;
+                    Future.delayed(const Duration(seconds: 1)).then(
+                      (value) async {
+                        await DesktopRepository().getSearchItemAPI();
+                      },
+                    );
                   },
-                );
-              },
-            ),
-          ),
-          Expanded(
-            child: Obx(
-              () => con.isLoading.isFalse
-                  ? con.searchItemData.isEmpty
-                      ? EmptyElement(
-                          height: Get.height / 1.9,
-                          imageHeight: Get.width / 2.4,
-                          imageWidth: Get.width / 2,
-                          spacing: 0,
-                          title: AppStrings.searchNotFoundTitle,
-                          subtitle: AppStrings.searchListNotFoundSubtitle,
-                        )
-                      : ListView.separated(
-                          padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                          shrinkWrap: true,
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(
-                              height: defaultPadding,
-                            );
-                          },
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
-                                  con.searchItemData[index].id.toString(),
-                                  con.searchItemData[index].restaurantName,
-                                ]);
+                ),
+              ),
+              Expanded(
+                child: Obx(
+                  () => con.isLoading.isFalse
+                      ? con.searchItemData.isEmpty
+                          ? EmptyElement(
+                              height: Get.height / 1.9,
+                              imageHeight: Get.width / 2.4,
+                              imageWidth: Get.width / 2,
+                              spacing: 0,
+                              title: AppStrings.searchNotFoundTitle,
+                              subtitle: AppStrings.searchListNotFoundSubtitle,
+                            )
+                          : ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: defaultPadding),
+                              shrinkWrap: true,
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(
+                                  height: defaultPadding,
+                                );
                               },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.circular(defaultRadius),
-                                  boxShadow: AppStyle.boxShadow(),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: MFNetworkImage(
-                                        imageUrl: con.searchItemData[index].logo ?? "",
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: defaultPadding - 10).copyWith(left: defaultPadding - 6),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    Get.toNamed(
+                                        AppRoutes.restaurantDetailsScreen,
+                                        arguments: [
+                                          con.searchItemData[index].id
+                                              .toString(),
+                                          con.searchItemData[index]
+                                              .restaurantName,
+                                        ]);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: defaultPadding),
+                                    // decoration: BoxDecoration(
+                                    //   color: AppColors.white,
+                                    //   borderRadius:
+                                    //       BorderRadius.circular(defaultRadius),
+                                    //   boxShadow: AppStyle.boxShadow(),
+                                    // ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10.w, vertical: 6.h),
+
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.r),
+                                        boxShadow: AppStyle.boxShadow(),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topRight,
+                                            end: Alignment.bottomLeft,
+                                            colors: [
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .background,
+                                              AppColors.white
+                                            ])
+                                        // color: Theme.of(context).colorScheme.background,
+                                        ),
+
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: MFNetworkImage(
+                                            imageUrl: con.searchItemData[index]
+                                                    .logo ??
+                                                "",
+                                            // height: 70,
+                                            // width: 70,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                    vertical:
+                                                        defaultPadding - 10)
+                                                .copyWith(
+                                                    left: defaultPadding - 6),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    con.searchItemData[index].restaurantName ?? "",
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: AppStyle.regularBlack().copyWith(
-                                                      fontWeight: FontWeight.w500,
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        con
+                                                                .searchItemData[
+                                                                    index]
+                                                                .restaurantName ??
+                                                            "",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 14.sp,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor),
+                                                      ),
                                                     ),
-                                                  ),
+                                                  ],
+                                                ),
+                                                Text(
+                                                  con.searchItemData[index]
+                                                          .phone ??
+                                                      "",
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 11.sp,
+                                                      color: AppColors.black),
+                                                ),
+                                                Text(
+                                                  con.searchItemData[index]
+                                                          .email ??
+                                                      "",
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 11.sp,
+                                                      color: AppColors.black),
+                                                ),
+                                                Text(
+                                                  con.searchItemData[index]
+                                                          .address ??
+                                                      "",
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 11.sp,
+                                                      color: AppColors.black),
                                                 ),
                                               ],
                                             ),
-                                            Text(
-                                              con.searchItemData[index].phone ?? "",
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: AppStyle.regularBlack().copyWith(
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            Text(
-                                              con.searchItemData[index].email ?? "",
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: AppStyle.regularBlack().copyWith(
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            Text(
-                                              con.searchItemData[index].address ?? "",
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: AppStyle.regularBlack().copyWith(
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
+                                        // SizedBox(
+                                        //   height: 50.h,
+                                        // ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          itemCount: con.searchItemData.length,
-                        )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(defaultPadding).copyWith(bottom: MediaQuery.of(context).padding.bottom),
-                      shrinkWrap: true,
-                      itemCount: 8,
-                      itemBuilder: (BuildContext context, index) => const WishListSimmerTile(),
-                    ),
-            ),
+                                  ),
+                                );
+                              },
+                              itemCount: con.searchItemData.length,
+                            )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(defaultPadding)
+                              .copyWith(
+                                  bottom:
+                                      MediaQuery.of(context).padding.bottom),
+                          shrinkWrap: true,
+                          itemCount: 8,
+                          itemBuilder: (BuildContext context, index) =>
+                              const WishListSimmerTile(),
+                        ),
+                ),
+              ),
+              SizedBox(
+                height: 50.h,
+              ),
+            ],
           ),
         ],
       ),
@@ -178,7 +269,8 @@ class SearchScreen extends StatelessWidget {
         ),
         title: "Search",
         centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+        titleStyle:
+            AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
       ),
     );
   }

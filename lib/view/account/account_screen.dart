@@ -9,7 +9,6 @@ import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 
-import '../../common_widgets/custom_alert_dislog.dart';
 import '../../packages/cached_network_image/cached_network_image.dart';
 import '../../res/widgets/app_bar.dart';
 import '../../res/widgets/empty_element.dart';
@@ -22,41 +21,44 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.zero,
+      body: Stack(
         children: [
-          _appHeader(context),
-          const SizedBox(
-            height: defaultPadding,
-          ),
-          if (LocalStorage.token.value.isNotEmpty) _profileImageWidget(),
-          const SizedBox(
-            height: defaultPadding,
-          ),
-          LocalStorage.token.value.isNotEmpty
-              ? _bodyWidget()
-              : Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    EmptyElement(
-                      height: Get.height / 1.8,
-                      imageHeight: Get.width / 2.4,
-                      imageWidth: Get.width / 2,
-                      spacing: 5,
-                      title: "Please Login !!",
+          Image.asset(AppAssets.appbarBgImage),
+          ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              _appHeader(context),
+              // if (LocalStorage.token.value.isNotEmpty) _profileImageWidget(),
+              // const SizedBox(
+              //   height: defaultPadding,
+              // ),
+              LocalStorage.token.value.isNotEmpty
+                  ? _bodyWidget()
+                  : Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        EmptyElement(
+                          height: Get.height / 1.8,
+                          imageHeight: Get.width / 2.4,
+                          imageWidth: Get.width / 2,
+                          spacing: 5,
+                          title: "Please Login !!",
+                        ),
+                        const SizedBox(height: 50),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: defaultPadding),
+                          child: AppButton(
+                            onPressed: () {
+                              Get.offAllNamed(AppRoutes.loginScreen);
+                            },
+                            title: "Login",
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 50),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                      child: AppButton(
-                        onPressed: () {
-                          Get.offAllNamed(AppRoutes.loginScreen);
-                        },
-                        title: "Login",
-                      ),
-                    ),
-                  ],
-                ),
+            ],
+          ),
         ],
       ),
     );
@@ -128,26 +130,21 @@ class AccountScreen extends StatelessWidget {
   }
 
   Widget _appHeader(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(defaultRadius * 3),
-        bottomRight: Radius.circular(defaultRadius * 3),
-      ),
-      child: MyAppBar(
-        bgColor: Theme.of(context).colorScheme.background,
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.arrow_back_outlined,
-        //     color: Theme.of(context).primaryColor,
-        //   ),
-        //   onPressed: () {
-        //     Get.back();
-        //   },
-        // ),
-        title: "My Account",
-        centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
-      ),
+    return MyAppBar(
+      bgColor: Colors.transparent,
+      // leading: IconButton(
+      //   icon: Icon(
+      //     Icons.arrow_back_outlined,
+      //     color: Theme.of(context).primaryColor,
+      //   ),
+      //   onPressed: () {
+      //     Get.back();
+      //   },
+      // ),
+      title: "Setting",
+      centerTitle: true,
+      titleStyle:
+          AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
     );
   }
 
@@ -170,9 +167,7 @@ class AccountScreen extends StatelessWidget {
             );
           },
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.location_on,
           title: 'Manage Address',
@@ -180,9 +175,7 @@ class AccountScreen extends StatelessWidget {
             Get.toNamed(AppRoutes.manageAddressScreen);
           },
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.favorite,
           title: 'Favorite',
@@ -190,9 +183,7 @@ class AccountScreen extends StatelessWidget {
             Get.toNamed(AppRoutes.wishListScreen);
           },
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.password,
           title: 'Change password',
@@ -207,9 +198,7 @@ class AccountScreen extends StatelessWidget {
         //   icon: Icons.percent,
         //   title: 'Offer',
         // ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.contact_support_sharp,
           title: 'Contact Us',
@@ -217,9 +206,7 @@ class AccountScreen extends StatelessWidget {
             Get.toNamed(AppRoutes.contactUsScreen);
           },
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.info,
           title: 'About Us',
@@ -229,9 +216,7 @@ class AccountScreen extends StatelessWidget {
             Get.toNamed(AppRoutes.aboutUsScreen);
           },
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.help_outline_sharp,
           title: 'Terms & Condition',
@@ -239,9 +224,7 @@ class AccountScreen extends StatelessWidget {
             Get.toNamed(AppRoutes.termsConditionsScreen);
           },
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.privacy_tip,
           title: 'Privacy Policy',
@@ -256,78 +239,198 @@ class AccountScreen extends StatelessWidget {
         //   icon: Icons.settings,
         //   title: 'Setting',
         // ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.location_city,
           title: 'Change city',
           onPressed: () => Get.toNamed(AppRoutes.getCityScreen),
         ),
-        Divider(
-          color: AppColors.grey,
-        ),
+        SizedBox(height: 15.h),
         CustomListTile(
           icon: Icons.logout,
           title: 'LOGOUT',
-          // onPressed: () {},
-          onPressed: () => showDialog(
-            barrierDismissible: false,
-            context: Get.context!,
-            builder: (context) {
-              return CustomLogoutAlertDialog(
-                text: "Logout",
-                content: "Are you sure you want logout ?",
-                yesButtonText: "Yes",
-                onYesPressed: () {
-                  con.isLoader.value = true;
-                  LocalStorage.clearLocalStorage().then(
-                    (value) {
-                      con.isLoader.value = false;
-                      Get.offAllNamed(AppRoutes.loginScreen);
-                    },
-                  );
-                },
-                //  () async => await DesktopRepository()
-                //     .logOutApiCall(isLoader: profileController.isLoader),
-                noButtonText: "No",
-                onNoPressed: () => Get.back(),
-                bgColor: Theme.of(context).primaryColor,
-              );
-            },
-          ),
+          onPressed: _logoutWidget,
+          // onPressed: () => showDialog(
+          //   barrierDismissible: false,
+          //   context: Get.context!,
+          //   builder: (context) {
+          //     return CustomLogoutAlertDialog(
+          //       text: "Logout",
+          //       content: "Are you sure you want logout ?",
+          //       yesButtonText: "Yes",
+          //       onYesPressed: () {
+          //         con.isLoader.value = true;
+          //         LocalStorage.clearLocalStorage().then(
+          //           (value) {
+          //             con.isLoader.value = false;
+          //             Get.offAllNamed(AppRoutes.loginScreen);
+          //           },
+          //         );
+          //       },
+          //       //  () async => await DesktopRepository()
+          //       //     .logOutApiCall(isLoader: profileController.isLoader),
+          //       noButtonText: "No",
+          //       onNoPressed: () => Get.back(),
+          //       bgColor: Theme.of(context).primaryColor,
+          //     );
+          // },
+          // ),
         ),
       ],
-    );
+    ).paddingSymmetric(horizontal: 15.h);
+  }
+
+  _logoutWidget() {
+    return Get.dialog(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(Get.context!).colorScheme.background,
+                  border: Border.all(
+                      width: 3, color: Theme.of(Get.context!).primaryColor),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Material(
+                    color: Theme.of(Get.context!).colorScheme.background,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          Text(
+                            "Logout",
+                            style: TextStyle(
+                              // fontFamily: FontFamilyText.sFProDisplayRegular,
+                              color: Theme.of(Get.context!).primaryColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            "Are you sure you want logout ?",
+                            style: TextStyle(
+                              // fontFamily: FontFamilyText.sFProDisplayRegular,
+                              color: Theme.of(Get.context!).primaryColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  height: 30.h,
+                                  borderRadius: BorderRadius.circular(10),
+                                  onPressed: () {
+                                    con.isLoader.value = true;
+                                    LocalStorage.clearLocalStorage().then(
+                                      (value) {
+                                        con.isLoader.value = false;
+                                        Get.offAllNamed(AppRoutes.loginScreen);
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontSize: 14.sp),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: AppButton(
+                                  height: 30.h,
+                                  borderRadius: BorderRadius.circular(10),
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: Text(
+                                    "No",
+                                    style: TextStyle(
+                                        color: AppColors.white,
+                                        fontSize: 14.sp),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        barrierDismissible: false);
   }
 }
 
 class CustomListTile extends StatelessWidget {
   final IconData icon;
   final String title;
+  final Widget? child;
+  final bool? isChildShow;
   final void Function()? onPressed;
 
-  const CustomListTile({super.key, required this.icon, required this.title, this.onPressed});
+  const CustomListTile(
+      {super.key,
+      required this.icon,
+      required this.title,
+      this.onPressed,
+      this.child,
+      this.isChildShow});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
-      child: Row(children: [
-        Icon(
-          icon,
-          size: 24,
+      child: Container(
+        // padding: EdgeInsets.symmetric(vertical: 2.h),
+        decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).primaryColor, width: 2),
+            borderRadius: BorderRadius.circular(12.r),
+            color: AppColors.white),
+        child: Column(
+          children: [
+            Row(children: [
+              // Icon(
+              //   icon,
+              //   size: 24,
+              // ),
+              // const SizedBox(
+              //   width: 8,
+              // ),
+              Expanded(
+                  child: Text(
+                title,
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              )),
+              Icon(
+                isChildShow == true
+                    ? Icons.arrow_drop_up_sharp
+                    : Icons.arrow_right,
+                size: 30.h,
+                color: Theme.of(context).primaryColor,
+              ),
+            ]).paddingSymmetric(horizontal: defaultPadding, vertical: 4),
+            isChildShow == true ? child ?? const SizedBox() : const SizedBox()
+          ],
         ),
-        const SizedBox(
-          width: 8,
-        ),
-        Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14))),
-        Icon(
-          Icons.arrow_forward_ios,
-          size: defaultPadding,
-          color: AppColors.greyFontColor,
-        ),
-      ]).paddingSymmetric(horizontal: defaultPadding, vertical: 4),
+      ),
     );
   }
 }

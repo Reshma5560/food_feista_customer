@@ -20,8 +20,8 @@ class GradientContainer extends StatelessWidget {
               colors: [
                 //! App Color Change to comment this line (No.22)
                 // Theme.of(context).colorScheme.background,
-                Theme.of(context).scaffoldBackgroundColor,
-                Theme.of(context).scaffoldBackgroundColor,
+                Theme.of(context).colorScheme.background,
+                Theme.of(context).colorScheme.background,
                 // Colors.red, Colors.blue
               ],
             ),

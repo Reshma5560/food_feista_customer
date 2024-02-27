@@ -34,11 +34,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.child,
     this.leading,
   })  : assert(elevation == null || elevation >= 0.0),
-        preferredSize = _PreferredAppBarSize(toolbarHeight, bottom?.preferredSize.height);
+        preferredSize =
+            _PreferredAppBarSize(toolbarHeight, bottom?.preferredSize.height);
 
   static double preferredHeightFor(BuildContext context, Size preferredSize) {
-    if (preferredSize is _PreferredAppBarSize && preferredSize.toolbarHeight == null) {
-      return (AppBarTheme.of(context).toolbarHeight ?? kToolbarHeight) + (preferredSize.bottomHeight ?? 0);
+    if (preferredSize is _PreferredAppBarSize &&
+        preferredSize.toolbarHeight == null) {
+      return (AppBarTheme.of(context).toolbarHeight ?? kToolbarHeight) +
+          (preferredSize.bottomHeight ?? 0);
     }
     return preferredSize.height;
   }
@@ -46,7 +49,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: bgColor ?? Theme.of(context).primaryColor,
+      backgroundColor: bgColor ?? Theme.of(context).colorScheme.background,
       elevation: elevation,
       centerTitle: centerTitle ?? false,
       automaticallyImplyLeading: false,
