@@ -30,16 +30,40 @@ class ContactUsScreen extends StatelessWidget {
             duration: const Duration(milliseconds: 700),
             child: Stack(
               children: [
-                Image.asset(AppAssets.appbarBgImage),
-                Column(
-                  children: [
-                    CommonAppBar(
-                      title: "Contact Us",
-                      onPressed: () {
-                        Get.back();
-                      },
-                    ),
-                    Expanded(
+                Image.asset(
+                  AppAssets.appbarBgImage,
+                  fit: BoxFit.fill,
+                  width: Get.width,
+                  height: Get.height,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: Get.height * 0.03),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          size: 16.sp,
+                          // color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                      Text(
+                        "Contact Us",
+                        style: AppStyle.customAppBarTitleStyle()
+                            .copyWith(color: AppColors.black, fontSize: 16.sp),
+                      ),
+                      const Text("TESTdata",
+                          style: TextStyle(color: Colors.transparent)),
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(top: Get.height * 0.1),
+                    child: Expanded(
                       child: ListView(
                         padding: const EdgeInsets.symmetric(
                             horizontal: defaultPadding,
@@ -91,9 +115,7 @@ class ContactUsScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                    ),
-                  ],
-                ),
+                    )),
               ],
             ),
           );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:foodapplication/res/app_assets.dart';
+import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/widgets/empty_element.dart';
 import 'package:get/get.dart';
 
@@ -31,18 +32,40 @@ class WishListScreen extends StatelessWidget {
             duration: const Duration(milliseconds: 700),
             child: Stack(
               children: [
-                Image.asset(AppAssets.appbarBgImage),
-                Column(
-                  // physics: const NeverScrollableScrollPhysics(),
-                  // padding: EdgeInsets.zero,
-                  children: [
-                    CommonAppBar(
-                      title: "Wishlist",
-                      onPressed: () {
-                        Get.back();
-                      },
-                    ),
-                    Expanded(
+                Image.asset(
+                  AppAssets.appbarBgImage,
+                  fit: BoxFit.fill,
+                  width: Get.width,
+                  height: Get.height,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: Get.height * 0.03),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          size: 16.sp,
+                          // color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                      Text(
+                        "Wishlist",
+                        style: AppStyle.customAppBarTitleStyle()
+                            .copyWith(color: AppColors.black, fontSize: 16.sp),
+                      ),
+                      const Text("wishlist",
+                          style: TextStyle(color: Colors.transparent)),
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(top: Get.height * 0.1),
+                    child: Expanded(
                       child: Obx(
                         () => con.isLoading.isFalse
                             ? con.wishListData.isEmpty
@@ -141,7 +164,7 @@ class WishListScreen extends StatelessWidget {
                                                             style: AppStyle
                                                                     .regularBlack()
                                                                 .copyWith(
-                                                                  fontSize: 13.sp,
+                                                              fontSize: 13.sp,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
@@ -240,9 +263,7 @@ class WishListScreen extends StatelessWidget {
                                     const WishListSimmerTile(),
                               ),
                       ),
-                    ),
-                  ],
-                ),
+                    )),
               ],
             ),
           );

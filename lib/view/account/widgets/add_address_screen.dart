@@ -39,98 +39,117 @@ class AddAddressScreen extends StatelessWidget {
             duration: const Duration(milliseconds: 700),
             child: Stack(
               children: [
-                Image.asset(AppAssets.appbarBgImage),
-                Column(
-                  children: [
-                    CommonAppBar(
-                      title: con.addressEnum.name == "edit"
+                     Image.asset(
+                        AppAssets.appbarBgImage,
+                        fit: BoxFit.fill,
+                        width: Get.width,
+                        height: Get.height,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: Get.height * 0.03),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.arrow_back_ios,
+                                size: 16.sp,
+                              ),
+                              onPressed: () {
+                                Get.back();    Get.back();
+                              },
+                            ),
+                            Text(
+                             con.addressEnum.name == "edit"
                           ? "Edit Address"
                           : "Add Address",
-                      onPressed: () {
-                        Get.back();
-                        Get.back();
-                        // Get.offNamedUntil('/MANAGE_ADDRESS_SCREEN', (Route<dynamic> route) => route.isFirst);
-                      },
-                    ),
-                    Expanded(
-                        child: Obx(
-                      () => con.isLoader.value
-                          ? const AppLoader()
-                          : ListView(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 15),
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.w, vertical: 10.h),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Theme.of(context).primaryColor,
-                                          width: 2),
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background,
-                                      boxShadow: AppStyle.boxShadow(),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                              style: AppStyle.customAppBarTitleStyle().copyWith(
+                                  color: AppColors.black, fontSize: 16.sp),
+                            ),
+                            const Text("",
+                                style: TextStyle(color: Colors.transparent)),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: Get.height * 0.1),
+                          child: Expanded(
+                              child: Obx(
+                            () => con.isLoader.value
+                                ? const AppLoader()
+                                : ListView(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 15),
+                                    physics: const AlwaysScrollableScrollPhysics(),
                                     children: [
-                                      _floorHouseModule(),
-                                      SizedBox(height: 10.w),
-                                      _addressModule(),
-                                      SizedBox(height: 10.w),
-                                      Text(
-                                        "Address Type",
-                                        style: AppStyle.textFieldTitleStyle(),
-                                      ).paddingOnly(bottom: 10),
-                                      _addressType(),
-                                      SizedBox(height: 10.w),
-                                      _receiverNameModule(),
-                                      SizedBox(height: 10.w),
-                                      _mobileNoModule(),
-                                      SizedBox(height: 10.w),
-                                      Text(
-                                        "Country",
-                                        style: AppStyle.textFieldTitleStyle(),
-                                      ).paddingOnly(bottom: 10),
-                                      _countryDropDownModule(),
-                                      SizedBox(height: 10.w),
-                                      Text(
-                                        "State",
-                                        style: AppStyle.textFieldTitleStyle(),
-                                      ).paddingOnly(bottom: 10),
-                                      _stateDropDownModule(),
-                                      SizedBox(height: 10.w),
-                                      Text(
-                                        "City",
-                                        style: AppStyle.textFieldTitleStyle(),
-                                      ).paddingOnly(bottom: 10),
-                                      _cityDropDownModule(),
-                                      SizedBox(height: 10.w),
-                                      _zipcodeModule(),
-                                      SizedBox(height: 10.w),
-                                      _latLongModule(),
-                                      SizedBox(height: 20.w),
-                                      AppButton(
-                                        onPressed: addAddressFunction,
-                                        child: Text(
-                                          con.addressEnum.name == 'edit'
-                                              ? "Edit Address"
-                                              : "Add Address",
-                                          style: AppStyle.mediumWhite(),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.w, vertical: 10.h),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Theme.of(context).primaryColor,
+                                                width: 2),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background,
+                                            boxShadow: AppStyle.boxShadow(),
+                                            borderRadius: BorderRadius.circular(10)),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            _floorHouseModule(),
+                                            SizedBox(height: 10.w),
+                                            _addressModule(),
+                                            SizedBox(height: 10.w),
+                                            Text(
+                                              "Address Type",
+                                              style: AppStyle.textFieldTitleStyle(),
+                                            ).paddingOnly(bottom: 10),
+                                            _addressType(),
+                                            SizedBox(height: 10.w),
+                                            _receiverNameModule(),
+                                            SizedBox(height: 10.w),
+                                            _mobileNoModule(),
+                                            SizedBox(height: 10.w),
+                                            Text(
+                                              "Country",
+                                              style: AppStyle.textFieldTitleStyle(),
+                                            ).paddingOnly(bottom: 10),
+                                            _countryDropDownModule(),
+                                            SizedBox(height: 10.w),
+                                            Text(
+                                              "State",
+                                              style: AppStyle.textFieldTitleStyle(),
+                                            ).paddingOnly(bottom: 10),
+                                            _stateDropDownModule(),
+                                            SizedBox(height: 10.w),
+                                            Text(
+                                              "City",
+                                              style: AppStyle.textFieldTitleStyle(),
+                                            ).paddingOnly(bottom: 10),
+                                            _cityDropDownModule(),
+                                            SizedBox(height: 10.w),
+                                            _zipcodeModule(),
+                                            SizedBox(height: 10.w),
+                                            _latLongModule(),
+                                            SizedBox(height: 20.w),
+                                            AppButton(
+                                              onPressed: addAddressFunction,
+                                              child: Text(
+                                                con.addressEnum.name == 'edit'
+                                                    ? "Edit Address"
+                                                    : "Add Address",
+                                                style: AppStyle.mediumWhite(),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.w)
+                                          ],
                                         ),
-                                      ),
-                                      SizedBox(height: 10.w)
+                                      )
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                    )),
-                  ],
-                ),
+                          ))),
               ],
             ),
           );

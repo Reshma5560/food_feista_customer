@@ -22,36 +22,51 @@ class AccountScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(AppAssets.appbarBgImage),
-          ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              _appHeader(context),
-              LocalStorage.token.value.isNotEmpty
-                  ? _bodyWidget()
-                  : Column(
-                      children: [
-                        EmptyElement(
-                          height: Get.height / 1.8,
-                          imageHeight: Get.width / 2.4,
-                          imageWidth: Get.width / 2,
-                          spacing: 5,
-                          title: "Please Login !!",
+          Image.asset(
+            AppAssets.appbarBgImage,
+            fit: BoxFit.fill,
+            width: Get.width,
+            height: Get.height,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Setting",
+                  style: AppStyle.customAppBarTitleStyle()
+                      .copyWith(color: AppColors.black, fontSize: 16.sp),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.1),
+            child: LocalStorage.token.value.isNotEmpty
+                ? _bodyWidget()
+                : Column(
+                    children: [
+                      EmptyElement(
+                        height: Get.height / 1.8,
+                        imageHeight: Get.width / 2.4,
+                        imageWidth: Get.width / 2,
+                        spacing: 5,
+                        title: "Please Login !!",
+                      ),
+                      const SizedBox(height: 50),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: defaultPadding),
+                        child: AppButton(
+                          onPressed: () {
+                            Get.offAllNamed(AppRoutes.loginScreen);
+                          },
+                          title: "Login",
                         ),
-                        const SizedBox(height: 50),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: defaultPadding),
-                          child: AppButton(
-                            onPressed: () {
-                              Get.offAllNamed(AppRoutes.loginScreen);
-                            },
-                            title: "Login",
-                          ),
-                        ),
-                      ],
-                    ),
-            ],
+                      ),
+                    ],
+                  ),
           ),
         ],
       ),
@@ -123,24 +138,24 @@ class AccountScreen extends StatelessWidget {
   //   );
   // }
 
-  Widget _appHeader(BuildContext context) {
-    return MyAppBar(
-      bgColor: Colors.transparent,
-      // leading: IconButton(
-      //   icon: Icon(
-      //     Icons.arrow_back_outlined,
-      //     color: Theme.of(context).primaryColor,
-      //   ),
-      //   onPressed: () {
-      //     Get.back();
-      //   },
-      // ),
-      title: "Setting",
-      centerTitle: true,
-      titleStyle:
-          AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
-    );
-  }
+  // Widget _appHeader(BuildContext context) {
+  //   return MyAppBar(
+  //     bgColor: Colors.transparent,
+  //     // leading: IconButton(
+  //     //   icon: Icon(
+  //     //     Icons.arrow_back_outlined,
+  //     //     color: Theme.of(context).primaryColor,
+  //     //   ),
+  //     //   onPressed: () {
+  //     //     Get.back();
+  //     //   },
+  //     // ),
+  //     title: "Setting",
+  //     centerTitle: true,
+  //     titleStyle:
+  //         AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+  //   );
+  // }
 
   Widget _bodyWidget() {
     return Column(
