@@ -287,16 +287,19 @@ class DesktopRepository {
 
             con.orderTrackModel.value = data;
 
-            Timer.periodic(const Duration(milliseconds: 50), (timer) {
-              DateTime now = DateTime.parse(DateTime.now().toIso8601String());
-              Duration difference = now.difference(con.orderTrackModel.value.data?.createdAt ?? DateTime.now().toLocal());
-              if (difference.inMinutes < 1) {
-                con.isCanceled.value = true;
-              } else {
-                con.isCanceled.value = false;
-                timer.cancel();
-              }
-            });
+            Timer.periodic(
+              const Duration(milliseconds: 50),
+              (timer) {
+                DateTime now = DateTime.parse(DateTime.now().toIso8601String());
+                Duration difference = now.difference(con.orderTrackModel.value.data?.createdAt ?? DateTime.now().toLocal());
+                if (difference.inMinutes < 1) {
+                  con.isCanceled.value = true;
+                } else {
+                  con.isCanceled.value = false;
+                  timer.cancel();
+                }
+              },
+            );
           }
           return response;
         },

@@ -11,7 +11,6 @@ import '../../../../repositories/desktop_repositories.dart';
 import '../../../../res/app_colors.dart';
 import '../../../../res/app_loader.dart';
 import '../../../../res/app_style.dart';
-import '../../../../res/widgets/app_bar.dart';
 import '../../../../res/widgets/empty_element.dart';
 import '../../../../route/app_routes.dart';
 
@@ -24,196 +23,201 @@ class RestaurantListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        alignment: Alignment.topCenter,
         children: [
-          Image.asset(AppAssets.appbarBgImage),
-          Column(
-            children: [
-              _appHeader(context),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    await DesktopRepository().getRestaurantListAPI(isInitial: true, categoryID: con.categoryId.value);
+          Image.asset(AppAssets.appbarBgImage, fit: BoxFit.fill, width: Get.width),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.03),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    // color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    Get.back();
                   },
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics(),
-                    ),
-                    child: Column(
-                      children: [
-                        Obx(
-                          () => con.isLoading.isFalse
-                              ? con.restaurantList.isNotEmpty
-                                  ? GridView.builder(
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      controller: con.scrollController,
-                                      padding: const EdgeInsets.all((defaultPadding - 6) * 2),
-                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: (defaultPadding - 6) * 2,
-                                        crossAxisSpacing: (defaultPadding - 6) * 2,
-                                        childAspectRatio: 3 / 4,
-                                      ),
-                                      itemCount: con.restaurantList.length,
-                                      itemBuilder: (context, i) {
-                                        var item = con.restaurantList[i];
-                                        return InkWell(
-                                          onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
-                                            item.id.toString(),
-                                            item.restaurantName,
-                                          ]),
-                                          child: Container(
-                                            width: 170,
-                                            margin: const EdgeInsets.only(right: defaultPadding - 6),
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xffFFF9EE),
-                                              borderRadius: BorderRadius.circular(defaultRadius),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Stack(
-                                                  children: [
-                                                    Container(
-                                                      height: 100,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(defaultRadius),
+                ),
+                Text(
+                  "Restaurant",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _filterRestaurant();
+                  },
+                  icon: const Icon(
+                    Icons.filter_alt,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.1),
+            child: Column(
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await DesktopRepository().getRestaurantListAPI(isInitial: true, categoryID: con.categoryId.value);
+                    },
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
+                      child: Column(
+                        children: [
+                          Obx(
+                            () => con.isLoading.isFalse
+                                ? con.restaurantList.isNotEmpty
+                                    ? GridView.builder(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        controller: con.scrollController,
+                                        padding: const EdgeInsets.all((defaultPadding - 6) * 2),
+                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: (defaultPadding - 6) * 2,
+                                          crossAxisSpacing: (defaultPadding - 6) * 2,
+                                          childAspectRatio: 3 / 4,
+                                        ),
+                                        itemCount: con.restaurantList.length,
+                                        itemBuilder: (context, i) {
+                                          var item = con.restaurantList[i];
+                                          return InkWell(
+                                            onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+                                              item.id.toString(),
+                                              item.restaurantName,
+                                            ]),
+                                            child: Container(
+                                              width: 170,
+                                              margin: const EdgeInsets.only(right: defaultPadding - 6),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xffFFF9EE),
+                                                borderRadius: BorderRadius.circular(defaultRadius),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Stack(
+                                                    children: [
+                                                      Container(
+                                                        height: 100,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(defaultRadius),
+                                                        ),
+                                                        child: MFNetworkImage(
+                                                          width: Get.width,
+                                                          imageUrl: item.logo ?? "",
+                                                          fit: BoxFit.fill,
+                                                          borderRadius: BorderRadius.circular(defaultRadius),
+                                                        ),
                                                       ),
-                                                      child: MFNetworkImage(
-                                                        width: Get.width,
-                                                        imageUrl: item.logo ?? "",
-                                                        fit: BoxFit.fill,
-                                                        borderRadius: BorderRadius.circular(defaultRadius),
-                                                      ),
-                                                    ),
-                                                    Align(
-                                                      alignment: Alignment.topRight,
-                                                      child: Obx(
-                                                        () => InkWell(
-                                                          onTap: () async {
-                                                            await DesktopRepository().postWishListAPIForRestaurant(
-                                                              index: i,
-                                                              id: item.id ?? "",
-                                                              isWishList: false,
-                                                            );
-                                                          },
-                                                          child: Icon(
-                                                            item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
-                                                            color: Colors.red,
+                                                      Align(
+                                                        alignment: Alignment.topRight,
+                                                        child: Obx(
+                                                          () => InkWell(
+                                                            onTap: () async {
+                                                              await DesktopRepository().postWishListAPIForRestaurant(
+                                                                index: i,
+                                                                id: item.id ?? "",
+                                                                isWishList: false,
+                                                              );
+                                                            },
+                                                            child: Icon(
+                                                              item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
+                                                              color: Colors.red,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Expanded(
-                                                  child: Text(
-                                                    item.restaurantName ?? "".toUpperCase(),
-                                                    // textAlign: TextAlign.center,
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(color: AppColors.black, fontSize: 11.sp, fontWeight: FontWeight.w600),
+                                                    ],
                                                   ),
-                                                ),
-                                                const SizedBox(height: 2),
-                                                Expanded(
-                                                  child: Text(
-                                                    item.address ?? "".toUpperCase(),
-                                                    textAlign: TextAlign.left,
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(color: AppColors.groupSubText, fontSize: 10.sp),
+                                                  const SizedBox(height: 10),
+                                                  Expanded(
+                                                    child: Text(
+                                                      item.restaurantName ?? "".toUpperCase(),
+                                                      // textAlign: TextAlign.center,
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(color: AppColors.black, fontSize: 11.sp, fontWeight: FontWeight.w600),
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      height: 25,
-                                                      width: 45,
-                                                      alignment: Alignment.center,
-                                                      // padding: const EdgeInsets.all(2),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.green,
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.star,
-                                                            color: Colors.yellow,
-                                                            size: 10.sp,
-                                                          ),
-                                                          const SizedBox(width: 3),
-                                                          Text(
-                                                            item.ratingCount ?? "",
-                                                            style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 10.sp),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                  const SizedBox(height: 2),
+                                                  Expanded(
+                                                    child: Text(
+                                                      item.address ?? "".toUpperCase(),
+                                                      textAlign: TextAlign.left,
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(color: AppColors.groupSubText, fontSize: 10.sp),
                                                     ),
-                                                    Text(
-                                                      item.distanceKm ?? "",
-                                                      style: TextStyle(
-                                                          color: AppColors.black.withOpacity(0.7), fontSize: 10.sp, fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ).paddingSymmetric(horizontal: 10, vertical: 10),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : EmptyElement(
-                                      height: Get.height / 1.8,
-                                      imageHeight: Get.width / 2.4,
-                                      imageWidth: Get.width / 2,
-                                      spacing: 0,
-                                      title: "No Restaurant Found",
-                                    )
-                              : const AppLoader(),
-                        ),
-                      ],
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        height: 25,
+                                                        width: 45,
+                                                        alignment: Alignment.center,
+                                                        // padding: const EdgeInsets.all(2),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.green,
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.star,
+                                                              color: Colors.yellow,
+                                                              size: 10.sp,
+                                                            ),
+                                                            const SizedBox(width: 3),
+                                                            Text(
+                                                              item.ratingCount ?? "",
+                                                              style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 10.sp),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        item.distanceKm ?? "",
+                                                        style: TextStyle(
+                                                            color: AppColors.black.withOpacity(0.7), fontSize: 10.sp, fontWeight: FontWeight.w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ).paddingSymmetric(horizontal: 10, vertical: 10),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : EmptyElement(
+                                        height: Get.height / 1.8,
+                                        imageHeight: Get.width / 2.4,
+                                        imageWidth: Get.width / 2,
+                                        spacing: 0,
+                                        title: "No Restaurant Found",
+                                      )
+                                : const AppLoader(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
-  }
-
-  Widget _appHeader(BuildContext context) {
-    return MyAppBar(
-        bgColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            // color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              _filterRestaurant();
-            },
-            icon: const Icon(
-              Icons.filter_alt,
-            ),
-          ),
-        ],
-        title: "Restaurant",
-        centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 14));
   }
 
   void _filterRestaurant() {
@@ -250,8 +254,8 @@ class RestaurantListScreen extends StatelessWidget {
                       Get.back();
                     },
                     icon: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(color: AppColors.greyBorderColor, borderRadius: BorderRadius.circular(10.r)),
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(color: Theme.of(Get.context!).primaryColor, borderRadius: BorderRadius.circular(10.r)),
                       child: Icon(
                         Icons.close,
                         color: AppColors.white,

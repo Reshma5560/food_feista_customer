@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Image.asset("assets/images/bg_home_image.png"),
+          Image.asset("assets/images/bg_home_image.png", width: Get.width, fit: BoxFit.fill),
           Padding(
             padding: EdgeInsets.only(top: Get.height * 0.03),
             child: Row(

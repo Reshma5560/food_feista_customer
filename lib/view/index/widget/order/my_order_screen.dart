@@ -23,32 +23,40 @@ class MyOrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: TweenAnimationBuilder(
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeOutCubic,
-        tween: Tween(begin: 20.0, end: 1.0),
-        builder: (context, value, child) {
-          return AnimatedOpacity(
-            opacity: value == 20 ? 0 : 1,
-            duration: const Duration(milliseconds: 700),
-            child: Stack(
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Image.asset(
+            AppAssets.appbarBgImage,
+            fit: BoxFit.fill,
+            width: Get.width,
+            height: Get.height,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(AppAssets.appbarBgImage),
-                Column(
-                  children: [
-                    _appHeader(context),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: Obx(() => con.isLoading.isTrue
-                          ? const AppLoader()
-                          : _bodyModule()),
-                    ),
-                  ],
-                ).paddingOnly(bottom: 20),
+                Text(
+                  "My Order",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
+                ),
               ],
             ),
-          );
-        },
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.1),
+            child: Column(
+              children: [
+                // _appHeader(context),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: Obx(() => con.isLoading.isTrue ? const AppLoader() : _bodyModule()),
+                ),
+              ],
+            ).paddingOnly(bottom: 20),
+          ),
+        ],
       ),
     );
   }
@@ -72,8 +80,7 @@ class MyOrderScreen extends StatelessWidget {
         // ),
         title: "My Order",
         centerTitle: true,
-        titleStyle:
-            AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
+        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
       ),
     );
   }
@@ -114,23 +121,18 @@ class MyOrderScreen extends StatelessWidget {
 
                   return InkWell(
                     onTap: () {
-                      Get.toNamed(AppRoutes.orderTrackScreen,
-                          arguments: {'orderId': item.id});
+                      Get.toNamed(AppRoutes.orderTrackScreen, arguments: {'orderId': item.id});
                     },
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10.w, vertical: 10.h),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.r),
                           boxShadow: AppStyle.boxShadow(),
                           gradient: LinearGradient(
                               begin: Alignment.topRight,
                               end: Alignment.bottomLeft,
-                              colors: [
-                                Theme.of(context).colorScheme.background,
-                                AppColors.white
-                              ])
+                              colors: [Theme.of(context).colorScheme.background, AppColors.white])
                           // color: Theme.of(context).colorScheme.background,
                           ),
                       child: Row(
@@ -153,50 +155,31 @@ class MyOrderScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                         child: Text(
                                       item.restaurant?.restaurantName ?? "",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                          color:
-                                              Theme.of(context).primaryColor),
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Theme.of(context).primaryColor),
                                     )),
                                     Text(
                                       "\$${item.orderAmount.toString()}",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18),
+                                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                                     )
                                   ],
                                 ),
-                                Text(
-                                    DateFormat('DD MMM yyyy, HH:mma').format(
-                                        item.createdAt ?? DateTime.now()),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 11.sp,
-                                        color: AppColors.black)),
+                                Text(DateFormat('DD MMM yyyy, HH:mma').format(item.createdAt ?? DateTime.now()),
+                                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 11.sp, color: AppColors.black)),
                                 Text("${item.orderDetail?[0].quantity} Item",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 11.sp,
-                                        color: AppColors.black)),
+                                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 11.sp, color: AppColors.black)),
                                 Text(
                                   "Order ID - ${item.invoiceNumber}",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                    "Payment Type - ${item.paymentType?.paymentTypeName ?? ""}"),
+                                Text("Payment Type - ${item.paymentType?.paymentTypeName ?? ""}"),
                                 Text(item.orderStatus?.statusName ?? "",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
-                                        color: AppColors.black))
+                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
                               ],
                             ),
                           )

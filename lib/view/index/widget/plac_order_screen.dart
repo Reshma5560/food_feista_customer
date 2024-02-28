@@ -29,7 +29,7 @@ class PlaceOrderScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(AppAssets.appbarBgImage),
+          Image.asset(AppAssets.appbarBgImage, width: Get.width, height: Get.height, fit: BoxFit.fill),
           Column(
             // padding: EdgeInsets.zero,
             children: [
@@ -55,10 +55,7 @@ class PlaceOrderScreen extends StatelessWidget {
                                   ),
                                   Text(
                                     "ADDRESS",
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
                                   ),
                                   SizedBox(
                                     height: 10.w,
@@ -67,72 +64,49 @@ class PlaceOrderScreen extends StatelessWidget {
                                     padding: EdgeInsets.zero,
                                     itemCount: addCon.addressList.length,
                                     shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (BuildContext context, int index) {
                                       var item = addCon.addressList[index];
                                       return InkWell(
                                         highlightColor: Colors.transparent,
                                         splashColor: Colors.transparent,
                                         onTap: () {
                                           con.selectedIndex.value = index;
-                                          con.addressId.value =
-                                              addCon.addressList[index].id;
+                                          con.addressId.value = addCon.addressList[index].id;
                                         },
                                         child: Obx(
                                           () => Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 12),
+                                            margin: const EdgeInsets.symmetric(vertical: 5),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                                             decoration: BoxDecoration(
-                                              color: con.selectedIndex.value ==
-                                                      index
-                                                  ? Theme.of(context)
-                                                      .colorScheme
-                                                      .background
-                                                  : Colors.transparent,
+                                              color: con.selectedIndex.value == index ? Theme.of(context).colorScheme.background : Colors.transparent,
                                               border: Border.all(
-                                                  color:
-                                                      con.selectedIndex.value ==
-                                                              index
-                                                          ? Theme.of(context)
-                                                              .primaryColor
-                                                          : AppColors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
+                                                  color: con.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey),
+                                              borderRadius: BorderRadius.circular(15),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
                                                     Icon(
                                                       item.addressType == "home"
                                                           ? Icons.home
-                                                          : item.addressType ==
-                                                                  "office"
+                                                          : item.addressType == "office"
                                                               ? Icons.work
-                                                              : Icons
-                                                                  .other_houses,
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
+                                                              : Icons.other_houses,
+                                                      color: Theme.of(context).primaryColor,
                                                     ),
                                                     SizedBox(width: 5.w),
                                                     Expanded(
                                                       child: Text(
-                                                        item.addressType ==
-                                                                "home"
+                                                        item.addressType == "home"
                                                             ? "Home Address"
-                                                            : item.addressType ==
-                                                                    "office"
+                                                            : item.addressType == "office"
                                                                 ? "Work Address"
                                                                 : "Other Address",
                                                         style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w700,
+                                                          fontWeight: FontWeight.w700,
                                                         ),
                                                       ),
                                                     ),
@@ -142,12 +116,8 @@ class PlaceOrderScreen extends StatelessWidget {
                                                 Text(
                                                   "${item.floor} ${item.address} ${item.road} ${item.house} ${item.city.cityName} ${item.state.stateName} ${item.country.countryName}",
                                                   maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: AppColors
-                                                          .greyFontColor),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
                                                 )
                                               ],
                                             ),
@@ -169,33 +139,22 @@ class PlaceOrderScreen extends StatelessWidget {
                                     highlightColor: Colors.transparent,
                                     child: Container(
                                       width: Get.width,
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 12),
+                                      margin: const EdgeInsets.symmetric(vertical: 5),
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        border: Border.all(
-                                            color:
-                                                Theme.of(context).primaryColor),
+                                        color: Theme.of(context).colorScheme.background,
+                                        border: Border.all(color: Theme.of(context).primaryColor),
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Container(
                                             height: 40,
                                             width: 40,
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(0.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      defaultRadius),
+                                              color: Theme.of(context).primaryColor.withOpacity(0.5),
+                                              borderRadius: BorderRadius.circular(defaultRadius),
                                             ),
                                             child: Icon(
                                               Icons.add,
@@ -207,9 +166,7 @@ class PlaceOrderScreen extends StatelessWidget {
                                             "Add new Address".toUpperCase(),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: AppColors.greyFontColor),
+                                            style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
                                           )
                                         ],
                                       ),
@@ -220,10 +177,7 @@ class PlaceOrderScreen extends StatelessWidget {
                                   ),
                                   Text(
                                     "Payment Process".toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
                                   ),
                                   SizedBox(
                                     height: 10.h,
@@ -232,10 +186,8 @@ class PlaceOrderScreen extends StatelessWidget {
                                     padding: EdgeInsets.zero,
                                     itemCount: 2,
                                     shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (BuildContext context, int index) {
                                       return InkWell(
                                         highlightColor: Colors.transparent,
                                         splashColor: Colors.transparent,
@@ -250,42 +202,26 @@ class PlaceOrderScreen extends StatelessWidget {
                                         },
                                         child: Obx(
                                           () => Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 12),
+                                            margin: const EdgeInsets.symmetric(vertical: 5),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                                             decoration: BoxDecoration(
                                               // color: con.selectedIndex2.value == index ? Theme.of(context).colorScheme.background : Colors.transparent,
                                               border: Border.all(
-                                                  color: con.selectedIndex2
-                                                              .value ==
-                                                          index
-                                                      ? Theme.of(context)
-                                                          .primaryColor
-                                                      : AppColors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
+                                                  color: con.selectedIndex2.value == index ? Theme.of(context).primaryColor : AppColors.grey),
+                                              borderRadius: BorderRadius.circular(15),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  index == 0
-                                                      ? "Cash On Delivery"
-                                                      : "Razorpay",
+                                                  index == 0 ? "Cash On Delivery" : "Razorpay",
                                                   maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 12,
-                                                    color: con.selectedIndex2
-                                                                .value ==
-                                                            index
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                        : AppColors.black
-                                                            .withOpacity(0.5),
+                                                    color: con.selectedIndex2.value == index
+                                                        ? Theme.of(context).primaryColor
+                                                        : AppColors.black.withOpacity(0.5),
                                                   ),
                                                 )
                                               ],
@@ -300,10 +236,7 @@ class PlaceOrderScreen extends StatelessWidget {
                                   ),
                                   Text(
                                     "Add notes".toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
                                   ),
                                   SizedBox(
                                     height: 10.h,
@@ -328,15 +261,13 @@ class PlaceOrderScreen extends StatelessWidget {
       bottomNavigationBar: Obx(
         () => (addCon.isLoader.isFalse)
             ? Padding(
-                padding: const EdgeInsets.all(defaultPadding - 6)
-                    .copyWith(bottom: 20),
+                padding: const EdgeInsets.all(defaultPadding - 6).copyWith(bottom: 20),
                 child: AppButton(
                   height: 35.h,
                   borderRadius: BorderRadius.circular(12.r),
                   loader: con.isLoader.value,
                   onPressed: () async {
-                    if (con.addressId.value.isNotEmpty &&
-                        con.paymentType.value.isNotEmpty) {
+                    if (con.addressId.value.isNotEmpty && con.paymentType.value.isNotEmpty) {
                       if (con.paymentType.value == "COD") {
                         await DesktopRepository().createOrderApiCall(
                           isLoader: con.isLoader,
