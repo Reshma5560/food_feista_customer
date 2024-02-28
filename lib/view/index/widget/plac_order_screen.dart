@@ -9,7 +9,6 @@ import '../../../controller/account/components/manage_Address_controller.dart';
 import '../../../controller/place_order_controller.dart';
 import '../../../controller/razoraypay_controller.dart';
 import '../../../repositories/desktop_repositories.dart';
-import '../../../res/app_appbar.dart';
 import '../../../res/app_button.dart';
 import '../../../res/app_colors.dart';
 import '../../../res/app_enum.dart';
@@ -28,233 +27,260 @@ class PlaceOrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        alignment: Alignment.topCenter,
         children: [
           Image.asset(AppAssets.appbarBgImage, width: Get.width, height: Get.height, fit: BoxFit.fill),
-          Column(
-            // padding: EdgeInsets.zero,
-            children: [
-              CommonAppBar(
-                title: "Place Order",
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Obx(
-                    () => (addCon.isLoader.value || con.isLoader.isTrue)
-                        ? const AppLoader()
-                        : addCon.addressList.isEmpty
-                            ? const Center(child: Text("No Address Found"))
-                            : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                // shrinkWrap: true,
-                                children: [
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    "ADDRESS",
-                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(
-                                    height: 10.w,
-                                  ),
-                                  ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    itemCount: addCon.addressList.length,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (BuildContext context, int index) {
-                                      var item = addCon.addressList[index];
-                                      return InkWell(
-                                        highlightColor: Colors.transparent,
-                                        splashColor: Colors.transparent,
-                                        onTap: () {
-                                          con.selectedIndex.value = index;
-                                          con.addressId.value = addCon.addressList[index].id;
-                                        },
-                                        child: Obx(
-                                          () => Container(
-                                            margin: const EdgeInsets.symmetric(vertical: 5),
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                            decoration: BoxDecoration(
-                                              color: con.selectedIndex.value == index ? Theme.of(context).colorScheme.background : Colors.transparent,
-                                              border: Border.all(
-                                                  color: con.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey),
-                                              borderRadius: BorderRadius.circular(15),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      item.addressType == "home"
-                                                          ? Icons.home
-                                                          : item.addressType == "office"
-                                                              ? Icons.work
-                                                              : Icons.other_houses,
-                                                      color: Theme.of(context).primaryColor,
-                                                    ),
-                                                    SizedBox(width: 5.w),
-                                                    Expanded(
-                                                      child: Text(
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.03),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    // color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
+                Text(
+                  "Place Order",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
+                ),
+                const Text("Category", style: TextStyle(color: Colors.transparent)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.1),
+            child: Column(
+              // padding: EdgeInsets.zero,
+              children: [
+                // CommonAppBar(
+                //   title: "Place Order",
+                //   onPressed: () {
+                //     Get.back();
+                //   },
+                // ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Obx(
+                      () => (addCon.isLoader.value || con.isLoader.isTrue)
+                          ? const AppLoader()
+                          : addCon.addressList.isEmpty
+                              ? const Center(child: Text("No Address Found"))
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // shrinkWrap: true,
+                                  children: [
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      "ADDRESS",
+                                      style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      height: 10.w,
+                                    ),
+                                    ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      itemCount: addCon.addressList.length,
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (BuildContext context, int index) {
+                                        var item = addCon.addressList[index];
+                                        return InkWell(
+                                          highlightColor: Colors.transparent,
+                                          splashColor: Colors.transparent,
+                                          onTap: () {
+                                            con.selectedIndex.value = index;
+                                            con.addressId.value = addCon.addressList[index].id;
+                                          },
+                                          child: Obx(
+                                            () => Container(
+                                              margin: const EdgeInsets.symmetric(vertical: 5),
+                                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    con.selectedIndex.value == index ? Theme.of(context).colorScheme.background : Colors.transparent,
+                                                border: Border.all(
+                                                    color: con.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey),
+                                                borderRadius: BorderRadius.circular(15),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(
                                                         item.addressType == "home"
-                                                            ? "Home Address"
+                                                            ? Icons.home
                                                             : item.addressType == "office"
-                                                                ? "Work Address"
-                                                                : "Other Address",
-                                                        style: const TextStyle(
-                                                          fontWeight: FontWeight.w700,
+                                                                ? Icons.work
+                                                                : Icons.other_houses,
+                                                        color: Theme.of(context).primaryColor,
+                                                      ),
+                                                      SizedBox(width: 5.w),
+                                                      Expanded(
+                                                        child: Text(
+                                                          item.addressType == "home"
+                                                              ? "Home Address"
+                                                              : item.addressType == "office"
+                                                                  ? "Work Address"
+                                                                  : "Other Address",
+                                                          style: const TextStyle(
+                                                            fontWeight: FontWeight.w700,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10.w),
-                                                Text(
-                                                  "${item.floor} ${item.address} ${item.road} ${item.house} ${item.city.cityName} ${item.state.stateName} ${item.country.countryName}",
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
-                                                )
-                                              ],
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 10.w),
+                                                  Text(
+                                                    "${item.floor} ${item.address} ${item.road} ${item.house} ${item.city.cityName} ${item.state.stateName} ${item.country.countryName}",
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
+                                        );
+                                      },
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(
+                                          AppRoutes.locationScreen,
+                                          arguments: {
+                                            "enumType": AddressEnum.add,
+                                          },
+                                        );
+                                      },
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      child: Container(
+                                        width: Get.width,
+                                        margin: const EdgeInsets.symmetric(vertical: 5),
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.background,
+                                          border: Border.all(color: Theme.of(context).primaryColor),
+                                          borderRadius: BorderRadius.circular(15),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Get.toNamed(
-                                        AppRoutes.locationScreen,
-                                        arguments: {
-                                          "enumType": AddressEnum.add,
-                                        },
-                                      );
-                                    },
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    child: Container(
-                                      width: Get.width,
-                                      margin: const EdgeInsets.symmetric(vertical: 5),
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.background,
-                                        border: Border.all(color: Theme.of(context).primaryColor),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              color: Theme.of(context).primaryColor.withOpacity(0.5),
-                                              borderRadius: BorderRadius.circular(defaultRadius),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context).primaryColor.withOpacity(0.5),
+                                                borderRadius: BorderRadius.circular(defaultRadius),
+                                              ),
+                                              child: Icon(
+                                                Icons.add,
+                                                color: AppColors.white,
+                                              ),
                                             ),
-                                            child: Icon(
-                                              Icons.add,
-                                              color: AppColors.white,
-                                            ),
-                                          ),
-                                          SizedBox(height: 10.w),
-                                          Text(
-                                            "Add new Address".toUpperCase(),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
-                                          )
-                                        ],
+                                            SizedBox(height: 10.w),
+                                            Text(
+                                              "Add new Address".toUpperCase(),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontSize: 12, color: AppColors.greyFontColor),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Text(
-                                    "Payment Process".toUpperCase(),
-                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    itemCount: 2,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return InkWell(
-                                        highlightColor: Colors.transparent,
-                                        splashColor: Colors.transparent,
-                                        onTap: () {
-                                          con.selectedIndex2.value = index;
+                                    SizedBox(
+                                      height: 5.h,
+                                    ),
+                                    Text(
+                                      "Payment Process".toUpperCase(),
+                                      style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      itemCount: 2,
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return InkWell(
+                                          highlightColor: Colors.transparent,
+                                          splashColor: Colors.transparent,
+                                          onTap: () {
+                                            con.selectedIndex2.value = index;
 
-                                          if (index == 0) {
-                                            con.paymentType.value = "COD";
-                                          } else {
-                                            con.paymentType.value = "Razor";
-                                          }
-                                        },
-                                        child: Obx(
-                                          () => Container(
-                                            margin: const EdgeInsets.symmetric(vertical: 5),
-                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                                            decoration: BoxDecoration(
-                                              // color: con.selectedIndex2.value == index ? Theme.of(context).colorScheme.background : Colors.transparent,
-                                              border: Border.all(
-                                                  color: con.selectedIndex2.value == index ? Theme.of(context).primaryColor : AppColors.grey),
-                                              borderRadius: BorderRadius.circular(15),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  index == 0 ? "Cash On Delivery" : "Razorpay",
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: con.selectedIndex2.value == index
-                                                        ? Theme.of(context).primaryColor
-                                                        : AppColors.black.withOpacity(0.5),
-                                                  ),
-                                                )
-                                              ],
+                                            if (index == 0) {
+                                              con.paymentType.value = "COD";
+                                            } else {
+                                              con.paymentType.value = "Razor";
+                                            }
+                                          },
+                                          child: Obx(
+                                            () => Container(
+                                              margin: const EdgeInsets.symmetric(vertical: 5),
+                                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                              decoration: BoxDecoration(
+                                                // color: con.selectedIndex2.value == index ? Theme.of(context).colorScheme.background : Colors.transparent,
+                                                border: Border.all(
+                                                    color: con.selectedIndex2.value == index ? Theme.of(context).primaryColor : AppColors.grey),
+                                                borderRadius: BorderRadius.circular(15),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    index == 0 ? "Cash On Delivery" : "Razorpay",
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: con.selectedIndex2.value == index
+                                                          ? Theme.of(context).primaryColor
+                                                          : AppColors.black.withOpacity(0.5),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  Text(
-                                    "Add notes".toUpperCase(),
-                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  AppTextField(
-                                    hintText: "Enter your notes",
-                                    controller: con.noteCon.value,
-                                    maxLines: 3,
-                                  ),
-                                  // Spacer(),
-                                ],
-                              ).paddingSymmetric(
-                                horizontal: defaultPadding.w,
-                              ),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      "Add notes".toUpperCase(),
+                                      style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    AppTextField(
+                                      hintText: "Enter your notes",
+                                      controller: con.noteCon.value,
+                                      maxLines: 3,
+                                    ),
+                                    // Spacer(),
+                                  ],
+                                ).paddingSymmetric(
+                                  horizontal: defaultPadding.w,
+                                ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

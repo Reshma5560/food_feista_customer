@@ -10,7 +10,6 @@ import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
-import 'package:foodapplication/res/widgets/app_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,28 +25,46 @@ class OrderTrackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Obx(
-        () => con.isLoading.isTrue
-            ? const AppLoader()
-            : Stack(
-                children: [
-                  Image.asset(AppAssets.appbarBgImage),
-                  Column(
-                    children: [
-                      _appHeader(context),
-                      const SizedBox(height: 10),
-                      Expanded(child: _buildBody(context)
-                          // _bodyModule()
-                          ),
-                    ],
+      // resizeToAvoidBottomInset: true,
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Image.asset(AppAssets.appbarBgImage, fit: BoxFit.fill, width: Get.width),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.03),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    // color: Theme.of(context).primaryColor,
                   ),
-                ],
-              ),
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
+                Text(
+                  "Track Order",
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
+                ),
+                const Text("Category", style: TextStyle(color: Colors.transparent)),
+              ],
+            ),
+          ),
+          Obx(
+            () => con.isLoading.isTrue
+                ? const AppLoader()
+                : Padding(
+                    padding: EdgeInsets.only(bottom: kFloatingActionButtonMargin + 60, top: Get.height * 0.1),
+                    child: _buildBody(context),
+                  ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Obx(
-        () => !(con.orderTrackModel.value.data?.orderStatus?.statusName == "Order Delivered" && con.orderTrackModel.value.data?.comments == null)
+        () => (con.orderTrackModel.value.data?.orderStatus?.statusName == "Order Delivered" && con.orderTrackModel.value.data?.comments == null)
             ? FloatingActionButton.extended(
                 label: Text(
                   "Add Review",
@@ -71,7 +88,7 @@ class OrderTrackScreen extends StatelessWidget {
                         width: Get.width,
                         padding: const EdgeInsets.all(defaultPadding),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(defaultRadius),
                         ),
                         child: SingleChildScrollView(
@@ -210,28 +227,28 @@ class OrderTrackScreen extends StatelessWidget {
     );
   }
 
-  Widget _appHeader(BuildContext context) {
-    return MyAppBar(
-        bgColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        title: "Track Order",
-        centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 14));
-  }
+  // Widget _appHeader(BuildContext context) {
+  //   return MyAppBar(
+  //       bgColor: Theme.of(context).colorScheme.background,
+  //       leading: IconButton(
+  //         icon: const Icon(
+  //           Icons.arrow_back_ios,
+  //           color: Colors.black,
+  //         ),
+  //         onPressed: () {
+  //           Get.back();
+  //         },
+  //       ),
+  //       title: "Track Order",
+  //       centerTitle: true,
+  //       titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 14));
+  // }
 
   Widget _buildBody(BuildContext context) {
     var item = con.orderTrackModel.value.data;
 
     return ListView(
-      physics: const NeverScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: [
         Container(
@@ -564,9 +581,12 @@ class OrderTrackScreen extends StatelessWidget {
                 height: 15.h,
               ),
               Obx(
-                () => !con.isCanceled.isTrue
+                () => con.isCanceled.isTrue
                     ? AppButton(
-                        onPressed: () {},
+                        loader: con.isLoadingCan.value,
+                        onPressed: () async {
+                          await DesktopRepository().cancelOrderApiCall(orderId: con.orderId);
+                        },
                         title: "CANCEL ORDER",
                       )
                     : const SizedBox.shrink(),

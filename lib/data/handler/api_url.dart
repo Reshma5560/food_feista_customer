@@ -39,6 +39,7 @@ class ApiUrls {
   static String orderTrackUrl = "order-detail";
   static String addOrderReviewUrl = "user-review";
   static String placeOrderUrl = "create-order";
+  static String cancelOrder = "order-cancel";
 
   ///wish list
   static String getWishListUrl = "get-wishlist";

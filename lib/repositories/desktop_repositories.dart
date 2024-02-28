@@ -76,13 +76,21 @@ class DesktopRepository {
             con.getDataMap = data;
             con.userApiImageFile.value = con.getDataMap?.data?.image ?? "";
 
-            printYellow("-------------  ${con.getDataMap?.data?.image}");
-
             con.userName.value = "${con.getDataMap?.data?.firstName} ${con.getDataMap?.data?.lastName}";
             con.phoneNoName.value = con.getDataMap?.data?.phone ?? "";
             con.firstName.value = con.getDataMap?.data?.firstName ?? "";
             con.lastName.value = con.getDataMap?.data?.lastName ?? "";
             con.email.value = con.getDataMap?.data?.email ?? "";
+
+            LocalStorage.prefs.write(Prefs.firstName, con.firstName.value);
+            LocalStorage.prefs.write(Prefs.lastName, con.lastName.value);
+
+            LocalStorage.firstName.value = LocalStorage.prefs.read(Prefs.firstName) ?? "";
+            LocalStorage.lastName.value = LocalStorage.prefs.read(Prefs.lastName) ?? "";
+
+            await LocalStorage.readDataInfo();
+            printYellow("-------------  ${LocalStorage.firstName.value}");
+            printYellow("-------------  ${LocalStorage.lastName.value}");
           }
           return response;
         },
@@ -277,7 +285,7 @@ class DesktopRepository {
   //order track api call
   Future<dynamic> orderTrackApiCall({required String orderId}) async {
     final OrderTrackController con = Get.find<OrderTrackController>();
-
+    con.isLoading.value = true;
     try {
       await APIFunction().getApiCall(apiName: "${ApiUrls.orderTrackUrl}/$orderId").then(
         (response) async {
@@ -373,6 +381,35 @@ class DesktopRepository {
       printError(type: "getOrderApiCall", errText: "$e");
     } finally {
       con.isLoading.value = false;
+      // con.paginationLoading.value = false;
+    }
+  }
+
+  ///get order list
+  Future<dynamic> cancelOrderApiCall({String? orderId}) async {
+    final OrderTrackController con = Get.find<OrderTrackController>();
+    con.isLoadingCan.value = true;
+    try {
+      await APIFunction().getApiCall(apiName: "${ApiUrls.cancelOrder}/$orderId").then(
+        (response) async {
+          printData(key: "cancel order  response", value: response);
+          if (!isValEmpty(response) && response["status"] == true) {
+            if (!isValEmpty(response["message"])) {
+              con.isCanceled.value = false;
+              toast(response["message"].toString());
+            }
+          } else {
+            if (!isValEmpty(response) && response["status"] == false) {
+              toast(response["message"].toString());
+            }
+          }
+          return response;
+        },
+      );
+    } catch (e) {
+      printError(type: "cancelOrderApiCall", errText: "$e");
+    } finally {
+      con.isLoadingCan.value = false;
       // con.paginationLoading.value = false;
     }
   }

@@ -157,7 +157,7 @@ class RestaurantRepository {
               // indexCon.selectedIndex.value = 3;
               //
               // Get.offNamedUntil(AppRoutes.indexScreen, (route) => route.isFirst);
-              // Get.back();
+              Get.back();
             }
           }
           return response;

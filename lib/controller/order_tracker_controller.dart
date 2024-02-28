@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 class OrderTrackController extends GetxController {
   Rx<OrderTrackModel> orderTrackModel = OrderTrackModel().obs;
   RxBool isLoading = true.obs;
+  RxBool isLoadingCan = false.obs;
   RxBool isCanceled = true.obs;
   var orderId = Get.arguments['orderId'];
 
@@ -23,10 +24,7 @@ class OrderTrackController extends GetxController {
   RxString commentError = "".obs;
   RxBool isLoadingReview = false.obs;
 
-  Future<void> downloadFile(
-      {required String url,
-      required String fileName,
-      required bool isDownload}) async {
+  Future<void> downloadFile({required String url, required String fileName, required bool isDownload}) async {
     try {
       // Request WRITE_EXTERNAL_STORAGE permission at runtime
       await _requestStoragePermission();

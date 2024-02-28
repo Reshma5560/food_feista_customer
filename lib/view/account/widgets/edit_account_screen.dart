@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/edit_account_controller.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
-import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
@@ -56,11 +55,9 @@ class EditAccountScreen extends StatelessWidget {
                         ),
                         Text(
                           "Edit Account",
-                          style: AppStyle.customAppBarTitleStyle().copyWith(
-                              color: AppColors.black, fontSize: 16.sp),
+                          style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
                         ),
-                        const Text("",
-                            style: TextStyle(color: Colors.transparent)),
+                        const Text("", style: TextStyle(color: Colors.transparent)),
                       ],
                     ),
                   ),
@@ -71,12 +68,9 @@ class EditAccountScreen extends StatelessWidget {
                           child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.w, vertical: 20.h),
+                            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context).primaryColor,
-                                    width: 2),
+                                border: Border.all(color: Theme.of(context).primaryColor, width: 2),
                                 color: Theme.of(context).colorScheme.background,
                                 boxShadow: AppStyle.boxShadow(),
                                 borderRadius: BorderRadius.circular(10)),
@@ -85,10 +79,7 @@ class EditAccountScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   "MY PROFILE",
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 13.sp,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 13.sp, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   height: 10.h,
@@ -152,8 +143,7 @@ class EditAccountScreen extends StatelessWidget {
                                     LengthLimitingTextInputFormatter(10),
                                   ],
                                   onChanged: (value) {
-                                    if (con.mobileNumberCon.value.text.length ==
-                                        10) {
+                                    if (con.mobileNumberCon.value.text.length == 10) {
                                       FocusScope.of(context).unfocus();
                                     }
                                     con.isMobileValid.value = false;
@@ -171,20 +161,14 @@ class EditAccountScreen extends StatelessWidget {
                                       DesktopRepository().editProfileApiCall(
                                         isLoader: con.isLoader,
                                         data: {
-                                          "first_name":
-                                              con.firstNameCon.text.trim(),
-                                          "last_name":
-                                              con.lastNameCon.text.trim(),
+                                          "first_name": con.firstNameCon.text.trim(),
+                                          "last_name": con.lastNameCon.text.trim(),
                                           "email": con.emailCon.text.trim(),
-                                          "phone":
-                                              con.mobileNumberCon.text.trim(),
+                                          "phone": con.mobileNumberCon.text.trim(),
                                           if (con.apiImage != null)
-                                            "image": await dio.MultipartFile
-                                                .fromFile(
+                                            "image": await dio.MultipartFile.fromFile(
                                               con.apiImage!.path,
-                                              filename: con.imagePath.value
-                                                  .split("/")
-                                                  .last,
+                                              filename: con.imagePath.value.split("/").last,
                                             ),
                                         },
                                       );

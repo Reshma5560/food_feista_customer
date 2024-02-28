@@ -508,7 +508,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       if (LocalStorage.token.isNotEmpty) {
                                         if (item!.foodVariant!.isNotEmpty || item.addons!.isNotEmpty) {
                                           // cartDataController.foodVariant.value = item.foodVariant ?? [];
@@ -516,11 +516,11 @@ class RestaurantDetailsScreen extends StatelessWidget {
 
                                           _addItem(context, item: item);
                                         } else {
-                                          RestaurantRepository().addToCartItemAPI(
+                                          await RestaurantRepository().addToCartItemAPI(
                                             params: {
                                               "restaurant_id": con.restaurantDetails?.id ?? "",
                                               "food_id": item.id ?? "",
-                                              "total_price": item.totalPrice?.value.toString() ?? "",
+                                              "total_price": item.price.toString() ?? "",
                                               "total_qty": item.itemCount?.value.toString() ?? "",
                                               "variant_options": con.variantDataForAPI,
                                               "addons": con.addonsData,
