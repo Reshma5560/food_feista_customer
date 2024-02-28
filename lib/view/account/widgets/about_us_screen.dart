@@ -37,6 +37,7 @@ class AboutUsScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: ListView(
+                        padding: EdgeInsets.zero,
                         physics: const RangeMaintainingScrollPhysics(),
                         children: [
                           // Center(

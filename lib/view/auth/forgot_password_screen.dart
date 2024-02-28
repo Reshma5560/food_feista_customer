@@ -4,6 +4,7 @@ import 'package:foodapplication/controller/auth/forgot_password_controller.dart'
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/ui_utils.dart';
+import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 
 import '../../repositories/auth_repositories.dart';
@@ -83,21 +84,6 @@ class ForgotPasswordScreen extends StatelessWidget {
                                       errorMessage: con.emailError.value,
                                       showError: con.emailValidation.value,
                                       keyboardType: TextInputType.emailAddress,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
                                       onChanged: (value) {
                                         con.emailValidation.value = false;
                                       },
@@ -170,6 +156,24 @@ class ForgotPasswordScreen extends StatelessWidget {
                                         },
                                       ),
                                     ),
+                                    SizedBox(height: defaultPadding.h),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Get.toNamed(AppRoutes.loginScreen);
+                                        },
+                                        child: Text(' Login',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationThickness: 1.5,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                    ),
+                                    SizedBox(height: defaultPadding.h),
                                   ],
                                 ).paddingSymmetric(
                                     horizontal: 10.w, vertical: 15.h)));

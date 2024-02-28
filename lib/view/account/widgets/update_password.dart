@@ -6,7 +6,6 @@ import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_button.dart';
-import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_style.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
@@ -69,22 +68,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                                         FilteringTextInputFormatter.digitsOnly,
                                         LengthLimitingTextInputFormatter(16),
                                       ],
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                    ),
+                                            ),
                                     SizedBox(height: defaultPadding.w),
                                     AppTextField(
                                       // titleText: "New Password",
@@ -99,21 +83,6 @@ class UpdatePasswordScreen extends StatelessWidget {
                                         FilteringTextInputFormatter.digitsOnly,
                                         LengthLimitingTextInputFormatter(16),
                                       ],
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
                                     ),
                                     SizedBox(height: defaultPadding.w),
                                     AppTextField(
@@ -130,22 +99,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                                         FilteringTextInputFormatter.digitsOnly,
                                         LengthLimitingTextInputFormatter(16),
                                       ],
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(14.r)),
-                                          borderSide: BorderSide(
-                                              color: AppColors.white)),
-                                    ),
+                                       ),
                                     SizedBox(height: 30.w),
                                     AppButton(
                                         height: 30.h,

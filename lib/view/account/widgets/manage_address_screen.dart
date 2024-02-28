@@ -99,19 +99,20 @@ class ManageAddressScreen extends StatelessWidget {
                                                         horizontal: 10,
                                                         vertical: 12),
                                                 decoration: BoxDecoration(
-                                                    // color: Theme.of(context)
-                                                    //     .colorScheme
-                                                    //     .background,
-                                                    gradient: LinearGradient(
-                                                        begin: Alignment
-                                                            .bottomCenter,
-                                                        end: Alignment.topCenter,
-                                                        colors: [
-                                                          AppColors.white,
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .background
-                                                        ]),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .background,
+                                                    // gradient: LinearGradient(
+                                                    //     begin: Alignment
+                                                    //         .bottomCenter,
+                                                    //     end:
+                                                    //         Alignment.topCenter,
+                                                    //     colors: [
+                                                    //       AppColors.white,
+                                                    //       Theme.of(context)
+                                                    //           .colorScheme
+                                                    //           .background
+                                                    //     ]),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             22.r),
@@ -154,157 +155,178 @@ class ManageAddressScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                         ),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            printYellow(
-                                                                item.latitude);
-                                                            printYellow(
-                                                                item.longitude);
-
-                                                            Get.toNamed(
-                                                              AppRoutes
-                                                                  .locationScreen,
-                                                              arguments: {
-                                                                "enumType":
-                                                                    AddressEnum
-                                                                        .edit,
-                                                                "addressId":
-                                                                    item.id,
-                                                                "lat": item
-                                                                        .latitude
-                                                                        .isEmpty
-                                                                    ? null
-                                                                    : item
-                                                                        .latitude,
-                                                                "long": item
-                                                                        .longitude
-                                                                        .isEmpty
-                                                                    ? null
-                                                                    : item
-                                                                        .longitude,
-                                                                "name": item
-                                                                    .contactPersonName,
-                                                                "mobileNo": item
-                                                                    .contactPersonNumber,
-                                                                "zipCode": item
-                                                                    .zipCode,
-                                                                "addressType": item
-                                                                    .addressType
-                                                              },
-                                                            );
-                                                          },
-                                                          child: Icon(
-                                                              Icons.edit,
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets.all(4),
+                                                          decoration: BoxDecoration(
                                                               color: Theme.of(
                                                                       context)
-                                                                  .primaryColor),
+                                                                  .primaryColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.r)),
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              printYellow(item
+                                                                  .latitude);
+                                                              printYellow(item
+                                                                  .longitude);
+
+                                                              Get.toNamed(
+                                                                AppRoutes
+                                                                    .locationScreen,
+                                                                arguments: {
+                                                                  "enumType":
+                                                                      AddressEnum
+                                                                          .edit,
+                                                                  "addressId":
+                                                                      item.id,
+                                                                  "lat": item
+                                                                          .latitude
+                                                                          .isEmpty
+                                                                      ? null
+                                                                      : item
+                                                                          .latitude,
+                                                                  "long": item
+                                                                          .longitude
+                                                                          .isEmpty
+                                                                      ? null
+                                                                      : item
+                                                                          .longitude,
+                                                                  "name": item
+                                                                      .contactPersonName,
+                                                                  "mobileNo": item
+                                                                      .contactPersonNumber,
+                                                                  "zipCode": item
+                                                                      .zipCode,
+                                                                  "addressType":
+                                                                      item.addressType
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Icon(
+                                                                Icons.edit,
+                                                                size: 14.sp,
+                                                                color: AppColors
+                                                                    .white),
+                                                          ),
                                                         ),
                                                         SizedBox(
                                                           width: 10.w,
                                                         ),
-                                                        InkWell(
-                                                          onTap: () =>
-                                                              Get.dialog(
-                                                                  Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            horizontal:
-                                                                                40),
-                                                                        child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                Theme.of(Get.context!).colorScheme.background,
-                                                                            border:
-                                                                                Border.all(width: 3, color: Theme.of(Get.context!).primaryColor),
-                                                                            borderRadius:
-                                                                                const BorderRadius.all(
-                                                                              Radius.circular(20),
-                                                                            ),
-                                                                          ),
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets.all(4),
+                                                          decoration: BoxDecoration(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor
+                                                                  .withOpacity(
+                                                                      0.3),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.r)),
+                                                          child: InkWell(
+                                                            onTap: () =>
+                                                                Get.dialog(
+                                                                    Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              horizontal: 40),
                                                                           child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(20.0),
-                                                                            child:
-                                                                                Material(
+                                                                              Container(
+                                                                            decoration:
+                                                                                BoxDecoration(
                                                                               color: Theme.of(Get.context!).colorScheme.background,
-                                                                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                                                                const SizedBox(height: 10),
-                                                                                Text(
-                                                                                  "Delete",
-                                                                                  style: TextStyle(
-                                                                                    // fontFamily: FontFamilyText.sFProDisplayRegular,
-                                                                                    color: Theme.of(Get.context!).primaryColor,
-                                                                                    fontSize: 14.sp,
-                                                                                    fontWeight: FontWeight.bold,
+                                                                              border: Border.all(width: 3, color: Theme.of(Get.context!).primaryColor),
+                                                                              borderRadius: const BorderRadius.all(
+                                                                                Radius.circular(20),
+                                                                              ),
+                                                                            ),
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(20.0),
+                                                                              child: Material(
+                                                                                color: Theme.of(Get.context!).colorScheme.background,
+                                                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                                                  const SizedBox(height: 10),
+                                                                                  Text(
+                                                                                    "Delete",
+                                                                                    style: TextStyle(
+                                                                                      // fontFamily: FontFamilyText.sFProDisplayRegular,
+                                                                                      color: Theme.of(Get.context!).primaryColor,
+                                                                                      fontSize: 14.sp,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
                                                                                   ),
-                                                                                ),
-                                                                                SizedBox(height: 10.h),
-                                                                                Text(
-                                                                                  "Are you sure you want Delete.?",
-                                                                                  style: TextStyle(
-                                                                                    // fontFamily: FontFamilyText.sFProDisplayRegular,
-                                                                                    color: Theme.of(Get.context!).primaryColor,
-                                                                                    fontSize: 14.sp,
-                                                                                    fontWeight: FontWeight.w400,
+                                                                                  SizedBox(height: 10.h),
+                                                                                  Text(
+                                                                                    "Are you sure you want Delete.?",
+                                                                                    style: TextStyle(
+                                                                                      // fontFamily: FontFamilyText.sFProDisplayRegular,
+                                                                                      color: Theme.of(Get.context!).primaryColor,
+                                                                                      fontSize: 14.sp,
+                                                                                      fontWeight: FontWeight.w400,
+                                                                                    ),
                                                                                   ),
-                                                                                ),
-                                                                                SizedBox(height: 20.h),
-                                                                                Row(
-                                                                                  children: [
-                                                                                    Expanded(
-                                                                                      child: AppButton(
-                                                                                        height: 30.h,
-                                                                                        borderRadius: BorderRadius.circular(10),
-                                                                                        onPressed: () {
-                                                                                          con.addressList.removeAt(index);
-                                                                                          AuthRepository().removeAddressByIdApiCall(addressId: item.id).then((value) {
+                                                                                  SizedBox(height: 20.h),
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      Expanded(
+                                                                                        child: AppButton(
+                                                                                          height: 30.h,
+                                                                                          borderRadius: BorderRadius.circular(10),
+                                                                                          onPressed: () {
+                                                                                            con.addressList.removeAt(index);
+                                                                                            AuthRepository().removeAddressByIdApiCall(addressId: item.id).then((value) {
+                                                                                              Get.back();
+                                                                                            });
+                                                                                          },
+                                                                                          child: Text(
+                                                                                            "Yes",
+                                                                                            style: TextStyle(color: AppColors.white, fontSize: 14.sp),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      const SizedBox(width: 15),
+                                                                                      Expanded(
+                                                                                        child: AppButton(
+                                                                                          height: 30.h,
+                                                                                          borderRadius: BorderRadius.circular(10),
+                                                                                          onPressed: () {
                                                                                             Get.back();
-                                                                                          });
-                                                                                        },
-                                                                                        child: Text(
-                                                                                          "Yes",
-                                                                                          style: TextStyle(color: AppColors.white, fontSize: 14.sp),
+                                                                                          },
+                                                                                          child: Text(
+                                                                                            "No",
+                                                                                            style: TextStyle(color: AppColors.white, fontSize: 14.sp),
+                                                                                          ),
                                                                                         ),
                                                                                       ),
-                                                                                    ),
-                                                                                    const SizedBox(width: 15),
-                                                                                    Expanded(
-                                                                                      child: AppButton(
-                                                                                        height: 30.h,
-                                                                                        borderRadius: BorderRadius.circular(10),
-                                                                                        onPressed: () {
-                                                                                          Get.back();
-                                                                                        },
-                                                                                        child: Text(
-                                                                                          "No",
-                                                                                          style: TextStyle(color: AppColors.white, fontSize: 14.sp),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ]),
+                                                                                    ],
+                                                                                  ),
+                                                                                ]),
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  barrierDismissible:
-                                                                      false),
-                                                          child: Icon(
-                                                              Icons.delete,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor),
+                                                                      ],
+                                                                    ),
+                                                                    barrierDismissible:
+                                                                        false),
+                                                            child: Icon(
+                                                                Icons.delete,
+                                                                size: 14.sp,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),

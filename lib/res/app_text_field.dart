@@ -122,7 +122,7 @@ class AppTextField extends StatelessWidget {
 
   AnimatedContainer errorMessageWidget() {
     return AnimatedContainer(
-      margin: EdgeInsets.only(left: 0, top: showError == false ? 0 : 5),
+      margin: EdgeInsets.only(left: 0, top: showError == false ? 0 : 1),
       alignment: Alignment.centerLeft,
       duration: const Duration(milliseconds: 180),
       height: showError == false ? 0 : 15 * 1.5,

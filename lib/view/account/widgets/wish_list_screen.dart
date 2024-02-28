@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/repositories/desktop_repositories.dart';
 import 'package:foodapplication/res/app_assets.dart';
-import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/widgets/empty_element.dart';
 import 'package:get/get.dart';
 
@@ -73,18 +72,18 @@ class WishListScreen extends StatelessWidget {
                                         margin: const EdgeInsets.symmetric(
                                             horizontal: defaultPadding),
                                         decoration: BoxDecoration(
-                                          // color: Theme.of(context)
-                                          //     .colorScheme
-                                          //     .background,
-                                          gradient: LinearGradient(
-                                              begin: Alignment.bottomRight,
-                                              end: Alignment.topRight,
-                                              colors: [
-                                                AppColors.white,
-                                                Theme.of(context)
-                                                    .colorScheme
-                                                    .background
-                                              ]),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .background,
+                                          // gradient: LinearGradient(
+                                          //     begin: Alignment.bottomRight,
+                                          //     end: Alignment.topRight,
+                                          //     colors: [
+                                          //       AppColors.white,
+                                          //       Theme.of(context)
+                                          //           .colorScheme
+                                          //           .background
+                                          //     ]),
                                           borderRadius:
                                               BorderRadius.circular(22.r),
                                           boxShadow: AppStyle.boxShadow(),
@@ -142,6 +141,7 @@ class WishListScreen extends StatelessWidget {
                                                             style: AppStyle
                                                                     .regularBlack()
                                                                 .copyWith(
+                                                                  fontSize: 13.sp,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,

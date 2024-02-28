@@ -9,7 +9,6 @@ import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 
-import '../../packages/cached_network_image/cached_network_image.dart';
 import '../../res/widgets/app_bar.dart';
 import '../../res/widgets/empty_element.dart';
 
@@ -28,14 +27,9 @@ class AccountScreen extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: [
               _appHeader(context),
-              // if (LocalStorage.token.value.isNotEmpty) _profileImageWidget(),
-              // const SizedBox(
-              //   height: defaultPadding,
-              // ),
               LocalStorage.token.value.isNotEmpty
                   ? _bodyWidget()
                   : Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         EmptyElement(
                           height: Get.height / 1.8,
@@ -64,70 +58,70 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _profileImageWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-      child: Row(
-        children: [
-          Center(
-            child: Obx(
-              () => con.userApiImageFile.value.isNotEmpty
-                  ? MFNetworkImage(
-                      height: 100,
-                      width: 100,
-                      imageUrl: con.userApiImageFile.value,
-                      fit: BoxFit.cover,
-                      shape: BoxShape.circle,
-                    )
-                  : Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage(AppAssets.profileIcon),
-                          onError: (exception, stackTrace) => Image.asset(
-                            AppAssets.profileIcon,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: defaultPadding),
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(
-                  () => Text(
-                    "${con.userName}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                ),
-                Obx(
-                  () => Text(
-                    "+91 ${con.phoneNoName.value}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      color: AppColors.greyFontColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _profileImageWidget() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+  //     child: Row(
+  //       children: [
+  //         Center(
+  //           child: Obx(
+  //             () => con.userApiImageFile.value.isNotEmpty
+  //                 ? MFNetworkImage(
+  //                     height: 100,
+  //                     width: 100,
+  //                     imageUrl: con.userApiImageFile.value,
+  //                     fit: BoxFit.cover,
+  //                     shape: BoxShape.circle,
+  //                   )
+  //                 : Container(
+  //                     height: 100,
+  //                     width: 100,
+  //                     decoration: BoxDecoration(
+  //                       color: Colors.grey,
+  //                       shape: BoxShape.circle,
+  //                       image: DecorationImage(
+  //                         image: AssetImage(AppAssets.profileIcon),
+  //                         onError: (exception, stackTrace) => Image.asset(
+  //                           AppAssets.profileIcon,
+  //                           fit: BoxFit.fill,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: const EdgeInsets.only(left: defaultPadding),
+  //           child: Column(
+  //             // mainAxisAlignment: MainAxisAlignment.start,
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Obx(
+  //                 () => Text(
+  //                   "${con.userName}",
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.w600,
+  //                     fontSize: 18.sp,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Obx(
+  //                 () => Text(
+  //                   "+91 ${con.phoneNoName.value}",
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.w500,
+  //                     fontSize: 16.sp,
+  //                     color: AppColors.greyFontColor,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _appHeader(BuildContext context) {
     return MyAppBar(
