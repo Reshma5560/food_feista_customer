@@ -16,7 +16,6 @@ import '../../../data/models/home_data_model.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../res/app_loader.dart';
 import '../../../res/box_shadow.dart';
-import '../../../res/widgets/app_bar.dart';
 import '../../../res/widgets/empty_element.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -27,128 +26,121 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
-      body: TweenAnimationBuilder(
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeOutCubic,
-        tween: Tween(begin: 20.0, end: 1.0),
-        builder: (context, value, child) {
-          return AnimatedOpacity(
-            opacity: value == 20 ? 0 : 1,
-            duration: const Duration(milliseconds: 700),
-            child: Stack(
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Image.asset("assets/images/bg_home_image.png"),
+          Padding(
+            padding: EdgeInsets.only(top: Get.height * 0.03),
+            child: Row(
               children: [
-                Image.asset("assets/images/bg_home_image.png"),
-                Obx(
-                  () => con.isLoading.isTrue
-                      ? const AppLoader()
-                      : Column(
-                          children: [
-                            _appHeader(context),
-                            const SizedBox(height: 10),
-                            Expanded(
-                              child: RefreshIndicator(
-                                onRefresh: () async {
-                                  await DesktopRepository().getHomeData();
-                                },
-                                child: SingleChildScrollView(
-                                  physics: const BouncingScrollPhysics(
-                                      decelerationRate:
-                                          ScrollDecelerationRate.fast),
-                                  child: Column(
-                                    children: [
-                                      (con.bannerList.isEmpty &&
-                                              con.categoryList.isEmpty &&
-                                              con.restaurantList.isEmpty &&
-                                              con.blogList.isEmpty &&
-                                              con.trendingFoodList.isEmpty)
-                                          ? EmptyElement(
-                                              height: Get.height / 1.8,
-                                              imageHeight: Get.width / 2.4,
-                                              imageWidth: Get.width / 2,
-                                              spacing: 0,
-                                              title: "Data Not Found",
-                                            )
-                                          : _bodyModule(),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                Center(
+                  child: Obx(
+                    () => LocalStorage.userImage.isNotEmpty
+                        ? MFNetworkImage(
+                            height: 40,
+                            width: 40,
+                            imageUrl: LocalStorage.userImage.value,
+                            fit: BoxFit.cover,
+                            shape: BoxShape.circle,
+                          )
+                        : Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.circle,
+
+                              // image: DecorationImage(
+                              //   image: AssetImage(AppAssets.profileIcon),
+                              //   onError: (exception, stackTrace) => Image.asset(
+                              //     AppAssets.profileIcon,
+                              //     fit: BoxFit.fill,
+                              //   ),
+                              // ),
                             ),
-                            SizedBox(
-                              height: 50.h,
-                            )
-                          ],
-                        ),
+                            child: Icon(Icons.person_2_outlined, color: AppColors.white),
+                          ),
+                  ),
+                ),
+                const SizedBox(
+                  width: defaultPadding - 6,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Welcome",
+                      style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black.withOpacity(0.5), fontSize: 13.sp),
+                    ),
+                    Text(
+                      (LocalStorage.firstName.isNotEmpty && LocalStorage.lastName.isNotEmpty)
+                          ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
+                          : "Please Login !!",
+                      style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
+                    ),
+                  ],
                 ),
               ],
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _appHeader(BuildContext context) {
-    return MyAppBar(
-      bgColor: Colors.transparent, // Theme.of(context).colorScheme.background,
-      child: Row(
-        children: [
-          Center(
-            child: Obx(
-              () => LocalStorage.userImage.isNotEmpty
-                  ? MFNetworkImage(
-                      height: 40,
-                      width: 40,
-                      imageUrl: LocalStorage.userImage.value,
-                      fit: BoxFit.cover,
-                      shape: BoxShape.circle,
-                    )
-                  : Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        shape: BoxShape.circle,
-
-                        // image: DecorationImage(
-                        //   image: AssetImage(AppAssets.profileIcon),
-                        //   onError: (exception, stackTrace) => Image.asset(
-                        //     AppAssets.profileIcon,
-                        //     fit: BoxFit.fill,
-                        //   ),
-                        // ),
-                      ),
-                      child:
-                          Icon(Icons.person_2_outlined, color: AppColors.white),
+          ),
+          // _appHeader(context),
+          const SizedBox(height: 10),
+          Obx(
+            () => con.isLoading.isTrue
+                ? const AppLoader()
+                : Padding(
+                    padding: EdgeInsets.only(top: Get.height * 0.1),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              await DesktopRepository().getHomeData();
+                            },
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(decelerationRate: ScrollDecelerationRate.fast),
+                              child: Column(
+                                children: [
+                                  (con.bannerList.isEmpty &&
+                                          con.categoryList.isEmpty &&
+                                          con.restaurantList.isEmpty &&
+                                          con.blogList.isEmpty &&
+                                          con.trendingFoodList.isEmpty)
+                                      ? EmptyElement(
+                                          height: Get.height / 1.8,
+                                          imageHeight: Get.width / 2.4,
+                                          imageWidth: Get.width / 2,
+                                          spacing: 0,
+                                          title: "Data Not Found",
+                                        )
+                                      : _bodyModule(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50.h,
+                        )
+                      ],
                     ),
-            ),
-          ),
-          const SizedBox(
-            width: defaultPadding - 6,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Welcome",
-                style: AppStyle.customAppBarTitleStyle().copyWith(
-                    color: AppColors.black.withOpacity(0.5), fontSize: 13.sp),
-              ),
-              Text(
-                (LocalStorage.firstName.isNotEmpty &&
-                        LocalStorage.lastName.isNotEmpty)
-                    ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
-                    : "Please Login !!",
-                style: AppStyle.customAppBarTitleStyle()
-                    .copyWith(color: AppColors.black),
-              ),
-            ],
+                  ),
           ),
         ],
       ),
     );
   }
+
+  // Widget _appHeader(BuildContext context) {
+  //   return MyAppBar(
+  //     elevation: 0,
+  //     bgColor: Colors.transparent, // Theme.of(context).colorScheme.background,
+  //     child:
+  //   );
+  // }
 
   Widget _bodyModule() {
     return Column(
@@ -179,7 +171,7 @@ class HomeScreen extends StatelessWidget {
         if (con.restaurantList.isNotEmpty)
           TitleButtonRowWidget(
             title: "OUR SPECIAL RESTAURANT",
-            buttonText: con.restaurantList.length >= 4 ? "View All" : "",
+            buttonText: con.restaurantList.length > 4 ? "View All" : "",
             onPressed: () {
               Get.toNamed(AppRoutes.restaurantListScreen);
             },
@@ -258,17 +250,14 @@ class HomeScreen extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                            color: Theme.of(Get.context!).primaryColor,
-                            width: 2),
+                        border: Border.all(color: Theme.of(Get.context!).primaryColor, width: 2),
                         color: AppColors.white,
                       ),
                     )
                   : Container(
                       width: 6,
                       height: 6,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.grey,
@@ -287,9 +276,7 @@ class HomeScreen extends StatelessWidget {
       children: [
         Container(
           height: Get.height * 0.1,
-          decoration: BoxDecoration(
-              color: Color(0xffFFF2DF),
-              borderRadius: BorderRadius.circular(14.r)),
+          decoration: BoxDecoration(color: const Color(0xffFFF2DF), borderRadius: BorderRadius.circular(14.r)),
         ),
         SizedBox(
           height: Get.height * 0.2,
@@ -304,13 +291,12 @@ class HomeScreen extends StatelessWidget {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () {
-                  Get.toNamed(AppRoutes.restaurantListScreen,
-                      arguments: {"category_id": item.id});
+                  Get.toNamed(AppRoutes.restaurantListScreen, arguments: {"category_id": item.id});
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
                   width: 102,
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   height: Get.height * 0.2,
                   // margin: const EdgeInsets.only(right: defaultPadding - 6),
                   // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -338,11 +324,8 @@ class HomeScreen extends StatelessWidget {
                         height: defaultPadding - 10,
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 6.w, vertical: 3.h),
-                        decoration: BoxDecoration(
-                            color: AppColors.yellow.withOpacity(0.16),
-                            borderRadius: BorderRadius.circular(7.r)),
+                        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                        decoration: BoxDecoration(color: AppColors.yellow.withOpacity(0.16), borderRadius: BorderRadius.circular(7.r)),
                         child: Text(
                           item.categoryName ?? "",
                           maxLines: 1,
@@ -377,16 +360,20 @@ class HomeScreen extends StatelessWidget {
         itemBuilder: (context, i) {
           Restaurant item = con.restaurantList[i];
           return InkWell(
-            onTap: () =>
-                Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
-              item.id.toString(),
-              item.restaurantName,
-            ]),
+            onTap: () {
+              Get.toNamed(
+                AppRoutes.restaurantDetailsScreen,
+                arguments: [
+                  item.id.toString(),
+                  item.restaurantName,
+                ],
+              );
+            },
             child: Container(
               width: 170,
               margin: const EdgeInsets.only(right: defaultPadding - 6),
               decoration: BoxDecoration(
-                color: Color(0xffFFF9EE),
+                color: const Color(0xffFFF9EE),
                 borderRadius: BorderRadius.circular(defaultRadius),
               ),
               child: Column(
@@ -412,15 +399,10 @@ class HomeScreen extends StatelessWidget {
                         child: Obx(
                           () => InkWell(
                             onTap: () async {
-                              await DesktopRepository().postWishListAPI(
-                                  index: i,
-                                  id: item.id ?? "",
-                                  isWishList: false);
+                              await DesktopRepository().postWishListAPI(index: i, id: item.id ?? "", isWishList: false);
                             },
                             child: Icon(
-                              item.favorite?.value == 1
-                                  ? Icons.favorite_outlined
-                                  : Icons.favorite_outline_outlined,
+                              item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
                               color: Colors.red,
                             ),
                           ),
@@ -435,10 +417,7 @@ class HomeScreen extends StatelessWidget {
                       // textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: AppColors.black,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w600),
+                      style: TextStyle(color: AppColors.black, fontSize: 11.sp, fontWeight: FontWeight.w600),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -448,8 +427,7 @@ class HomeScreen extends StatelessWidget {
                       textAlign: TextAlign.left,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: AppColors.groupSubText, fontSize: 10.sp),
+                      style: TextStyle(color: AppColors.groupSubText, fontSize: 10.sp),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -457,10 +435,10 @@ class HomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        height: 18,
-                        width: 30,
+                        height: 20,
+                        width: 45,
                         alignment: Alignment.center,
-                        // padding: const EdgeInsets.all(2),
+                        padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
                           color: Colors.green,
                           borderRadius: BorderRadius.circular(8),
@@ -475,20 +453,14 @@ class HomeScreen extends StatelessWidget {
                             const SizedBox(width: 3),
                             Text(
                               item.ratingCount ?? "",
-                              style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10.sp),
+                              style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 10.sp),
                             ),
                           ],
                         ),
                       ),
                       Text(
                         item.distance ?? "",
-                        style: TextStyle(
-                            color: AppColors.black.withOpacity(0.7),
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w500),
+                        style: TextStyle(color: AppColors.black.withOpacity(0.7), fontSize: 10.sp, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -518,9 +490,7 @@ class HomeScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 5),
                   width: 100,
                   decoration: BoxDecoration(
-                      color: con.selectSellType.value == index
-                          ? Theme.of(context).primaryColor
-                          : AppColors.white,
+                      color: con.selectSellType.value == index ? Theme.of(context).primaryColor : AppColors.white,
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
                       ),
@@ -530,9 +500,7 @@ class HomeScreen extends StatelessWidget {
                       con.sellingTypeList[index],
                       style: TextStyle(
                           fontSize: 11,
-                          color: con.selectSellType.value == index
-                              ? AppColors.white
-                              : Theme.of(context).primaryColor,
+                          color: con.selectSellType.value == index ? AppColors.white : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -554,9 +522,7 @@ class HomeScreen extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(
-              color: AppColors.greyShad1,
-              borderRadius: BorderRadius.circular(15)),
+          decoration: BoxDecoration(color: AppColors.greyShad1, borderRadius: BorderRadius.circular(15)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.start,
@@ -576,45 +542,30 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       item.title ?? "",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 23,
-                          color: Theme.of(context).primaryColor),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 23, color: Theme.of(context).primaryColor),
                     ),
                     Text(
                       item.descripton ?? "",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10,
-                          color: AppColors.black),
+                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 10, color: AppColors.black),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: Text(
                             "\$${item.price?.toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20,
-                                color: AppColors.black),
+                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: AppColors.black),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             "Type - ${item.type?.toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 8.5,
-                                color: AppColors.black),
+                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
                           ),
                         ),
                         Expanded(
                           child: Text(
                             "Qty - ${item.qty?.toString()}",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 8.5,
-                                color: AppColors.black),
+                            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 8.5, color: AppColors.black),
                           ),
                         ),
                       ],
@@ -624,9 +575,7 @@ class HomeScreen extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(25)),
+                decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(25)),
                 child: Icon(
                   Icons.add,
                   color: AppColors.white,
@@ -672,8 +621,7 @@ class HomeScreen extends StatelessWidget {
                     item.blogName ?? "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 13),
+                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
                   ),
                 ],
               ),
@@ -758,19 +706,13 @@ class HomeScreen extends StatelessWidget {
 
               // Coupon code show
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.red.shade900,
-                    boxShadow: BoxShadows().shadow(),
-                    shape: BoxShape.circle
+                decoration: BoxDecoration(color: Colors.red.shade900, boxShadow: BoxShadows().shadow(), shape: BoxShape.circle
                     // borderRadius: BorderRadius.circular(25),
                     ),
                 child: Text(
                   "${item.discount!}${item.discountType == "percent" ? "%" : "₹"}\nOFF",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.white),
                 ).paddingAll(10),
               ).paddingOnly(top: 10),
             ],

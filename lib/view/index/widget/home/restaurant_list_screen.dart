@@ -32,8 +32,7 @@ class RestaurantListScreen extends StatelessWidget {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    await DesktopRepository().getRestaurantListAPI(
-                        isInitial: true, categoryID: con.categoryId.value);
+                    await DesktopRepository().getRestaurantListAPI(isInitial: true, categoryID: con.categoryId.value);
                   },
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(
@@ -46,85 +45,60 @@ class RestaurantListScreen extends StatelessWidget {
                               ? con.restaurantList.isNotEmpty
                                   ? GridView.builder(
                                       shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       controller: con.scrollController,
-                                      padding: const EdgeInsets.all(
-                                          (defaultPadding - 6) * 2),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                      padding: const EdgeInsets.all((defaultPadding - 6) * 2),
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 2,
-                                        mainAxisSpacing:
-                                            (defaultPadding - 6) * 2,
-                                        crossAxisSpacing:
-                                            (defaultPadding - 6) * 2,
+                                        mainAxisSpacing: (defaultPadding - 6) * 2,
+                                        crossAxisSpacing: (defaultPadding - 6) * 2,
                                         childAspectRatio: 3 / 4,
                                       ),
                                       itemCount: con.restaurantList.length,
                                       itemBuilder: (context, i) {
                                         var item = con.restaurantList[i];
                                         return InkWell(
-                                          onTap: () => Get.toNamed(
-                                              AppRoutes.restaurantDetailsScreen,
-                                              arguments: [
-                                                item.id.toString(),
-                                                item.restaurantName,
-                                              ]),
+                                          onTap: () => Get.toNamed(AppRoutes.restaurantDetailsScreen, arguments: [
+                                            item.id.toString(),
+                                            item.restaurantName,
+                                          ]),
                                           child: Container(
                                             width: 170,
-                                            margin: const EdgeInsets.only(
-                                                right: defaultPadding - 6),
+                                            margin: const EdgeInsets.only(right: defaultPadding - 6),
                                             decoration: BoxDecoration(
-                                              color: Color(0xffFFF9EE),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      defaultRadius),
+                                              color: const Color(0xffFFF9EE),
+                                              borderRadius: BorderRadius.circular(defaultRadius),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Stack(
                                                   children: [
                                                     Container(
                                                       height: 100,
                                                       decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                defaultRadius),
+                                                        borderRadius: BorderRadius.circular(defaultRadius),
                                                       ),
                                                       child: MFNetworkImage(
                                                         width: Get.width,
-                                                        imageUrl:
-                                                            item.logo ?? "",
+                                                        imageUrl: item.logo ?? "",
                                                         fit: BoxFit.fill,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                defaultRadius),
+                                                        borderRadius: BorderRadius.circular(defaultRadius),
                                                       ),
                                                     ),
                                                     Align(
-                                                      alignment:
-                                                          Alignment.topRight,
+                                                      alignment: Alignment.topRight,
                                                       child: Obx(
                                                         () => InkWell(
                                                           onTap: () async {
-                                                            await DesktopRepository()
-                                                                .postWishListAPI(
-                                                                    index: i,
-                                                                    id: item.id ??
-                                                                        "",
-                                                                    isWishList:
-                                                                        false);
+                                                            await DesktopRepository().postWishListAPIForRestaurant(
+                                                              index: i,
+                                                              id: item.id ?? "",
+                                                              isWishList: false,
+                                                            );
                                                           },
                                                           child: Icon(
-                                                            item.favorite
-                                                                        ?.value ==
-                                                                    1
-                                                                ? Icons
-                                                                    .favorite_outlined
-                                                                : Icons
-                                                                    .favorite_outline_outlined,
+                                                            item.favorite?.value == 1 ? Icons.favorite_outlined : Icons.favorite_outline_outlined,
                                                             color: Colors.red,
                                                           ),
                                                         ),
@@ -135,76 +109,48 @@ class RestaurantListScreen extends StatelessWidget {
                                                 const SizedBox(height: 10),
                                                 Expanded(
                                                   child: Text(
-                                                    item.restaurantName ??
-                                                        "".toUpperCase(),
+                                                    item.restaurantName ?? "".toUpperCase(),
                                                     // textAlign: TextAlign.center,
                                                     maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color: AppColors.black,
-                                                        fontSize: 11.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(color: AppColors.black, fontSize: 11.sp, fontWeight: FontWeight.w600),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 2),
                                                 Expanded(
                                                   child: Text(
-                                                    item.address ??
-                                                        "".toUpperCase(),
+                                                    item.address ?? "".toUpperCase(),
                                                     textAlign: TextAlign.left,
                                                     maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color: AppColors
-                                                            .groupSubText,
-                                                        fontSize: 10.sp),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(color: AppColors.groupSubText, fontSize: 10.sp),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 10),
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
                                                     Container(
                                                       height: 25,
                                                       width: 45,
-                                                      alignment:
-                                                          Alignment.center,
+                                                      alignment: Alignment.center,
                                                       // padding: const EdgeInsets.all(2),
                                                       decoration: BoxDecoration(
                                                         color: Colors.green,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
+                                                        borderRadius: BorderRadius.circular(8),
                                                       ),
                                                       child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
+                                                        mainAxisAlignment: MainAxisAlignment.center,
                                                         children: [
                                                           Icon(
                                                             Icons.star,
-                                                            color:
-                                                                Colors.yellow,
+                                                            color: Colors.yellow,
                                                             size: 10.sp,
                                                           ),
-                                                          const SizedBox(
-                                                              width: 3),
+                                                          const SizedBox(width: 3),
                                                           Text(
-                                                            item.ratingCount ??
-                                                                "",
-                                                            style: TextStyle(
-                                                                color: AppColors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                fontSize:
-                                                                    10.sp),
+                                                            item.ratingCount ?? "",
+                                                            style: TextStyle(color: AppColors.white, fontWeight: FontWeight.w500, fontSize: 10.sp),
                                                           ),
                                                         ],
                                                       ),
@@ -212,17 +158,12 @@ class RestaurantListScreen extends StatelessWidget {
                                                     Text(
                                                       item.distanceKm ?? "",
                                                       style: TextStyle(
-                                                          color: AppColors.black
-                                                              .withOpacity(0.7),
-                                                          fontSize: 10.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500),
+                                                          color: AppColors.black.withOpacity(0.7), fontSize: 10.sp, fontWeight: FontWeight.w500),
                                                     ),
                                                   ],
                                                 ),
                                               ],
-                                            ).paddingSymmetric(
-                                                horizontal: 10, vertical: 10),
+                                            ).paddingSymmetric(horizontal: 10, vertical: 10),
                                           ),
                                         );
                                       },
@@ -272,8 +213,7 @@ class RestaurantListScreen extends StatelessWidget {
         ],
         title: "Restaurant",
         centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle()
-            .copyWith(color: AppColors.black, fontSize: 14));
+        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 14));
   }
 
   void _filterRestaurant() {
@@ -293,9 +233,7 @@ class RestaurantListScreen extends StatelessWidget {
         ),
         width: Get.width,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-                  vertical: defaultPadding, horizontal: defaultPadding)
-              .copyWith(bottom: 0),
+          padding: const EdgeInsets.symmetric(vertical: defaultPadding, horizontal: defaultPadding).copyWith(bottom: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
@@ -305,9 +243,7 @@ class RestaurantListScreen extends StatelessWidget {
                 children: [
                   Text(
                     "Filter",
-                    style: AppStyle.authTitleStyle().copyWith(
-                        fontSize: 18.sp,
-                        color: Theme.of(Get.context!).primaryColor),
+                    style: AppStyle.authTitleStyle().copyWith(fontSize: 18.sp, color: Theme.of(Get.context!).primaryColor),
                   ),
                   IconButton(
                     onPressed: () {
@@ -315,9 +251,7 @@ class RestaurantListScreen extends StatelessWidget {
                     },
                     icon: Container(
                       padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          color: AppColors.greyBorderColor,
-                          borderRadius: BorderRadius.circular(10.r)),
+                      decoration: BoxDecoration(color: AppColors.greyBorderColor, borderRadius: BorderRadius.circular(10.r)),
                       child: Icon(
                         Icons.close,
                         color: AppColors.white,
@@ -343,8 +277,7 @@ class RestaurantListScreen extends StatelessWidget {
                       const SizedBox(height: defaultPadding - 6),
                       Text(
                         "Select Cuisine",
-                        style: AppStyle.authTitleStyle()
-                            .copyWith(fontSize: 14.sp, color: AppColors.black),
+                        style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp, color: AppColors.black),
                       ),
                       const SizedBox(
                         height: defaultPadding - 6,
@@ -355,8 +288,7 @@ class RestaurantListScreen extends StatelessWidget {
                       const SizedBox(height: defaultPadding - 6),
                       Text(
                         "Select Veg or non-veg",
-                        style: AppStyle.authTitleStyle()
-                            .copyWith(fontSize: 14.sp, color: AppColors.black),
+                        style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp, color: AppColors.black),
                       ),
                       const SizedBox(height: defaultPadding - 6),
                       Row(
@@ -373,26 +305,17 @@ class RestaurantListScreen extends StatelessWidget {
                               () => Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: con.selectVeg.value != 0
-                                      ? Theme.of(Get.context!).primaryColor
-                                      : AppColors.white,
+                                  color: con.selectVeg.value != 0 ? Theme.of(Get.context!).primaryColor : AppColors.white,
                                   border: Border.all(
-                                    color: con.selectVeg.value != 0
-                                        ? Theme.of(Get.context!).primaryColor
-                                        : AppColors.black.withOpacity(0.5),
+                                    color: con.selectVeg.value != 0 ? Theme.of(Get.context!).primaryColor : AppColors.black.withOpacity(0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.circular(defaultRadius),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
                                 ),
                                 child: Text(
                                   "Veg",
                                   style: TextStyle(
-                                    fontWeight: con.selectVeg.value != 0
-                                        ? FontWeight.w500
-                                        : FontWeight.w400,
-                                    color: con.selectVeg.value != 0
-                                        ? AppColors.white
-                                        : null,
+                                    fontWeight: con.selectVeg.value != 0 ? FontWeight.w500 : FontWeight.w400,
+                                    color: con.selectVeg.value != 0 ? AppColors.white : null,
                                   ),
                                 ),
                               ),
@@ -411,26 +334,17 @@ class RestaurantListScreen extends StatelessWidget {
                               () => Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: con.selectNonVeg.value != 0
-                                      ? Theme.of(Get.context!).primaryColor
-                                      : AppColors.white,
+                                  color: con.selectNonVeg.value != 0 ? Theme.of(Get.context!).primaryColor : AppColors.white,
                                   border: Border.all(
-                                    color: con.selectNonVeg.value != 0
-                                        ? Theme.of(Get.context!).primaryColor
-                                        : AppColors.black.withOpacity(0.5),
+                                    color: con.selectNonVeg.value != 0 ? Theme.of(Get.context!).primaryColor : AppColors.black.withOpacity(0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.circular(defaultRadius),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
                                 ),
                                 child: Text(
                                   "Non-Veg",
                                   style: TextStyle(
-                                    fontWeight: con.selectNonVeg.value != 0
-                                        ? FontWeight.w500
-                                        : FontWeight.w400,
-                                    color: con.selectNonVeg.value != 0
-                                        ? AppColors.white
-                                        : null,
+                                    fontWeight: con.selectNonVeg.value != 0 ? FontWeight.w500 : FontWeight.w400,
+                                    color: con.selectNonVeg.value != 0 ? AppColors.white : null,
                                   ),
                                 ),
                               ),
@@ -439,33 +353,23 @@ class RestaurantListScreen extends StatelessWidget {
                           const SizedBox(width: defaultPadding - 6),
                           InkWell(
                             onTap: () {
-                              con.selectPureVeg.value =
-                                  !con.selectPureVeg.value;
+                              con.selectPureVeg.value = !con.selectPureVeg.value;
                             },
                             child: Obx(
                               () => Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: con.selectPureVeg.isTrue
-                                      ? Theme.of(Get.context!).primaryColor
-                                      : AppColors.white,
+                                  color: con.selectPureVeg.isTrue ? Theme.of(Get.context!).primaryColor : AppColors.white,
                                   border: Border.all(
-                                    color: con.selectPureVeg.isTrue
-                                        ? Theme.of(Get.context!).primaryColor
-                                        : AppColors.black.withOpacity(0.5),
+                                    color: con.selectPureVeg.isTrue ? Theme.of(Get.context!).primaryColor : AppColors.black.withOpacity(0.5),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.circular(defaultRadius),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
                                 ),
                                 child: Text(
                                   "Pure Veg",
                                   style: TextStyle(
-                                    fontWeight: con.selectPureVeg.isTrue
-                                        ? FontWeight.w500
-                                        : FontWeight.w400,
-                                    color: con.selectPureVeg.isTrue
-                                        ? AppColors.white
-                                        : null,
+                                    fontWeight: con.selectPureVeg.isTrue ? FontWeight.w500 : FontWeight.w400,
+                                    color: con.selectPureVeg.isTrue ? AppColors.white : null,
                                   ),
                                 ),
                               ),
@@ -476,9 +380,7 @@ class RestaurantListScreen extends StatelessWidget {
                       const SizedBox(height: defaultPadding - 6),
                       Text(
                         "If you select near by me option then you show near by your restaurant list",
-                        style: AppStyle.authTitleStyle().copyWith(
-                            fontSize: 14.sp,
-                            color: AppColors.black.withOpacity(0.5)),
+                        style: AppStyle.authTitleStyle().copyWith(fontSize: 14.sp, color: AppColors.black.withOpacity(0.5)),
                       ),
                       const SizedBox(height: defaultPadding - 6),
                       InkWell(
@@ -489,26 +391,17 @@ class RestaurantListScreen extends StatelessWidget {
                           () => Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: con.isNearByMe.isTrue
-                                  ? Theme.of(Get.context!).primaryColor
-                                  : AppColors.white,
+                              color: con.isNearByMe.isTrue ? Theme.of(Get.context!).primaryColor : AppColors.white,
                               border: Border.all(
-                                color: con.isNearByMe.isTrue
-                                    ? Theme.of(Get.context!).primaryColor
-                                    : AppColors.black.withOpacity(0.5),
+                                color: con.isNearByMe.isTrue ? Theme.of(Get.context!).primaryColor : AppColors.black.withOpacity(0.5),
                               ),
-                              borderRadius:
-                                  BorderRadius.circular(defaultRadius),
+                              borderRadius: BorderRadius.circular(defaultRadius),
                             ),
                             child: Text(
                               "Near by me",
                               style: TextStyle(
-                                fontWeight: con.isNearByMe.isTrue
-                                    ? FontWeight.w500
-                                    : FontWeight.w400,
-                                color: con.isNearByMe.isTrue
-                                    ? AppColors.white
-                                    : null,
+                                fontWeight: con.isNearByMe.isTrue ? FontWeight.w500 : FontWeight.w400,
+                                color: con.isNearByMe.isTrue ? AppColors.white : null,
                               ),
                             ),
                           ),
@@ -522,9 +415,7 @@ class RestaurantListScreen extends StatelessWidget {
                               height: 30.h,
                               onPressed: () async {
                                 Get.back();
-                                await DesktopRepository().getRestaurantListAPI(
-                                    isInitial: true,
-                                    categoryID: con.categoryId.value);
+                                await DesktopRepository().getRestaurantListAPI(isInitial: true, categoryID: con.categoryId.value);
                               },
                               title: "Apply Filter",
                             ),
@@ -540,9 +431,7 @@ class RestaurantListScreen extends StatelessWidget {
                                 con.selectPureVeg.value = false;
                                 con.isNearByMe.value = false;
                                 con.selectedChoice.clear();
-                                await DesktopRepository().getRestaurantListAPI(
-                                    isInitial: true,
-                                    categoryID: con.categoryId.value);
+                                await DesktopRepository().getRestaurantListAPI(isInitial: true, categoryID: con.categoryId.value);
                               },
                               buttonType: ButtonType.outline,
                               title: "Clear Filter",
@@ -575,12 +464,8 @@ class RestaurantListScreen extends StatelessWidget {
               label: Text(
                 item.cuisineName ?? "",
                 style: TextStyle(
-                  fontWeight: con.selectedChoice.contains(item.id)
-                      ? FontWeight.w500
-                      : FontWeight.w400,
-                  color: con.selectedChoice.contains(item.id)
-                      ? AppColors.white
-                      : null,
+                  fontWeight: con.selectedChoice.contains(item.id) ? FontWeight.w500 : FontWeight.w400,
+                  color: con.selectedChoice.contains(item.id) ? AppColors.white : null,
                 ),
               ),
               checkmarkColor: AppColors.white,
