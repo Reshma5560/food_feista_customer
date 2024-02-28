@@ -103,7 +103,7 @@ class EditAccountController extends GetxController {
 
     if (pickedImage != null) {
       apiImage = File(pickedImage.path);
-      printYellow("---------------------  ${apiImage}");
+      printYellow("---------------------  $apiImage");
       imagePath.value = pickedImage.path;
     }
   }

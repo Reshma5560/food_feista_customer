@@ -370,10 +370,14 @@ class AddAddressScreen extends StatelessWidget {
           value: value,
           child: Text(
             value,
+            // style: TextStyle(
+            //   color: AppColors.greyFontColor,
+            //   fontSize: 11.sp,
+            // ),
             style: TextStyle(
-              color: AppColors.greyFontColor,
-              fontSize: 11.sp,
-            ),
+                fontSize: 11.sp,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(Get.context!).primaryColor),
           ),
         );
       }).toList(),
@@ -422,9 +426,9 @@ class AddAddressScreen extends StatelessWidget {
               child: Text(
                 "${value.countryName}",
                 style: TextStyle(
-                  color: AppColors.greyFontColor,
-                  fontSize: 11.sp,
-                ),
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(Get.context!).primaryColor),
               ),
             );
           }).toList(),
@@ -483,9 +487,9 @@ class AddAddressScreen extends StatelessWidget {
               child: Text(
                 "${value.stateName}",
                 style: TextStyle(
-                  color: AppColors.greyFontColor,
-                  fontSize: 11.sp,
-                ),
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(Get.context!).primaryColor),
               ),
             );
           }).toList(),
@@ -541,9 +545,9 @@ class AddAddressScreen extends StatelessWidget {
               child: Text(
                 "${value.cityName}",
                 style: TextStyle(
-                  color: AppColors.greyFontColor,
-                  fontSize: 11.sp,
-                ),
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(Get.context!).primaryColor),
               ),
             );
           }).toList(),

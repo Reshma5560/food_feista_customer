@@ -438,7 +438,7 @@ class AppDialogs {
           backgroundColor: Theme.of(context).colorScheme.background,
           shape: RoundedRectangleBorder(
               side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-              borderRadius: BorderRadius.all(Radius.circular(defaultRadius))),
+              borderRadius: const BorderRadius.all(Radius.circular(defaultRadius))),
           clipBehavior: Clip.antiAlias,
           insetPadding: EdgeInsets.all(defaultPadding.w),
           elevation: 0,

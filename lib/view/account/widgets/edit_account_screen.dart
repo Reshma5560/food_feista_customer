@@ -43,6 +43,7 @@ class EditAccountScreen extends StatelessWidget {
                     ),
                     Expanded(
                         child: ListView(
+                      padding: EdgeInsets.zero,
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(
@@ -55,7 +56,18 @@ class EditAccountScreen extends StatelessWidget {
                               boxShadow: AppStyle.boxShadow(),
                               borderRadius: BorderRadius.circular(10)),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                "MY PROFILE",
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
                               _profileImageWidget(),
                               const SizedBox(
                                 height: defaultPadding,
@@ -127,9 +139,9 @@ class EditAccountScreen extends StatelessWidget {
                               ),
                               Obx(
                                 () => AppButton(
-                                    height: 30.h,
+                                  height: 30.h,
                                   borderRadius: BorderRadius.circular(12.r),
-                                loader: con.isLoader.value,
+                                  loader: con.isLoader.value,
                                   onPressed: () async {
                                     DesktopRepository().editProfileApiCall(
                                       isLoader: con.isLoader,
@@ -181,8 +193,8 @@ class EditAccountScreen extends StatelessWidget {
               Radius.circular(20.r),
             ),
             child: Container(
-              height: 100.h,
-              width: 100.w,
+              height: 70.h,
+              width: 70.w,
               decoration: const BoxDecoration(
                 color: Colors.grey,
                 // shape: BoxShape.circle,
@@ -208,8 +220,8 @@ class EditAccountScreen extends StatelessWidget {
         ),
       ),
       Positioned(
-          bottom: 14,
-          right: 95,
+          bottom: 11,
+          right: 115,
           child: Center(
             child: GestureDetector(
               onTap: () {
@@ -225,13 +237,14 @@ class EditAccountScreen extends StatelessWidget {
                     ),
                   ),
                   child: Icon(
-                    Icons.camera,
+                    Icons.edit,
+                    // camera,
                     // AppIcons.cameraIcon,\
                     color: AppColors.white,
                     //  Theme.of(Get.context!).primaryColor,
                     // height: 25,
                     // width: 25,
-                    size: 25,
+                    size: 18,
                   )),
             ),
           ))

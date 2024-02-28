@@ -58,58 +58,18 @@ class ContactUsScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
                               children: [
-                                // Center(
-                                //   child: Image.asset(
-                                //     AppAssets.appLogo,
-                                //     width: Get.width / 2,
-                                //   ),
-                                // ),
-                                // const SizedBox(
-                                //   height: defaultPadding,
-                                // ),
-                                // const SizedBox(
-                                //   height: defaultPadding,
-                                // ),
-                                // const Text(
-                                //   "Full Name",
-                                //   style: TextStyle(
-                                //     fontWeight: FontWeight.w600,
-                                //     fontSize: 16,
-                                //   ),
-                                // ),
                                 _fullNameRowModule(),
                                 const SizedBox(
                                   height: defaultPadding,
                                 ),
-                                // const Text(
-                                //   "Mobile No",
-                                //   style: TextStyle(
-                                //     fontWeight: FontWeight.w600,
-                                //     fontSize: 16,
-                                //   ),
-                                // ),
                                 _mobileNoRowModule(),
                                 const SizedBox(
                                   height: defaultPadding,
                                 ),
-                                // const Text(
-                                //   "Email Id",
-                                //   style: TextStyle(
-                                //     fontWeight: FontWeight.w600,
-                                //     fontSize: 16,
-                                //   ),
-                                // ),
                                 _emailRowModule(),
                                 const SizedBox(
                                   height: defaultPadding,
                                 ),
-                                // const Text(
-                                //   "Feedback",
-                                //   style: TextStyle(
-                                //     fontWeight: FontWeight.w600,
-                                //     fontSize: 16,
-                                //   ),
-                                // ),
                                 _feedbackRowModule(),
                                 const SizedBox(
                                   height: defaultPadding,
@@ -144,73 +104,29 @@ class ContactUsScreen extends StatelessWidget {
 
   _fullNameRowModule() {
     return AppTextField(
-      titleText: "Full Name",
       hintText: "Enter Your Full Name",
       controller: con.fullnameCon,
-      // errorMessage: con.passwordError.value,
-      // showError: con.passwordValidation.value,
+      errorMessage: con.fullNameError.value,
+      showError: con.fullnameValidation.value,
       fillColor: AppColors.white,
       keyboardType: TextInputType.text,
       onChanged: (value) {
-        // if (con.passwordCon.value.text.length == 8) {
-        //   con.passwordError.value = "";
-        //   FocusScope.of(context).unfocus();
-        // } else if (con.passwordCon.value.text.length < 8) {
-        //   con.passwordValidation.value = true;
-        //   con.passwordError.value = "Please Enter your password at least 8 digits.";
-        // } else {
-        //   con.passwordValidation.value = false;
-        //   con.passwordError.value = "";
-        // }
+        con.fullnameValidation.value = false;
       },
-      enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-
-      inputFormatters: const [
-        // FilteringTextInputFormatter.digitsOnly,
-        // LengthLimitingTextInputFormatter(8),
-      ],
     );
   }
 
   _mobileNoRowModule() {
     return AppTextField(
-      titleText: "Mobile No",
       hintText: "Enter Your Mobile Number",
       controller: con.mobilenoCon,
-      // errorMessage: con.passwordError.value,
-      // showError: con.passwordValidation.value,
+      errorMessage: con.mobileNoError.value,
+      showError: con.mobileNoValidation.value,
       fillColor: AppColors.white,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.number,
       onChanged: (value) {
-        // if (con.passwordCon.value.text.length == 8) {
-        //   con.passwordError.value = "";
-        //   FocusScope.of(context).unfocus();
-        // } else if (con.passwordCon.value.text.length < 8) {
-        //   con.passwordValidation.value = true;
-        //   con.passwordError.value = "Please Enter your password at least 8 digits.";
-        // } else {
-        //   con.passwordValidation.value = false;
-        //   con.passwordError.value = "";
-        // }
+        con.mobileNoValidation.value = false;
       },
-      enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(10),
@@ -220,65 +136,25 @@ class ContactUsScreen extends StatelessWidget {
 
   _emailRowModule() {
     return AppTextField(
-      titleText: "Email ID",
       hintText: "Enter Email ID",
       controller: con.emailCon,
-      // errorMessage: con.emailError.value,
       readOnly: true,
       fillColor: AppColors.white,
-      // showError: con.emailValidation.value,
       keyboardType: TextInputType.emailAddress,
-      enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-
-      onChanged: (value) {
-        // con.emailValidation.value = false;
-      },
     );
   }
 
   _feedbackRowModule() {
     return AppTextField(
-      titleText: "Feedback",
       hintText: "Enter Your Message",
       controller: con.feedbackCon,
-      // errorMessage: con.passwordError.value,
-      // showError: con.passwordValidation.value,
+      errorMessage: con.feedbackError.value,
+      showError: con.feedbackValidation.value,
       fillColor: AppColors.white,
-      keyboardType: TextInputType.emailAddress,
-      enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-      focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(14.r)),
-          borderSide: BorderSide(color: AppColors.white)),
-
+      keyboardType: TextInputType.text,
       onChanged: (value) {
-        // if (con.passwordCon.value.text.length == 8) {
-        //   con.passwordError.value = "";
-        //   FocusScope.of(context).unfocus();
-        // } else if (con.passwordCon.value.text.length < 8) {
-        //   con.passwordValidation.value = true;
-        //   con.passwordError.value = "Please Enter your password at least 8 digits.";
-        // } else {
-        //   con.passwordValidation.value = false;
-        //   con.passwordError.value = "";
-        // }
+        con.feedbackValidation.value = false;
       },
-      inputFormatters: const [
-        // FilteringTextInputFormatter.digitsOnly,
-        // LengthLimitingTextInputFormatter(8),
-      ],
     );
   }
 }

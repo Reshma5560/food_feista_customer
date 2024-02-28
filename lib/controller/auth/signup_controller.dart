@@ -27,9 +27,4 @@ class SignUpController extends GetxController {
 
   RxBool isChecked = false.obs;
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-  }
 }

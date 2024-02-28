@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/res/widgets/app_bar.dart';
 
 import 'app_colors.dart';
@@ -23,6 +24,7 @@ class CommonAppBar extends StatelessWidget {
       leading: IconButton(
         icon: Icon(
           Icons.arrow_back_ios,
+          size: 16.sp,
           color: AppColors.black, //Theme.of(context).primaryColor,
         ),
         onPressed: onPressed,
