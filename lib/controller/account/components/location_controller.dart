@@ -2,21 +2,23 @@ import 'dart:developer';
 
 import 'package:foodapplication/res/app_enum.dart';
 import 'package:foodapplication/res/color_print.dart';
-import 'package:foodapplication/utils/local_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+
+import '../../../utils/local_storage.dart';
 
 class LocationController extends GetxController {
   late AddressEnum addressEnum;
 
   RxString addressId = "".obs;
   Placemark? place;
-  Rx<LatLng> tappedLocation = const LatLng(0.0, 0.0).obs;
+
+  // Rx<LatLng> tappedLocation = const LatLng(0.0, 0.0).obs;
 
   RxBool isLoader = false.obs;
-  RxString latValue = "".obs;
-  RxString longValue = "".obs;
+  RxDouble latValue = 0.0.obs;
+  RxDouble longValue = 0.0.obs;
   RxBool isDisable = true.obs;
 
   void handleTap(LatLng latLng /*, {
@@ -24,14 +26,14 @@ class LocationController extends GetxController {
   }*/
       ) async {
     isLoader(true);
-    tappedLocation.value = latLng;
+    // tappedLocation.value = latLng;
 
     // Reverse geocoding to get address from tapped location
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(latLng.latitude, latLng.longitude);
       place = placemarks.first;
-      latValue.value = latLng.latitude.toString();
-      longValue.value = latLng.longitude.toString();
+      latValue.value = latLng.latitude;
+      longValue.value = latLng.longitude;
       log('Tapped Location: ${latLng.latitude}, ${latLng.longitude}');
       log('Address: ${place?.name}, ${place?.subThoroughfare}, ${place?.thoroughfare}, ${place?.subLocality}, ${place?.locality}, ${place?.administrativeArea}, ${place?.postalCode}, ${place?.country}');
       isDisable(false);
@@ -62,6 +64,8 @@ class LocationController extends GetxController {
         printWhite(Get.arguments["lat"]);
         lat = double.parse(Get.arguments["lat"].toString());
         long = double.parse(Get.arguments["long"].toString());
+        latValue.value = lat;
+        longValue.value = long;
         log("$lat $long");
         handleTap(LatLng(lat, long));
       } else {

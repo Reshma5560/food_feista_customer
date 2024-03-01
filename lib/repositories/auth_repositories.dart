@@ -198,7 +198,7 @@ class AuthRepository {
     final con = Get.find<AddAddressController>();
     RxBool isSuccessStatus = false.obs;
     try {
-      isLoader?.value = true;
+      // isLoader?.value = true;
       await APIFunction()
           .getApiCall(
         apiName: cityId != null ? "${ApiUrls.getCityUrl}/$cityId" : ApiUrls.getCityUrl,

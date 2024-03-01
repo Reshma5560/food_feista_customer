@@ -73,10 +73,10 @@ class AddAddressController extends GetxController {
         place = Get.arguments["place"];
       }
       if (Get.arguments["lat"] != null) {
-        latTextEditingController.text = Get.arguments["lat"];
+        latTextEditingController.text = Get.arguments["lat"].toString();
       }
       if (Get.arguments["lng"] != null) {
-        logTextEditingController.text = Get.arguments["lng"];
+        logTextEditingController.text = Get.arguments["lng"].toString();
       }
       if (Get.arguments["name"] != null) {
         receiverNameCon.text = Get.arguments["name"];

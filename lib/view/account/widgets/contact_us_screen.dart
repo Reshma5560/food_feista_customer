@@ -7,7 +7,6 @@ import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:get/get.dart';
 
-import '../../../res/app_appbar.dart';
 import '../../../res/app_colors.dart';
 import '../../../res/app_style.dart';
 
@@ -37,7 +36,7 @@ class ContactUsScreen extends StatelessWidget {
                   height: Get.height,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: Get.height * 0.03),
+                  padding: EdgeInsets.only(top: Get.height * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -53,34 +52,27 @@ class ContactUsScreen extends StatelessWidget {
                       ),
                       Text(
                         "Contact Us",
-                        style: AppStyle.customAppBarTitleStyle()
-                            .copyWith(color: AppColors.black, fontSize: 16.sp),
+                        style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
                       ),
-                      const Text("TESTdata",
-                          style: TextStyle(color: Colors.transparent)),
+                      const Text("TESTdata", style: TextStyle(color: Colors.transparent)),
                     ],
                   ),
                 ),
                 Padding(
-                    padding: EdgeInsets.only(top: Get.height * 0.1),
-                    child: Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: defaultPadding,
-                            vertical: defaultPadding),
-                        physics: const RangeMaintainingScrollPhysics(),
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.w, vertical: 20.h),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context).primaryColor,
-                                    width: 2),
-                                color: Theme.of(context).colorScheme.background,
-                                boxShadow: AppStyle.boxShadow(),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
+                    padding: EdgeInsets.only(top: Get.height * 0.12),
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: defaultPadding, vertical: defaultPadding),
+                      physics: const RangeMaintainingScrollPhysics(),
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Theme.of(context).primaryColor, width: 2),
+                              color: Theme.of(context).colorScheme.background,
+                              boxShadow: AppStyle.boxShadow(),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Obx(
+                            () => Column(
                               children: [
                                 _fullNameRowModule(),
                                 const SizedBox(
@@ -112,9 +104,9 @@ class ContactUsScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     )),
               ],
             ),

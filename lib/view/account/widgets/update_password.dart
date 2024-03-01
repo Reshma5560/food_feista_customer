@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodapplication/controller/account/components/update_passwprd_controller.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
-import 'package:foodapplication/res/app_appbar.dart';
 import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_button.dart';
 import 'package:foodapplication/res/app_colors.dart';
@@ -15,6 +14,7 @@ class UpdatePasswordScreen extends StatelessWidget {
   UpdatePasswordScreen({super.key});
 
   final con = Get.put(UpdatePasswordController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                         height: Get.height,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: Get.height * 0.03),
+                        padding: EdgeInsets.only(top: Get.height * 0.04),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -52,30 +52,22 @@ class UpdatePasswordScreen extends StatelessWidget {
                             ),
                             Text(
                               "Change Password",
-                              style: AppStyle.customAppBarTitleStyle().copyWith(
-                                  color: AppColors.black, fontSize: 16.sp),
+                              style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
                             ),
-                            const Text("test",
-                                style: TextStyle(color: Colors.transparent)),
+                            const Text("test", style: TextStyle(color: Colors.transparent)),
                           ],
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: Get.height * 0.1),
-                        child: Expanded(
-                            child: ListView(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: defaultPadding.w, vertical: 10.h),
+                        padding: EdgeInsets.only(top: Get.height * 0.12),
+                        child: ListView(
+                          padding: EdgeInsets.symmetric(horizontal: defaultPadding.w, vertical: 10.h),
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.w, vertical: 20.h),
+                              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).primaryColor,
-                                      width: 2),
-                                  color:
-                                      Theme.of(context).colorScheme.background,
+                                  border: Border.all(color: Theme.of(context).primaryColor, width: 2),
+                                  color: Theme.of(context).colorScheme.background,
                                   boxShadow: AppStyle.boxShadow(),
                                   borderRadius: BorderRadius.circular(10)),
                               child: Column(
@@ -112,10 +104,8 @@ class UpdatePasswordScreen extends StatelessWidget {
                                     // titleText: "Password",
                                     hintText: "Enter Password",
                                     controller: con.cnfmNewPasswordCon,
-                                    errorMessage:
-                                        con.cnfmNewPasswordError.value,
-                                    showError:
-                                        con.cnfmNewPasswordValidation.value,
+                                    errorMessage: con.cnfmNewPasswordError.value,
+                                    showError: con.cnfmNewPasswordValidation.value,
                                     keyboardType: TextInputType.emailAddress,
                                     onChanged: (value) {},
                                     inputFormatters: [
@@ -129,87 +119,55 @@ class UpdatePasswordScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(12.r),
                                       onPressed: () {
                                         //old password
-                                        if (con.oldPasswordCon.value.text
-                                                .length ==
-                                            16) {
+                                        if (con.oldPasswordCon.value.text.length == 16) {
                                           con.oldPasswordError.value = "";
-                                          con.oldPasswordValidation.value =
-                                              false;
+                                          con.oldPasswordValidation.value = false;
                                           FocusScope.of(context).unfocus();
-                                        } else if (con.oldPasswordCon.value.text
-                                                .length <
-                                            8) {
-                                          con.oldPasswordValidation.value =
-                                              true;
-                                          con.oldPasswordError.value =
-                                              "Please Enter your password at least 8 digits.";
+                                        } else if (con.oldPasswordCon.value.text.length < 8) {
+                                          con.oldPasswordValidation.value = true;
+                                          con.oldPasswordError.value = "Please Enter your password at least 8 digits.";
                                         } else {
-                                          con.oldPasswordValidation.value =
-                                              false;
+                                          con.oldPasswordValidation.value = false;
                                           con.oldPasswordError.value = "";
                                         }
 
                                         //new password
-                                        if (con.newPasswordCon.value.text
-                                                .length ==
-                                            16) {
+                                        if (con.newPasswordCon.value.text.length == 16) {
                                           con.newPasswordError.value = "";
-                                          con.newPasswordValidation.value =
-                                              false;
+                                          con.newPasswordValidation.value = false;
                                           FocusScope.of(context).unfocus();
-                                        } else if (con.newPasswordCon.value.text
-                                                .length <
-                                            8) {
-                                          con.newPasswordValidation.value =
-                                              true;
-                                          con.newPasswordError.value =
-                                              "Please Enter your password at least 8 digits.";
+                                        } else if (con.newPasswordCon.value.text.length < 8) {
+                                          con.newPasswordValidation.value = true;
+                                          con.newPasswordError.value = "Please Enter your password at least 8 digits.";
                                         } else {
-                                          con.newPasswordValidation.value =
-                                              false;
+                                          con.newPasswordValidation.value = false;
                                           con.newPasswordError.value = "";
                                         }
 
                                         //cnfm password
-                                        if (con.cnfmNewPasswordCon.value.text
-                                                .length ==
-                                            16) {
-                                          con.cnfmNewPasswordValidation.value =
-                                              false;
+                                        if (con.cnfmNewPasswordCon.value.text.length == 16) {
+                                          con.cnfmNewPasswordValidation.value = false;
                                           con.cnfmNewPasswordError.value = "";
                                           FocusScope.of(context).unfocus();
-                                        } else if (con.cnfmNewPasswordCon.value
-                                                .text.length <
-                                            8) {
-                                          con.cnfmNewPasswordValidation.value =
-                                              true;
-                                          con.cnfmNewPasswordError.value =
-                                              "Please Enter your password at least 8 digits.";
-                                        } else if (con.cnfmNewPasswordCon.value
-                                                .text !=
-                                            con.newPasswordCon.text) {
-                                          con.cnfmNewPasswordValidation.value =
-                                              true;
-                                          con.cnfmNewPasswordError.value =
-                                              "Confirm password not match.";
+                                        } else if (con.cnfmNewPasswordCon.value.text.length < 8) {
+                                          con.cnfmNewPasswordValidation.value = true;
+                                          con.cnfmNewPasswordError.value = "Please Enter your password at least 8 digits.";
+                                        } else if (con.cnfmNewPasswordCon.value.text != con.newPasswordCon.text) {
+                                          con.cnfmNewPasswordValidation.value = true;
+                                          con.cnfmNewPasswordError.value = "Confirm password not match.";
                                         } else {
-                                          con.cnfmNewPasswordValidation.value =
-                                              false;
+                                          con.cnfmNewPasswordValidation.value = false;
                                           con.cnfmNewPasswordError.value = "";
                                         }
 
                                         if (con.oldPasswordValidation.isFalse &&
                                             con.newPasswordValidation.isFalse &&
-                                            con.cnfmNewPasswordValidation
-                                                .isFalse) {
+                                            con.cnfmNewPasswordValidation.isFalse) {
                                           FocusScope.of(Get.context!).unfocus();
-                                          AuthRepository()
-                                              .updatePasswordApiCall(params: {
-                                            "old_password":
-                                                con.oldPasswordCon.text,
+                                          AuthRepository().updatePasswordApiCall(params: {
+                                            "old_password": con.oldPasswordCon.text,
                                             "password": con.newPasswordCon.text,
-                                            "password_confirmation":
-                                                con.cnfmNewPasswordCon.text
+                                            "password_confirmation": con.cnfmNewPasswordCon.text
                                           });
                                         }
                                       },
@@ -218,7 +176,7 @@ class UpdatePasswordScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )),
+                        ),
                       )
                     ],
                   ));

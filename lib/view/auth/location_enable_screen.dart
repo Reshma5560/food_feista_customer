@@ -14,16 +14,20 @@ class LocationEnableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Theme.of(context).colorScheme.background,
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
         padding: const EdgeInsets.only(top: 80),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Set your location to start exploring restaurants near you",
-              textAlign: TextAlign.center,
-              style: AppStyle.authSubtitleStyle().copyWith(fontWeight: FontWeight.w600),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+              child: Text(
+                "Set your location to start exploring restaurants near you",
+                textAlign: TextAlign.center,
+                style: AppStyle.authSubtitleStyle().copyWith(fontWeight: FontWeight.w600),
+              ),
             ),
 
             Image(
@@ -32,7 +36,7 @@ class LocationEnableScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding).copyWith(bottom: defaultPadding),
+              padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: defaultPadding),
               child: Column(
                 children: [
                   AppButton(
@@ -40,6 +44,7 @@ class LocationEnableScreen extends StatelessWidget {
                       con.checkLocationPermission();
                     },
                     title: "Enable Device Location",
+                    padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                   ),
                   const SizedBox(
                     height: defaultPadding,
@@ -50,6 +55,7 @@ class LocationEnableScreen extends StatelessWidget {
                     },
                     buttonType: ButtonType.outline,
                     title: "Enter Your Location Manually",
+                    padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                   ),
                 ],
               ),

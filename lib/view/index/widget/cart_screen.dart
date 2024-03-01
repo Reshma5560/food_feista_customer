@@ -39,9 +39,13 @@ class CartScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Cart",
-                  style: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.transparent, fontSize: 16.sp),
+                Obx(
+                  () => con.cartItemData.isNotEmpty
+                      ? Text(
+                          "Cart",
+                          style: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.transparent, fontSize: 16.sp),
+                        )
+                      : const SizedBox.shrink(),
                 ),
                 Text(
                   "Cart",

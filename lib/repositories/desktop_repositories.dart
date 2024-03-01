@@ -84,13 +84,16 @@ class DesktopRepository {
 
             LocalStorage.prefs.write(Prefs.firstName, con.firstName.value);
             LocalStorage.prefs.write(Prefs.lastName, con.lastName.value);
+            LocalStorage.prefs.write(Prefs.userImage, con.userApiImageFile.value);
 
             LocalStorage.firstName.value = LocalStorage.prefs.read(Prefs.firstName) ?? "";
             LocalStorage.lastName.value = LocalStorage.prefs.read(Prefs.lastName) ?? "";
+            LocalStorage.userImage.value = LocalStorage.prefs.read(Prefs.userImage) ?? "";
 
             await LocalStorage.readDataInfo();
             printYellow("-------------  ${LocalStorage.firstName.value}");
             printYellow("-------------  ${LocalStorage.lastName.value}");
+            printYellow("-------------  ${LocalStorage.userImage.value}");
           }
           return response;
         },

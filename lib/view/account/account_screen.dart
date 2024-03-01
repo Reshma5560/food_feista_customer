@@ -9,7 +9,6 @@ import 'package:foodapplication/route/app_routes.dart';
 import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 
-import '../../res/widgets/app_bar.dart';
 import '../../res/widgets/empty_element.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -29,20 +28,19 @@ class AccountScreen extends StatelessWidget {
             height: Get.height,
           ),
           Padding(
-            padding: EdgeInsets.only(top: Get.height * 0.04),
+            padding: EdgeInsets.only(top: Get.height * 0.05),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "Setting",
-                  style: AppStyle.customAppBarTitleStyle()
-                      .copyWith(color: AppColors.black, fontSize: 16.sp),
+                  style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black, fontSize: 16.sp),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: Get.height * 0.1),
+            padding: EdgeInsets.only(top: Get.height * 0.12),
             child: LocalStorage.token.value.isNotEmpty
                 ? _bodyWidget()
                 : Column(
@@ -56,8 +54,7 @@ class AccountScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 50),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: defaultPadding),
+                        padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                         child: AppButton(
                           onPressed: () {
                             Get.offAllNamed(AppRoutes.loginScreen);
@@ -299,8 +296,7 @@ class AccountScreen extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(Get.context!).colorScheme.background,
-                  border: Border.all(
-                      width: 3, color: Theme.of(Get.context!).primaryColor),
+                  border: Border.all(width: 3, color: Theme.of(Get.context!).primaryColor),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(20),
                   ),
@@ -309,72 +305,69 @@ class AccountScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20.0),
                   child: Material(
                     color: Theme.of(Get.context!).colorScheme.background,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        "Logout",
+                        style: TextStyle(
+                          // fontFamily: FontFamilyText.sFProDisplayRegular,
+                          color: Theme.of(Get.context!).primaryColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      Text(
+                        "Are you sure you want logout ?",
+                        style: TextStyle(
+                          // fontFamily: FontFamilyText.sFProDisplayRegular,
+                          color: Theme.of(Get.context!).primaryColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Row(
                         children: [
-                          const SizedBox(height: 10),
-                          Text(
-                            "Logout",
-                            style: TextStyle(
-                              // fontFamily: FontFamilyText.sFProDisplayRegular,
-                              color: Theme.of(Get.context!).primaryColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: AppButton(
+                              height: 30.h,
+                              borderRadius: BorderRadius.circular(10),
+                              onPressed: () {
+                                con.isLoader.value = true;
+                                LocalStorage.clearLocalStorage().then(
+                                  (value) {
+                                    con.isLoader.value = false;
+                                    Get.offAllNamed(AppRoutes.loginScreen);
+                                  },
+                                );
+                              },
+                              title: "YES",
+                              // child: Text(
+                              //   "Yes",
+                              //   style: TextStyle(color: AppColors.white, fontSize: 14.sp),
+                              // ),
                             ),
                           ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            "Are you sure you want logout ?",
-                            style: TextStyle(
-                              // fontFamily: FontFamilyText.sFProDisplayRegular,
-                              color: Theme.of(Get.context!).primaryColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: AppButton(
+                              height: 30.h,
+                              buttonType: ButtonType.outline,
+                              borderRadius: BorderRadius.circular(10),
+                              onPressed: () {
+                                Get.back();
+                              },
+                              title: "NO",
+                              // child: Text(
+                              //   "No",
+                              //   style: TextStyle(color: AppColors.white, fontSize: 14.sp),
+                              // ),
                             ),
                           ),
-                          SizedBox(height: 20.h),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: AppButton(
-                                  height: 30.h,
-                                  borderRadius: BorderRadius.circular(10),
-                                  onPressed: () {
-                                    con.isLoader.value = true;
-                                    LocalStorage.clearLocalStorage().then(
-                                      (value) {
-                                        con.isLoader.value = false;
-                                        Get.offAllNamed(AppRoutes.loginScreen);
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    "Yes",
-                                    style: TextStyle(
-                                        color: AppColors.white,
-                                        fontSize: 14.sp),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: AppButton(
-                                  height: 30.h,
-                                  borderRadius: BorderRadius.circular(10),
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  child: Text(
-                                    "No",
-                                    style: TextStyle(
-                                        color: AppColors.white,
-                                        fontSize: 14.sp),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ]),
+                        ],
+                      ),
+                    ]),
                   ),
                 ),
               ),
@@ -392,13 +385,7 @@ class CustomListTile extends StatelessWidget {
   final bool? isChildShow;
   final void Function()? onPressed;
 
-  const CustomListTile(
-      {super.key,
-      required this.icon,
-      required this.title,
-      this.onPressed,
-      this.child,
-      this.isChildShow});
+  const CustomListTile({super.key, required this.icon, required this.title, this.onPressed, this.child, this.isChildShow});
 
   @override
   Widget build(BuildContext context) {
@@ -407,9 +394,7 @@ class CustomListTile extends StatelessWidget {
       child: Container(
         // padding: EdgeInsets.symmetric(vertical: 2.h),
         decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).primaryColor, width: 2),
-            borderRadius: BorderRadius.circular(12.r),
-            color: AppColors.white),
+            border: Border.all(color: Theme.of(context).primaryColor, width: 2), borderRadius: BorderRadius.circular(12.r), color: AppColors.white),
         child: Column(
           children: [
             Row(children: [
@@ -423,15 +408,10 @@ class CustomListTile extends StatelessWidget {
               Expanded(
                   child: Text(
                 title,
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14),
+                style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w600, fontSize: 14),
               )),
               Icon(
-                isChildShow == true
-                    ? Icons.arrow_drop_up_sharp
-                    : Icons.arrow_right,
+                isChildShow == true ? Icons.arrow_drop_up_sharp : Icons.arrow_right,
                 size: 30.h,
                 color: Theme.of(context).primaryColor,
               ),

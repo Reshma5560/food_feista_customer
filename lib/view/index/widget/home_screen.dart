@@ -33,37 +33,35 @@ class HomeScreen extends StatelessWidget {
         children: [
           Image.asset("assets/images/bg_home_image.png", width: Get.width, fit: BoxFit.fill),
           Padding(
-            padding: EdgeInsets.only(top: Get.height * 0.03),
+            padding: EdgeInsets.only(top: Get.height * 0.03, left: defaultPadding - 6),
             child: Row(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Obx(
-                    () => LocalStorage.userImage.isNotEmpty
-                        ? MFNetworkImage(
+                Obx(
+                  () => LocalStorage.userImage.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: MFNetworkImage(
                             height: 40,
                             width: 40,
                             imageUrl: LocalStorage.userImage.value,
                             fit: BoxFit.cover,
                             shape: BoxShape.circle,
-                          )
-                        : Container(
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: Container(
                             height: 40,
                             width: 40,
                             decoration: BoxDecoration(
                               color: Theme.of(context).primaryColor,
                               shape: BoxShape.circle,
-
-                              // image: DecorationImage(
-                              //   image: AssetImage(AppAssets.profileIcon),
-                              //   onError: (exception, stackTrace) => Image.asset(
-                              //     AppAssets.profileIcon,
-                              //     fit: BoxFit.fill,
-                              //   ),
-                              // ),
                             ),
-                            child: Icon(Icons.person_2_outlined, color: AppColors.white),
+                            child: Icon(Icons.person_2_outlined, color: AppColors.black),
                           ),
-                  ),
+                        ),
                 ),
                 const SizedBox(
                   width: defaultPadding - 6,
@@ -75,11 +73,13 @@ class HomeScreen extends StatelessWidget {
                       "Welcome",
                       style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black.withOpacity(0.5), fontSize: 13.sp),
                     ),
-                    Text(
-                      (LocalStorage.firstName.isNotEmpty && LocalStorage.lastName.isNotEmpty)
-                          ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
-                          : "Please Login !!",
-                      style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
+                    Obx(
+                      () => Text(
+                        (LocalStorage.firstName.isNotEmpty && LocalStorage.lastName.isNotEmpty)
+                            ? "${LocalStorage.firstName.value} ${LocalStorage.lastName.value}"
+                            : "Please Login !!",
+                        style: AppStyle.customAppBarTitleStyle().copyWith(color: AppColors.black),
+                      ),
                     ),
                   ],
                 ),
@@ -133,14 +133,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _appHeader(BuildContext context) {
-  //   return MyAppBar(
-  //     elevation: 0,
-  //     bgColor: Colors.transparent, // Theme.of(context).colorScheme.background,
-  //     child:
-  //   );
-  // }
 
   Widget _bodyModule() {
     return Column(

@@ -27,43 +27,41 @@ class LocationScreen extends StatelessWidget {
           children: [
             FlutterMap(
               options: MapOptions(
-                  center: con.latValue.value.isNotEmpty &&
-                          con.longValue.value.isNotEmpty
-                      ? LatLng(double.parse(con.longValue.value),
-                          double.parse(con.latValue.value))
-                      : LatLng(LocalStorage.userLat.value,
-                          LocalStorage.userLong.value
-                          // double.parse("screenController.productDetails!.branch.longitude"),
-                          // doubleouble.parse("screenController.productDetails!.branch.latitude"),
-                          ),
-                  onTap: (TapPosition position, LatLng latLng) {
-                    con.handleTap(
-                      latLng, /* position: position*/
-                    );
-                  },
-                  zoom: 14),
+                center: con.latValue.value != 0.0 && con.longValue.value != 0.0
+                    ? LatLng(con.latValue.value, con.longValue.value)
+                    : LatLng(LocalStorage.userLat.value, LocalStorage.userLong.value
+                        // double.parse("screenController.productDetails!.branch.longitude"),
+                        // doubleouble.parse("screenController.productDetails!.branch.latitude"),
+                        ),
+                onTap: (TapPosition position, LatLng latLng) {
+                  con.latValue.value = latLng.latitude;
+                  con.handleTap(
+                    latLng,
+                  );
+                },
+                zoom: 14,
+              ),
               children: [
                 TileLayer(
-                  urlTemplate:
-                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                   subdomains: const ['a', 'b', 'c'],
                   userAgentPackageName: 'com.example.app',
                 ),
-                MarkerLayer(
-                  markers: [
-                    Marker(
-                      point: con.latValue.value.isNotEmpty &&
-                              con.longValue.value.isNotEmpty
-                          ? LatLng(double.parse(con.longValue.value),
-                              double.parse(con.latValue.value))
-                          : const LatLng(40.7128, -74.0060),
-                      child: const Icon(
-                        Icons.location_on,
-                        color: Colors.red,
-                        size: 50.0,
+                Obx(
+                  () => MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: con.latValue.value != 0.0 && con.longValue.value != 0.0
+                            ? LatLng(con.latValue.value, con.longValue.value)
+                            : LatLng(LocalStorage.userLat.value, LocalStorage.userLong.value),
+                        child: const Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 50.0,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -75,8 +73,7 @@ class LocationScreen extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(Get.context!).colorScheme.background,
-                    border: Border.all(
-                        width: 3, color: Theme.of(Get.context!).primaryColor),
+                    border: Border.all(width: 3, color: Theme.of(Get.context!).primaryColor),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(20),
                     ),
@@ -112,10 +109,7 @@ class LocationScreen extends StatelessWidget {
                                           textAlign: TextAlign.left,
                                           maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.black),
+                                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.black),
                                         )
                                       : const Text("Select address"),
                             ),
@@ -139,8 +133,7 @@ class LocationScreen extends StatelessWidget {
                                       "name": Get.arguments['name'],
                                       "mobileNo": Get.arguments['mobileNo'],
                                       "zipCode": Get.arguments['zipcode'],
-                                      "addressType":
-                                          Get.arguments['addressType']
+                                      "addressType": Get.arguments['addressType']
                                     };
                                     log(params.toString());
                                     Get.toNamed(
@@ -154,8 +147,7 @@ class LocationScreen extends StatelessWidget {
                                         "name": Get.arguments['name'],
                                         "mobileNo": Get.arguments['mobileNo'],
                                         "zipCode": Get.arguments['zipcode'],
-                                        "addressType":
-                                            Get.arguments['addressType']
+                                        "addressType": Get.arguments['addressType']
                                       },
                                     );
                                     // Get.toNamed(AppRoutes.addAddressScreen, arguments: [
@@ -168,10 +160,7 @@ class LocationScreen extends StatelessWidget {
                                   },
                             child: Text(
                               "CONFIRM LOCATION",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).primaryColor),
+                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),
                             ),
                           ))
                     ],
