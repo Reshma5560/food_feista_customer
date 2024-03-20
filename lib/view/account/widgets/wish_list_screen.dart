@@ -10,6 +10,7 @@ import '../../../controller/account/components/wish_list_controller.dart';
 import '../../../packages/cached_network_image/cached_network_image.dart';
 import '../../../res/app_strings.dart';
 import '../../../res/app_style.dart';
+import '../../../route/app_routes.dart';
 import '../components/wish_list_simmer_tile.dart';
 
 class WishListScreen extends StatelessWidget {
@@ -75,7 +76,7 @@ class WishListScreen extends StatelessWidget {
                                 )
                               : ListView.separated(
                                   controller: con.scrollController,
-                                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                                  padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   separatorBuilder: (context, index) {
                                     return const SizedBox(
@@ -83,104 +84,116 @@ class WishListScreen extends StatelessWidget {
                                     );
                                   },
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-                                      margin: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.background,
-                                        // gradient: LinearGradient(
-                                        //     begin: Alignment.bottomRight,
-                                        //     end: Alignment.topRight,
-                                        //     colors: [
-                                        //       AppColors.white,
-                                        //       Theme.of(context)
-                                        //           .colorScheme
-                                        //           .background
-                                        //     ]),
-                                        borderRadius: BorderRadius.circular(22.r),
-                                        boxShadow: AppStyle.boxShadow(),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(25.r),
-                                              child: MFNetworkImage(
-                                                imageUrl: con.wishListData[index].logo ?? "",
-                                                fit: BoxFit.fill,
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.toNamed(
+                                          AppRoutes.restaurantDetailsScreen,
+                                          arguments: [
+                                            con.wishListData[index].id.toString(),
+                                            con.wishListData[index].restaurantName,
+                                          ],
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                                        margin: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.background,
+                                          // gradient: LinearGradient(
+                                          //     begin: Alignment.bottomRight,
+                                          //     end: Alignment.topRight,
+                                          //     colors: [
+                                          //       AppColors.white,
+                                          //       Theme.of(context)
+                                          //           .colorScheme
+                                          //           .background
+                                          //     ]),
+                                          borderRadius: BorderRadius.circular(defaultRadius * 2),
+                                          boxShadow: AppStyle.boxShadow(),
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(defaultRadius * 2),
+                                                child: MFNetworkImage(
+                                                  imageUrl: con.wishListData[index].logo ?? "",
+                                                  height: 120,
+                                                  fit: BoxFit.fill,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: defaultPadding - 10).copyWith(left: defaultPadding - 6),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                          con.wishListData[index].restaurantName ?? "",
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: AppStyle.regularBlack().copyWith(
-                                                            fontSize: 13.sp,
-                                                            fontWeight: FontWeight.w500,
+                                            Expanded(
+                                              flex: 2,
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: defaultPadding - 10).copyWith(left: defaultPadding - 6),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            con.wishListData[index].restaurantName ?? "",
+                                                            maxLines: 2,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: AppStyle.regularBlack().copyWith(
+                                                              fontSize: 13.sp,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(right: defaultPadding - 6),
-                                                        child: InkWell(
-                                                          onTap: () async {
-                                                            await DesktopRepository().postWishListAPI(
-                                                                id: con.wishListData[index].id ?? "", index: index, isWishList: true);
-                                                          },
-                                                          child: const Icon(
-                                                            Icons.favorite,
-                                                            color: Colors.red,
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: defaultPadding - 6),
+                                                          child: InkWell(
+                                                            onTap: () async {
+                                                              await DesktopRepository().postWishListAPI(
+                                                                  id: con.wishListData[index].id ?? "", index: index, isWishList: true);
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.favorite,
+                                                              color: Colors.red,
+                                                            ),
                                                           ),
                                                         ),
+                                                      ],
+                                                    ),
+                                                    Text(
+                                                      con.wishListData[index].phone ?? "",
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: AppStyle.regularBlack().copyWith(
+                                                        fontSize: 12.sp,
+                                                        fontWeight: FontWeight.w400,
                                                       ),
-                                                    ],
-                                                  ),
-                                                  Text(
-                                                    con.wishListData[index].phone ?? "",
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: AppStyle.regularBlack().copyWith(
-                                                      fontSize: 12.sp,
-                                                      fontWeight: FontWeight.w400,
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    con.wishListData[index].email ?? "",
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: AppStyle.regularBlack().copyWith(
-                                                      fontSize: 12.sp,
-                                                      fontWeight: FontWeight.w400,
+                                                    Text(
+                                                      con.wishListData[index].email ?? "",
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: AppStyle.regularBlack().copyWith(
+                                                        fontSize: 12.sp,
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    con.wishListData[index].address ?? "",
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: AppStyle.regularBlack().copyWith(
-                                                      fontSize: 11.sp,
-                                                      fontWeight: FontWeight.w400,
+                                                    Text(
+                                                      con.wishListData[index].address ?? "",
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: AppStyle.regularBlack().copyWith(
+                                                        fontSize: 11.sp,
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },

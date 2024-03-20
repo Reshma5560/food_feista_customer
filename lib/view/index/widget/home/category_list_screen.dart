@@ -25,7 +25,7 @@ class CategoryListScreen extends StatelessWidget {
         children: [
           Image.asset(AppAssets.appbarBgImage, fit: BoxFit.fill, width: Get.width),
           Padding(
-            padding: EdgeInsets.only(top: Get.height * 0.03),
+            padding: EdgeInsets.only(top: Get.height * 0.04),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

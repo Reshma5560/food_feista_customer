@@ -438,7 +438,7 @@ class AddAddressScreen extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(14.r)), borderSide: BorderSide(color: AppColors.white)),
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(14.r)), borderSide: BorderSide(color: AppColors.white)),
           ),
-          hint: const Text("Select country"),
+          hint: const Text("Select State"),
           value: con.stateDropDownValue.value,
           icon: Icon(
             Icons.keyboard_arrow_down_rounded,
@@ -456,7 +456,7 @@ class AddAddressScreen extends StatelessWidget {
             );
           }).toList(),
           isDense: true,
-          isExpanded: false,
+          isExpanded: true,
           dropdownColor: AppColors.white,
           // underline: Container(height: 1, color: AppColors.blackColor),
           // borderRadius: const BorderRadius.all(Radius.circular(15)),

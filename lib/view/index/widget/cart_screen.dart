@@ -870,6 +870,15 @@ class CartScreen extends StatelessWidget {
                       const SizedBox(
                         height: defaultPadding,
                       ),
+                      if (con.foodItemVariantData.isEmpty && con.foodItemAddonData.isEmpty)
+                        EmptyElement(
+                          height: Get.height / 3.5,
+                          imageHeight: Get.width / 2.4,
+                          imageWidth: Get.width / 2,
+                          spacing: 0,
+                          title: "",
+                          subtitle: "",
+                        ),
                     ],
                   ),
                 ),

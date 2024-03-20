@@ -7,6 +7,7 @@ import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_text_field.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
+import 'package:foodapplication/res/widgets/empty_element.dart';
 import 'package:foodapplication/utils/local_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +44,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
               children: [
                 Image.asset(AppAssets.appbarBgImage, width: Get.width, fit: BoxFit.fill),
                 Padding(
-                  padding: EdgeInsets.only(top: Get.height * 0.03),
+                  padding: EdgeInsets.only(top: Get.height * 0.04),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -87,8 +88,8 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.r)),
                                         child: MFNetworkImage(
                                           backgroundColor: AppColors.white,
-                                          imageUrl: con.restaurantDetails?.coverPhoto ?? "",
-                                          fit: BoxFit.fill,
+                                          imageUrl: con.restaurantDetails?.logo ?? "",
+                                          fit: BoxFit.cover,
                                           height: 230,
                                           width: Get.width,
                                           borderRadius: BorderRadius.circular(20.r),
@@ -372,15 +373,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
         return _overViewListModule();
       case "REVIEW":
         return con.restaurantReviewList.isEmpty
-            ? Padding(
-                padding: EdgeInsets.only(top: Get.height / 4),
-                child: Text(
-                  "No review available",
-                  style: AppStyle.errorTextStyle().copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14.sp,
-                  ),
-                ),
+            ? EmptyElement(
+                height: Get.height / 4,
+                title: "No review available",
               )
             : _reviewListModule();
       default:
@@ -510,23 +505,24 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                   InkWell(
                                     onTap: () async {
                                       if (LocalStorage.token.isNotEmpty) {
-                                        if (item!.foodVariant!.isNotEmpty || item.addons!.isNotEmpty) {
-                                          // cartDataController.foodVariant.value = item.foodVariant ?? [];
-                                          // cartDataController.addons.value = item.addons ?? [];
-
-                                          _addItem(context, item: item);
-                                        } else {
-                                          await RestaurantRepository().addToCartItemAPI(
-                                            params: {
-                                              "restaurant_id": con.restaurantDetails?.id ?? "",
-                                              "food_id": item.id ?? "",
-                                              "total_price": item.price.toString() ?? "",
-                                              "total_qty": item.itemCount?.value.toString() ?? "",
-                                              "variant_options": con.variantDataForAPI,
-                                              "addons": con.addonsData,
-                                            },
-                                          );
-                                        }
+                                        addItem(context, item: item!);
+                                        // if (item!.foodVariant!.isNotEmpty || item.addons!.isNotEmpty) {
+                                        //   // cartDataController.foodVariant.value = item.foodVariant ?? [];
+                                        //   // cartDataController.addons.value = item.addons ?? [];
+                                        //
+                                        //   _addItem(context, item: item);
+                                        // } else {
+                                        //   await RestaurantRepository().addToCartItemAPI(
+                                        //     params: {
+                                        //       "restaurant_id": con.restaurantDetails?.id ?? "",
+                                        //       "food_id": item.id ?? "",
+                                        //       "total_price": item.price.toString() ?? "",
+                                        //       "total_qty": item.itemCount?.value.toString() ?? "",
+                                        //       "variant_options": con.variantDataForAPI,
+                                        //       "addons": con.addonsData,
+                                        //     },
+                                        //   );
+                                        // }
                                       } else {
                                         toast("Please login for adding item into cart!!");
                                       }
@@ -814,7 +810,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
     );
   }
 
-  _addItem(BuildContext context, {required Food item}) {
+  addItem(BuildContext context, {required Food item}) {
     item.totalPrice?.value = (double.parse(item.price!.value.toString()) * item.itemCount!.value);
 
     return Get.bottomSheet(
@@ -824,9 +820,9 @@ class RestaurantDetailsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(defaultRadius * 3),
       ),
       Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(defaultRadius * 3),
             topRight: Radius.circular(defaultRadius * 3),
           ),
@@ -867,7 +863,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
               Container(
                 height: 1,
                 width: Get.width,
-                color: AppColors.black,
+                color: Theme.of(context).primaryColor,
               ),
               const SizedBox(
                 height: defaultPadding - 6,
@@ -1101,6 +1097,15 @@ class RestaurantDetailsScreen extends StatelessWidget {
                       const SizedBox(
                         height: defaultPadding,
                       ),
+                      if (item.addons!.isEmpty && item.foodVariant!.isEmpty)
+                        EmptyElement(
+                          height: Get.height / 3.5,
+                          imageHeight: Get.width / 2.4,
+                          imageWidth: Get.width / 2,
+                          spacing: 0,
+                          title: "",
+                          subtitle: "",
+                        ),
                     ],
                   ),
                 ),
@@ -1125,21 +1130,30 @@ class RestaurantDetailsScreen extends StatelessWidget {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    if (item.itemCount!.value < item.minimumCartQuantity!.toInt()) {
+                                    if (item.itemCount!.value == 1) {
                                     } else {
                                       item.itemCount?.value--;
-
-                                      ///old one
                                       item.totalPrice?.value = (item.totalPrice!.value -
                                           (double.parse(
                                                 item.price?.value.toString() ?? "0",
-                                              ) +
+                                              ) -
                                               double.parse(
                                                 item.addonsPrice.toString(),
-                                              ) +
+                                              ) -
                                               double.parse(
                                                 item.variantPrice.toString(),
                                               )));
+                                      // ///old one
+                                      // item.totalPrice?.value = (item.totalPrice!.value -
+                                      //     (double.parse(
+                                      //           item.price?.value.toString() ?? "0",
+                                      //         ) +
+                                      //         double.parse(
+                                      //           item.addonsPrice.toString(),
+                                      //         ) +
+                                      //         double.parse(
+                                      //           item.variantPrice.toString(),
+                                      //         )));
 
                                       // item.totalPrice?.value = (item.totalPrice!.value - double.parse(item.totalPrice!.value.toString()));
 

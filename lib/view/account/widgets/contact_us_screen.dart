@@ -161,6 +161,7 @@ class ContactUsScreen extends StatelessWidget {
   _feedbackRowModule() {
     return AppTextField(
       hintText: "Enter Your Message",
+      maxLines: 3,
       controller: con.feedbackCon,
       errorMessage: con.feedbackError.value,
       showError: con.feedbackValidation.value,

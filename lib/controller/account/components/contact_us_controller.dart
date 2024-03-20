@@ -5,6 +5,7 @@ import 'package:foodapplication/data/handler/api_url.dart';
 import 'package:foodapplication/res/color_print.dart';
 import 'package:foodapplication/res/ui_utils.dart';
 import 'package:foodapplication/route/app_routes.dart';
+import 'package:foodapplication/utils/local_storage.dart';
 import 'package:foodapplication/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -48,17 +49,15 @@ class ContactUsController extends GetxController {
 
       if (feedbackCon.value.text.isEmpty) {
         feedbackValidation.value = true;
-        feedbackError.value = "Please Enter your full name.";
+        feedbackError.value = "Please Enter your message";
       } else {
         feedbackValidation.value = false;
         feedbackError.value = "";
       }
 
-      if (mobileNoValidation.isFalse &&
-          fullnameValidation.isFalse &&
-          feedbackValidation.isFalse) {
+      if (mobileNoValidation.isFalse && fullnameValidation.isFalse && feedbackValidation.isFalse) {
         FocusScope.of(Get.context!).unfocus();
-       await contactUsApi(params: {
+        await contactUsApi(params: {
           "full_name": fullnameCon.text.trim(),
           "email": emailCon.value.text.trim(),
           "mobile_number": mobilenoCon.text.trim(),
@@ -72,9 +71,7 @@ class ContactUsController extends GetxController {
     try {
       isLoader.value = true;
       printData(key: "Contact us params", value: params);
-      await APIFunction()
-          .postApiCall(apiName: ApiUrls.contactUsUrl, params: params)
-          .then(
+      await APIFunction().postApiCall(apiName: ApiUrls.contactUsUrl, params: params).then(
         (response) async {
           printData(key: "contact us response", value: response);
           if (!isValEmpty(response) && response["status"] == true) {
@@ -104,7 +101,7 @@ class ContactUsController extends GetxController {
 
   @override
   void onInit() {
-    emailCon.text = "ffdss@gmail.com";
+    emailCon.text = LocalStorage.email.value;
     super.onInit();
   }
 }

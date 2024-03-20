@@ -5,7 +5,6 @@ import 'package:foodapplication/res/app_assets.dart';
 import 'package:foodapplication/res/app_colors.dart';
 import 'package:foodapplication/res/app_loader.dart';
 import 'package:foodapplication/res/app_style.dart';
-import 'package:foodapplication/res/widgets/app_bar.dart';
 import 'package:foodapplication/route/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -57,30 +56,6 @@ class MyOrderScreen extends StatelessWidget {
             ).paddingOnly(bottom: 20),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _appHeader(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(defaultRadius * 3),
-        bottomRight: Radius.circular(defaultRadius * 3),
-      ),
-      child: MyAppBar(
-        bgColor: Theme.of(context).colorScheme.background,
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.arrow_back_outlined,
-        //     color: Theme.of(context).primaryColor,
-        //   ),
-        //   onPressed: () {
-        //     Get.back();
-        //   },
-        // ),
-        title: "My Order",
-        centerTitle: true,
-        titleStyle: AppStyle.customAppBarTitleStyle().copyWith(color: Colors.black),
       ),
     );
   }
@@ -138,13 +113,14 @@ class MyOrderScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                              flex: 1,
-                              child: Image.network(
-                                item.restaurant?.logo ?? "",
-                                height: 70,
-                                width: 70,
-                                fit: BoxFit.cover,
-                              )),
+                            flex: 1,
+                            child: Image.network(
+                              item.restaurant?.logo ?? "",
+                              height: 100,
+                              // width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           SizedBox(
                             width: 8.w,
                           ),
@@ -179,7 +155,7 @@ class MyOrderScreen extends StatelessWidget {
                                 ),
                                 Text("Payment Type - ${item.paymentType?.paymentTypeName ?? ""}"),
                                 Text(item.orderStatus?.statusName ?? "",
-                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: AppColors.black))
+                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: AppColors.green))
                               ],
                             ),
                           )

@@ -168,13 +168,17 @@ class AuthRepository {
             GetStateModel getStateModel = GetStateModel.fromJson(response);
             isSuccessStatus.value = getStateModel.status!;
             if (isSuccessStatus.value) {
+              con.stateList.clear();
               con.stateList.add(StateList(stateName: 'Select state'));
               con.stateList.value = getStateModel.data ?? [];
               if (con.stateList.isNotEmpty) {
                 con.stateDropDownValue.value = con.stateList[0];
+                await AuthRepository().getCityListOnlyCall(isLoader: isLoader);
+              } else {
+                con.cityList.clear();
               }
               printData(key: "get state response", value: con.stateList.length);
-              await AuthRepository().getCityListOnlyCall(isLoader: isLoader);
+
               // con.stateList.refresh();
             } else {
               log("getStateApiFunction else");
@@ -210,6 +214,7 @@ class AuthRepository {
             GetCityModel getCityModel = GetCityModel.fromJson(response);
             isSuccessStatus.value = getCityModel.status!;
             if (isSuccessStatus.value) {
+              con.cityList.clear();
               con.cityList.add(City(cityName: 'Select city'));
               con.cityList.addAll(getCityModel.data!);
               con.cityDropDownValue.value = con.cityList[0];
@@ -451,17 +456,19 @@ class AuthRepository {
             if (!isValEmpty(response["message"])) {
               toast(response["message"].toString());
             }
+            Get.back();
 
-            /// Set User Token
-            await LocalStorage.setLoginToken(userToken: response["token"]);
+            // /// Set User Token
+            // await LocalStorage.setLoginToken(userToken: response["token"]);
 
             /// Set User Data
-            await LocalStorage.storeDataInfo(data: response['user']).then(
-              (value) {
-                // Get.delete<RegisterController>(force: true);
-                Get.offAllNamed(AppRoutes.getCityScreen);
-              },
-            );
+            // await LocalStorage.storeDataInfo(data: response['user']).then(
+            //   (value) {
+            //     Get.back();
+            //     // // Get.delete<RegisterController>(force: true);
+            //     // Get.offAllNamed(AppRoutes.getCityScreen);
+            //   },
+            // );
 
             // /// Set links
             // if (!isValEmpty(response["links"])) {

@@ -36,7 +36,11 @@ class OrderTrackController extends GetxController {
         showNotification: true,
         openFileFromNotification: true,
         saveInPublicStorage: true,
-      ).then((value) => toast("File downloaded successfully!"));
+      ).then((value) {
+        log('Download task ID: $value');
+
+        toast("File downloaded successfully!");
+      });
       isDownload = false;
 
       log('Download task ID: $taskId');

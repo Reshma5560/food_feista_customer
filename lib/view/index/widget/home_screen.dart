@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           Image.asset("assets/images/bg_home_image.png", width: Get.width, fit: BoxFit.fill),
           Padding(
-            padding: EdgeInsets.only(top: Get.height * 0.03, left: defaultPadding - 6),
+            padding: EdgeInsets.only(top: Get.height * 0.055, left: defaultPadding - 6),
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
             () => con.isLoading.isTrue
                 ? const AppLoader()
                 : Padding(
-                    padding: EdgeInsets.only(top: Get.height * 0.1),
+                    padding: EdgeInsets.only(top: Get.height * 0.12),
                     child: Column(
                       children: [
                         Expanded(
@@ -230,34 +230,35 @@ class HomeScreen extends StatelessWidget {
             },
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: con.bannerList.map((url) {
-            int index = con.bannerList.indexOf(url);
-            return Obx(
-              () => con.activeSliderIndex.value == index
-                  ? Container(
-                      width: 10,
-                      height: 10,
-                      margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Theme.of(Get.context!).primaryColor, width: 2),
-                        color: AppColors.white,
+        if (con.bannerList.length != 1)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: con.bannerList.map((url) {
+              int index = con.bannerList.indexOf(url);
+              return Obx(
+                () => con.activeSliderIndex.value == index
+                    ? Container(
+                        width: 10,
+                        height: 10,
+                        margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Theme.of(Get.context!).primaryColor, width: 2),
+                          color: AppColors.white,
+                        ),
+                      )
+                    : Container(
+                        width: 6,
+                        height: 6,
+                        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.grey,
+                        ),
                       ),
-                    )
-                  : Container(
-                      width: 6,
-                      height: 6,
-                      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.grey,
-                      ),
-                    ),
-            );
-          }).toList(),
-        ),
+              );
+            }).toList(),
+          ),
       ],
     );
   }
@@ -304,12 +305,12 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                           50.r,
                         ),
-                        child: Image.network(
-                          item.image ?? "",
-                          fit: BoxFit.cover,
+                        child: MFNetworkImage(
+                          imageUrl: item.image ?? "",
+                          fit: BoxFit.fill,
                           height: 70,
                           width: 70,
-                          // height: ,
+                          borderRadius: BorderRadius.circular(defaultRadius),
                         ),
                       ),
                       const SizedBox(
@@ -591,31 +592,41 @@ class HomeScreen extends StatelessWidget {
           Blog item = con.blogList[i];
           return Padding(
             padding: const EdgeInsets.only(right: defaultPadding - 6),
-            child: SizedBox(
-              width: 250,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 8,
-                    child: MFNetworkImage(
-                      height: 100,
-                      width: 250,
-                      backgroundColor: Colors.grey,
-                      imageUrl: item.image ?? "",
-                      fit: BoxFit.cover,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(defaultRadius),
+            child: InkWell(
+              onTap: () {
+                Get.toNamed(
+                  AppRoutes.blogDetailsScreen,
+                  arguments: {
+                    "blogData": item,
+                  },
+                );
+              },
+              child: SizedBox(
+                width: 250,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: MFNetworkImage(
+                        height: 100,
+                        width: 250,
+                        backgroundColor: Colors.grey,
+                        imageUrl: item.image ?? "",
+                        fit: BoxFit.cover,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(defaultRadius),
+                      ),
                     ),
-                  ),
-                  Text(
-                    item.blogName ?? "",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
-                  ),
-                ],
+                    Text(
+                      item.blogName ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

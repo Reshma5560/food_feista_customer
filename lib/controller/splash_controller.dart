@@ -7,8 +7,6 @@ import '../utils/local_storage.dart';
 import 'location_permission_controler.dart';
 
 class SplashController extends GetxController {
-  LocationPermissionController con = Get.put(LocationPermissionController());
-
   @override
   void onInit() {
     navigation();
@@ -24,8 +22,10 @@ class SplashController extends GetxController {
         if (LocalStorage.token.value.isEmpty) {
           Get.offAllNamed(AppRoutes.loginScreen);
         } else if (LocalStorage.userCity.value.isEmpty) {
+          LocationPermissionController con = Get.put(LocationPermissionController());
           Get.offAllNamed(AppRoutes.locationEnableScreen);
         } else {
+          LocationPermissionController con = Get.put(LocationPermissionController());
           Get.offAllNamed(AppRoutes.indexScreen);
         }
       },

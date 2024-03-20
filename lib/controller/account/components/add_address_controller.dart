@@ -6,6 +6,7 @@ import 'package:foodapplication/data/models/get_country_model.dart';
 import 'package:foodapplication/data/models/get_state_model.dart';
 import 'package:foodapplication/repositories/auth_repositories.dart';
 import 'package:foodapplication/res/app_enum.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/get_add_by_id_model.dart';
@@ -14,7 +15,7 @@ class AddAddressController extends GetxController {
   late AddressEnum addressEnum;
   RxString addressId = "".obs;
   RxString enum1 = "".obs;
-  var place;
+  Placemark? place;
   GetAddressByIdModel? getAddressData;
 
   TextEditingController addressCon = TextEditingController();
@@ -90,10 +91,10 @@ class AddAddressController extends GetxController {
       if (Get.arguments["addressType"] != null) {
         typeValue.value = Get.arguments["addressType"];
       }
-      countryDropDownValue = Country(countryName: place.country).obs;
-      floorCon.text = " ${place.subThoroughfare}";
-      houseCon.text = "${place.thoroughfare}";
-      addressCon.text = "${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+      countryDropDownValue = Country(countryName: place?.country).obs;
+      floorCon.text = "${place?.subThoroughfare}";
+      houseCon.text = "${place?.thoroughfare}";
+      addressCon.text = "${place?.subLocality}, ${place?.locality}, ${place?.administrativeArea}, ${place?.postalCode}, ${place?.country}";
     }
 
     super.onInit();

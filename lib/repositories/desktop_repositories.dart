@@ -419,7 +419,14 @@ class DesktopRepository {
 
   ///get wish list api
   Future<dynamic> getCartAPI() async {
-    final CartController con = Get.find<CartController>();
+    CartController con;
+
+    if (Get.isRegistered<CartController>()) {
+      con = Get.find<CartController>();
+    } else {
+      con = Get.put(CartController());
+    }
+
     try {
       con.isLoading.value = true;
       await APIFunction().getApiCall(apiName: ApiUrls.getCartUrl).then(

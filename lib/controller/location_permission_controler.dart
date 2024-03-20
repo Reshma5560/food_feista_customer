@@ -89,6 +89,8 @@ class LocationPermissionController extends GetxController with WidgetsBindingObs
         if (currentAddress.value != LocalStorage.userCity.value) {
           await LocalStorage.setCity(city: currentAddress.value);
           Get.offAllNamed(AppRoutes.indexScreen);
+        } else {
+          Get.offAllNamed(AppRoutes.indexScreen);
         }
       }
     }).catchError((e) {

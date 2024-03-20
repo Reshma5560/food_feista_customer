@@ -111,8 +111,6 @@ class RestaurantRepository {
 
   ///ADD CART ITEM API
   Future<dynamic> addToCartItemAPI({dynamic params}) async {
-    // final CartController con = Get.find<CartController>();
-    // final IndexController indexCon = Get.find<IndexController>();
     try {
       await APIFunction().postApiCall(apiName: ApiUrls.addToCartUrl, params: params).then(
         (response) async {

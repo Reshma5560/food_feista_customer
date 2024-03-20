@@ -33,7 +33,7 @@ class SearchScreen extends StatelessWidget {
             height: Get.height,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 6).copyWith(top: Get.height * 0.04, bottom: Get.height * 0.04),
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding - 6).copyWith(top: Get.height * 0.06, bottom: Get.height * 0.04),
             child: AppTextField(
               controller: con.searchCon.value,
               fillColor: AppColors.white,

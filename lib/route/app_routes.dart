@@ -19,6 +19,7 @@ class AppRoutes {
   static String wishListScreen = "/WISH_LIST_SCREEN";
   static String getCityScreen = "/City_SCREEN";
   static String restaurantDetailsScreen = "/RESTAURANT_DETAILS_SCREEN";
+  static String blogDetailsScreen = "/BLOG_DETAILS_SCREEN";
   static String forgotPasswordScreen = "/FORGOT_PASSWORD_SCREEN";
   static String orderTrackScreen = "/ORDER_TRACK_SCREEN";
   static String placeOrderScreen = "/PLACE_ORDER_SCREEN";
